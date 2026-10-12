@@ -2726,7 +2726,7 @@ csBindInCrop();
 csBindStage();
 
 /* ---------- Tabs / routing ---------- */
-const TABS=[["setup","Game overview",IC.setup],["supplies","Supplies",IC.supplies],["party","Ambiance",IC.fire],["script","Script",IC.script]];
+const TABS=[["setup","Game overview",IC.setup],["script","Script",IC.script],["supplies","Supplies",IC.supplies],["party","Ambiance",IC.fire]];
 const tabHTML=TABS.map(([k,l,ic])=>`<button class="tab" role="tab" data-view="${k}">${ic}<span>${l}</span></button>`).join("");
 $("#bottom-nav").innerHTML=tabHTML; $("#top-tabs").innerHTML=tabHTML;
 function show(v,top=true){

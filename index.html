@@ -799,6 +799,16 @@ body.wiz-on{overflow:hidden}
 @keyframes logoIn{from{opacity:0;transform:translateY(24px) scale(.94);letter-spacing:.2em}to{opacity:1;transform:none}}
 .wiz-logo em{display:block;margin-top:6px;font:italic 600 clamp(22px,5vw,38px)/1.2 var(--serif);color:#f4efe4;animation:fadeUp 1s .5s both}
 .wiz-tag{max-width:460px;margin:6px 0 0;color:#cfd8d1;font-size:16px;animation:fadeUp 1s .75s both}
+.fin{position:fixed;inset:0;z-index:210;display:grid;place-items:center;overflow-y:auto;background:#0b1411;color:#f4efe4;text-align:center}
+.fin.show{animation:finIn .6s ease both}
+@keyframes finIn{from{opacity:0}to{opacity:1}}
+.fin .wiz-shade{background:radial-gradient(90% 80% at 50% 40%,rgba(9,16,13,.1),rgba(9,16,13,.85))}
+.fin-cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.fin-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:40px 18px}
+.fin-logo span{font-size:clamp(52px,12vw,138px)}
+.fin .wiz-cta .btn{min-height:54px}
+.fin-btn{gap:8px}
+.fin-btn svg{width:20px;height:20px}
 .wiz-cta{display:grid;gap:10px;width:min(100%,330px);margin-top:26px;animation:fadeUp 1s .95s both}
 .wiz .btn{border-radius:14px}
 .wiz-big{min-height:60px;font-size:18px}
@@ -826,24 +836,35 @@ body.wiz-on{overflow:hidden}
 .wt-p{width:18px;height:18px;border-radius:50%;background:linear-gradient(180deg,#ffd27a,#ec7a3f)}
 .wiz-rule{margin:16px 0 0;text-align:center;color:#b9c8be;font-size:14px}
 .wiz-colors{display:grid;gap:12px}
-.wc-tribe{padding:14px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-left:6px solid var(--tc);animation:fadeUp .4s both;transition:border-color .25s}
-.wc-top{display:flex;align-items:center;gap:12px}
-.wc-top .rock{width:64px;height:48px;flex:none}
-.wc-top .rock path:first-child{transition:fill .25s}
-.wc-id{flex:1;min-width:0;display:grid;gap:2px}
+.wc-tribe{display:grid;align-content:start;gap:6px;min-width:0;padding:14px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-left:6px solid var(--tc);animation:fadeUp .4s both;transition:border-color .25s}
+.wc-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px}
+.wc-n{padding-left:2px;color:#b9c8be;font-size:13px}
+.wc-colorbtn span{white-space:nowrap}
+.wc-colorbtn{display:flex;align-items:center;gap:8px;min-width:150px;height:40px;padding:0 12px 0 6px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.06);color:#e4ebe6;font:600 14px/1 var(--sans);cursor:pointer;transition:background .15s}
+.wc-colorbtn:hover,.wc-tribe.open .wc-colorbtn{background:rgba(255,255,255,.14)}
+.wc-colorbtn .rock{width:36px;height:27px;flex:none}
+.wc-colorbtn .rock path:first-child{transition:fill .25s}
 .wc-lab{padding-left:2px;font:700 11px/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#f0b48c}
 .wc-in{position:relative;display:block}
 .wc-in svg{position:absolute;right:12px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:#b9c8be;pointer-events:none}
-.wc-id input{width:100%;min-height:44px;padding:6px 40px 6px 10px;font:800 22px/1.1 var(--serif);color:#fff;background:transparent;border:2px dashed rgba(255,255,255,.2);border-radius:12px}
-.wc-id input:focus{outline:none;border:2px solid #ec7a3f;background:rgba(255,255,255,.05)}
-.wc-id small{padding-left:2px;color:#b9c8be;font-size:13px}
-.wc-pal{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-.wc-pal .pal{width:38px;height:38px;border-color:#1b2a22;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.wc-in input{width:100%;min-height:44px;padding:6px 40px 6px 10px;font:800 20px/1.1 var(--serif);color:#fff;background:transparent;border:2px dashed rgba(255,255,255,.2);border-radius:12px}
+.wc-in input:focus{outline:none;border:2px solid #ec7a3f;background:rgba(255,255,255,.05)}
+.wc-pal{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);animation:fadeUp .25s both}
+.wc-pal .pal{width:34px;height:34px;border-color:#1b2a22;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
 .wc-pal .pal.on{box-shadow:0 0 0 3px #fff}
 .wc-pal .pal.taken:not(.on){opacity:.35}
 /* Phones: one tribe per row. Wider screens: two per row, each as wide as half the panel */
-@media (min-width:620px){.wiz-colors{grid-template-columns:1fr 1fr}}
-.wc-swap-h{grid-column:1/-1;margin:12px 0 0}
+@media (min-width:620px){.wiz-colors{grid-template-columns:repeat(var(--n,2),minmax(0,1fr))}
+  /* Starting tribes: one per row, name on the left, Change color on the right */
+  .wiz-colors.rows{grid-template-columns:minmax(0,1fr)}
+  .wiz-colors.rows .wc-tribe{grid-template-columns:minmax(0,1fr) auto;column-gap:18px}
+  .wiz-colors.rows .wc-tribe>*{grid-column:1}
+  .wiz-colors.rows .wc-row{grid-column:2;grid-row:1/span 3;align-self:center;margin:0}
+  .wiz-colors.rows .wc-pal{grid-column:1/-1}}
+.wc-group-h{margin:4px 0 10px}
+/* A clear break before the swap tribes: space, a divider line, then its own heading */
+.wc-swap-h{margin:44px 0 12px;padding-top:30px;border-top:1px solid rgba(255,255,255,.24)}
+@media (max-width:619px){.wc-swap-h,.wc-group-h{flex-direction:column;align-items:flex-start;gap:4px}}
 .wiz-cards{display:grid;gap:10px}
 .wiz-card{display:grid;justify-items:start;gap:6px;padding:18px;text-align:left;border:2px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(255,255,255,.06);color:#f4efe4;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
 .wiz-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.3)}
@@ -1135,6 +1156,16 @@ body.wiz-on{overflow:hidden}
   </div>
 </div>
 
+<div class="fin" id="fin" hidden role="dialog" aria-modal="true" aria-labelledby="fin-title">
+  <div class="wiz-bg"><div class="hero-art wiz-art"></div><div class="wiz-embers fin-embers"></div><div class="wiz-shade"></div></div>
+  <canvas class="fin-cv" id="fin-cv" aria-hidden="true"></canvas>
+  <div class="fin-in">
+    <div class="wiz-kicker">The tribe has spoken</div>
+    <h1 class="wiz-logo fin-logo" id="fin-title"><span>SOLE SURVIVOR</span><em id="fin-sub"></em></h1>
+    <p class="wiz-tag" id="fin-tag"></p>
+    <div class="wiz-cta"><button class="btn primary wiz-big" data-fin-close>Back to the game plan</button><button class="btn wiz-ghost" data-fin-again>Start again from step 1</button></div>
+  </div>
+</div>
 <div class="wiz" id="wiz" hidden>
   <div class="wiz-bg"><div class="hero-art wiz-art"></div><div class="wiz-embers"><span style="--x:43%;--s:4px;--d:9.8s;--dl:0.5s;--dx:45px"></span><span style="--x:70%;--s:3px;--d:9.6s;--dl:0.6s;--dx:4px"></span><span style="--x:29%;--s:3px;--d:7.6s;--dl:4.2s;--dx:-30px"></span><span style="--x:13%;--s:6px;--d:7.4s;--dl:5.7s;--dx:-32px"></span><span style="--x:82%;--s:3px;--d:11.0s;--dl:4.0s;--dx:-32px"></span><span style="--x:7%;--s:4px;--d:9.0s;--dl:1.4s;--dx:-45px"></span><span style="--x:75%;--s:5px;--d:10.9s;--dl:6.8s;--dx:-47px"></span><span style="--x:76%;--s:4px;--d:9.6s;--dl:5.5s;--dx:-52px"></span><span style="--x:74%;--s:3px;--d:11.3s;--dl:5.0s;--dx:8px"></span><span style="--x:56%;--s:5px;--d:10.3s;--dl:9.2s;--dx:-14px"></span><span style="--x:40%;--s:4px;--d:12.6s;--dl:7.0s;--dx:-29px"></span><span style="--x:12%;--s:5px;--d:10.7s;--dl:8.8s;--dx:33px"></span><span style="--x:59%;--s:5px;--d:11.3s;--dl:0.7s;--dx:5px"></span><span style="--x:55%;--s:4px;--d:12.3s;--dl:1.5s;--dx:2px"></span><span style="--x:55%;--s:3px;--d:13.7s;--dl:0.8s;--dx:11px"></span><span style="--x:75%;--s:5px;--d:9.4s;--dl:3.5s;--dx:3px"></span><span style="--x:76%;--s:6px;--d:7.5s;--dl:0.9s;--dx:-26px"></span><span style="--x:62%;--s:3px;--d:7.4s;--dl:7.0s;--dx:22px"></span><span style="--x:75%;--s:6px;--d:9.0s;--dl:3.9s;--dx:25px"></span><span style="--x:46%;--s:3px;--d:13.6s;--dl:3.6s;--dx:18px"></span><span style="--x:16%;--s:6px;--d:7.4s;--dl:7.7s;--dx:-44px"></span><span style="--x:96%;--s:4px;--d:9.8s;--dl:9.2s;--dx:3px"></span></div><div class="wiz-shade"></div></div>
   <div class="wiz-panel" id="wiz-panel"></div>
@@ -1817,7 +1848,7 @@ function renderCarousel(){
     </div>
     <div class="car-nav">
       <button class="btn" data-car="${CAR-1}" ${CAR?"":"disabled"} aria-label="Previous step">${IC.prev}<span>Back</span></button>
-      <button class="btn primary" data-car="${CAR+1}" ${CAR<n-1?"":"disabled"} aria-label="Next step"><span>Next</span>${IC.next}</button>
+      ${CAR<n-1?`<button class="btn primary" data-car="${CAR+1}" aria-label="Next step"><span>Next</span>${IC.next}</button>`:`<button class="btn primary fin-btn" data-finish>${IC.medal}<span>Finish</span></button>`}
     </div></div>
     <div class="car-script-card"><details class="car-script" ${carScriptOpen?"open":""}><summary><span class="cs-ic">${IC.doc}</span><span class="cs-t"><b>Full step description</b><small>Plus the host's script</small></span></summary><div class="seg-body">${s.blocks.map(b=>renderBlock(b,s.ctx)).join("")}<i class="end-mark"></i></div></details></div>
 `;
@@ -1836,6 +1867,36 @@ function armNudges(){
 }
 addEventListener("scroll",()=>{if(!armNudges.q){armNudges.q=1;setTimeout(()=>{armNudges.q=0;armNudges();},120);}},{passive:true});
 addEventListener("resize",()=>armNudges());
+/* Finale: the closing title card with confetti in the tribe colors */
+let finRun=0;
+function openFinish(){
+  const f=$("#fin"),ev=S.event.replace(/^Survivor[:\s—-]*/i,"");
+  $("#fin-sub").textContent=`${ev} is in the books`;
+  $("#fin-tag").textContent=`Crown your winner, hand over the ${S.prize}, and enjoy the rest of the night. Thanks for hosting!`;
+  if(!$(".fin-embers").children.length)$(".fin-embers").innerHTML=$("#wiz .wiz-embers").innerHTML;
+  f.hidden=false;f.classList.remove("show");void f.offsetWidth;f.classList.add("show");document.body.classList.add("wiz-on");
+  f.querySelector("[data-fin-close]").focus({preventScroll:true});
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches)finConfetti();
+}
+function closeFinish(){finRun++;$("#fin").hidden=true;document.body.classList.remove("wiz-on");}
+function finConfetti(){
+  const run=++finRun,cv=$("#fin-cv"),ctx=cv.getContext("2d"),dpr=Math.min(2,devicePixelRatio||1);
+  const W=cv.width=innerWidth*dpr,H=cv.height=innerHeight*dpr;
+  const cols=[...S.colors.slice(0,PL.T).map(c=>c.hex),"#ffd27a","#ffc861","#f39a5d","#fff4d6"];
+  const P=[],add=(x,y,n,spread)=>{for(let i=0;i<n;i++){const a=-Math.PI/2+(Math.random()-.5)*spread,v=(7+Math.random()*11)*dpr;
+    P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,w:(6+Math.random()*7)*dpr,h:(9+Math.random()*9)*dpr,r:Math.random()*6,vr:(Math.random()-.5)*.35,c:cols[i%cols.length],life:0});}};
+  add(W*.12,H*.98,90,1.1);add(W*.88,H*.98,90,1.1);
+  setTimeout(()=>run===finRun&&add(W*.5,H*.95,120,1.6),500);
+  setTimeout(()=>run===finRun&&(add(W*.25,H,60,1),add(W*.75,H,60,1)),1300);
+  const t0=performance.now();
+  (function tick(t){if(run!==finRun)return;ctx.clearRect(0,0,W,H);
+    P.forEach(p=>{p.life++;p.vy+=.22*dpr;p.vx*=.99;p.vy*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.scale(1,Math.cos(p.r*1.7));ctx.fillStyle=p.c;ctx.globalAlpha=Math.max(0,1-p.life/260);
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();});
+    for(let i=P.length;i--;)if(P[i].y>H+60||P[i].life>260)P.splice(i,1);
+    if(P.length||t-t0<1600)requestAnimationFrame(tick);else ctx.clearRect(0,0,W,H);})(t0);
+}
+
 /* Scroll so the whole Game plan card shows, with a little gap under the (sticky, on desktop) header */
 const stickyHead=()=>{const t=$(".top");return t&&getComputedStyle(t).position==="sticky"?t.offsetHeight:0;};
 function goStep(k){CAR=Math.max(0,Math.min(STEPS.length-1,k));renderCarousel();const c=$("#car"),head=stickyHead(),top=c.getBoundingClientRect().top;
@@ -1995,7 +2056,7 @@ function renderScript(){
         <div class="seg-panel">
           <div class="seg-body">${instructionPhotos(s)}${s.blocks.map(b=>renderBlock(b,s.ctx)).join("")}</div>
           <div class="seg-foot"><button class="btn" data-seg-go="${i-1}" ${i?"":"disabled"}>${IC.prev}Previous</button>
-            <button class="btn primary" data-seg-go="${i+1}" ${nx?"":"disabled"}>Next${IC.next}</button></div>
+            ${nx?`<button class="btn primary" data-seg-go="${i+1}">Next${IC.next}</button>`:`<button class="btn primary fin-btn" data-finish>${IC.medal}Finish</button>`}</div>
         </div>
       </article>`}).join("")+`</section>`).join("");
   syncSegDone();renderScriptTop();armNudges();
@@ -2085,14 +2146,18 @@ function wizTribesHTML(){
 }
 function wizColorsHTML(){
   const T=tribesFor(S.players),p=computePlan();
-  return wizColorCards("colors",S.colors.slice(0,T),split(S.players,T).map(n=>`${n} castaways`))
-    +(p.swap?`<h3 class="wiz-sub wc-swap-h">After the tribe swap <span>everyone left redraws into 2 new tribes</span></h3>`+wizColorCards("swap",S.swap,(p.swapSizes||[]).map(n=>`${n} castaways`)):"");
+  return (p.swap?`<h3 class="wiz-sub wc-group-h">Starting tribes <span>from the opening draw</span></h3>`:"")+`<div class="wiz-colors rows">${wizColorCards("colors",S.colors.slice(0,T),split(S.players,T).map(n=>`${n} castaways`))}</div>`
+    +(p.swap?`<h3 class="wiz-sub wc-swap-h">After the tribe swap <span>everyone left redraws into 2 new tribes</span></h3><div class="wiz-colors" style="--n:2">${wizColorCards("swap",S.swap,(p.swapSizes||[]).map(n=>`${n} castaways`))}</div>`:"");
 }
+let wizPal="";  /* which tribe card has its color swatches open */
 function wizColorCards(set,cols,subs){
-  return cols.map((c,i)=>`<div class="wc-tribe" data-wct="${set}-${i}" style="--tc:${c.hex}">
-    <div class="wc-top">${rockSVG(c.hex)}<div class="wc-id"><span class="wc-lab">Tribe name · tap to rename</span><label class="wc-in">${IC.edit}<input type="text" value="${esc(c.name)}" data-set="${set}" data-i="${i}" aria-label="Tribe ${i+1} name" placeholder="Tribe name" autocomplete="off"></label><small>${subs[i]||""}</small></div></div>
-    <div class="wc-pal">${PALETTE.map(([n,h])=>{const other=cols.findIndex((o,j)=>j!==i&&o.hex.toLowerCase()===h);
-      return `<button class="pal${h===c.hex.toLowerCase()?" on":""}${other>=0?" taken":""}" data-wiz-color="${set}:${i}:${h}:${n}" style="background:${h}" title="${n}${other>=0?` (${esc(cols[other].name)} has it, tap to swap)`:""}" aria-label="${n}"></button>`}).join("")}<label class="pal custom" title="Any color"><input type="color" value="${c.hex}" data-set="${set}" data-i="${i}" aria-label="Pick any color"></label></div></div>`).join("");
+  return cols.map((c,i)=>{const k=`${set}-${i}`,open=wizPal===k;return `<div class="wc-tribe${open?" open":""}" data-wct="${k}" style="--tc:${c.hex}">
+    <span class="wc-lab">Tribe name · tap to rename</span>
+    <label class="wc-in">${IC.edit}<input type="text" value="${esc(c.name)}" data-set="${set}" data-i="${i}" aria-label="Tribe ${i+1} name" placeholder="Tribe name" autocomplete="off"></label>
+    <small class="wc-n">${subs[i]||""}</small>
+    <div class="wc-row"><button class="wc-colorbtn" data-wiz-pal="${k}" aria-expanded="${open}">${rockSVG(c.hex)}<span>${open?"Done":"Change color"}</span></button></div>
+    ${open?`<div class="wc-pal">${PALETTE.map(([n,h])=>{const other=cols.findIndex((o,j)=>j!==i&&o.hex.toLowerCase()===h);
+      return `<button class="pal${h===c.hex.toLowerCase()?" on":""}${other>=0?" taken":""}" data-wiz-color="${set}:${i}:${h}:${n}" style="background:${h}" title="${n}${other>=0?` (${esc(cols[other].name)} has it, tap to swap)`:""}" aria-label="${n}"></button>`}).join("")}<label class="pal custom" title="Any color"><input type="color" value="${c.hex}" data-set="${set}" data-i="${i}" aria-label="Pick any color"></label></div>`:""}</div>`}).join("");
 }
 const wizRule=()=>{const T=tribesFor(S.players);return T===1?"5–9 players: one tribe · final 2":T===2?"10–14 players: two tribes · final 3":"15–24 players: three tribes · final 3";};
 /* Only the parts that change: no re-animating the whole step */
@@ -2120,7 +2185,7 @@ function renderWizard(anim=true){
       <p class="wiz-rule">${wizRule()}</p>${nav()}`;
   }else if(k==="colors"){
     w.innerHTML=`${dots}<h2 class="wiz-h">Pick your tribe colors</h2><p class="wiz-p">Each tribe wears buffs and draws stones in its color. Tap a color for each tribe.</p>
-      <div class="wiz-colors">${wizColorsHTML()}</div>${nav()}`;
+      ${wizColorsHTML()}${nav()}`;
   }else if(k==="length"){
     w.innerHTML=`${dots}<h2 class="wiz-h">How long should it last?</h2><p class="wiz-p">Times are estimates for ${S.players} players, including Tribal Councils.</p>
       <div class="wiz-cards">${Object.entries(LENGTHS).map(([id,L])=>{const p=wizPlan({length:id});return `<button class="wiz-card${S.length===id?" on":""}" data-wiz-length="${id}"><span class="wc-ic">${IC.clock}</span><b>${L.name}</b><span class="wc-big">${hoursRange(p)}</span><small>${p.R} rounds · ${L.blurb}</small></button>`}).join("")}</div>${nav()}`;
@@ -2695,6 +2760,9 @@ document.addEventListener("click",e=>{
   else if(d.miGo!==undefined||d.miTo!==undefined){const st=$("#car .car-media");if(st){const n=st.children.length,cur=Math.round(st.scrollLeft/st.clientWidth);
     const k=Math.max(0,Math.min(n-1,d.miTo!==undefined?+d.miTo:cur+ +d.miGo));const x=k*st.clientWidth,from=st.scrollLeft;st.scrollTo({left:x,behavior:"smooth"});
     setTimeout(()=>{if(Math.abs(st.scrollLeft-from)<2&&Math.abs(x-from)>2)st.scrollLeft=x;},450);}}
+  else if(d.finish!==undefined)openFinish();
+  else if(d.finClose!==undefined)closeFinish();
+  else if(d.finAgain!==undefined){closeFinish();CAR=0;if(location.hash==="#script"){setOpen(0,true);}else{location.hash="setup";goStep(0);}}
   else if(d.segGo!==undefined){const k=+d.segGo;if(STEPS[k])setOpen(k,true);}
   else if(d.car!==undefined)goStep(+d.car);
   else if(d.stepDone){toggleDone(d.stepDone);renderScript();observe();renderCarousel();if(doneSteps.has(d.stepDone)&&CAR<STEPS.length-1)setTimeout(()=>goStep(CAR+1),220);}
@@ -2702,11 +2770,12 @@ document.addEventListener("click",e=>{
   else if(d.wizGo!==undefined)openWizard(+d.wizGo);
   else if(d.wizNext!==undefined){if(WIZ_STEPS[WIZ]==="players")wizCommitN();wizMove(1);}
   else if(d.wizBack!==undefined)wizMove(-1);
+  else if(d.wizPal){wizPal=wizPal===d.wizPal?"":d.wizPal;renderWizard(false);}
   else if(d.wizColor){const [set,i,hex,name]=d.wizColor.split(":"),list=set==="swap"?S.swap:S.colors.slice(0,tribesFor(S.players)),c=list[+i];
     const isPreset=x=>PALETTE.some(([n])=>n.toLowerCase()===x.name.trim().toLowerCase())||!x.name.trim();
     const j=list.findIndex((o,k)=>k!==+i&&o.hex.toLowerCase()===hex);
     if(j>=0){const o=list[j],oldHex=c.hex,oldName=c.name;o.hex=oldHex;if(isPreset(o))o.name=isPreset({name:oldName})?oldName:(PALETTE.find(([,h])=>h===oldHex.toLowerCase())||[o.name])[0];}
-    if(isPreset(c))c.name=name;c.hex=hex;saveS();rerender();renderWizard(false);}
+    if(isPreset(c))c.name=name;c.hex=hex;wizPal="";saveS();rerender();renderWizard(false);}
   else if(d.wizClose!==undefined)closeWizard("setup");
   else if(d.wizCast!==undefined)closeWizard("cast");
   else if(d.wizN){const next=S.players+ +d.wizN;if(next<MIN_P||next>MAX_P){const c=$(".wiz-count");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");return;}S.players=next;S.challenges=null;saveS();wizPlayersRefresh();}
@@ -2731,6 +2800,7 @@ document.addEventListener("click",e=>{
   else if(t.id==="reset-settings"){S=Object.assign(structuredClone(DEFAULTS),{players:S.players,length:S.length,style:S.style,challenges:S.challenges,onboarded:true});saveS();lastT=0;rerender();renderSettingsStatic();}
 });
 document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!$("#fin").hidden){closeFinish();return;}
   if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches("[data-open]")){e.preventDefault();e.target.click();}
   if(e.key==="Enter"&&e.target.id==="wiz-n")e.target.blur();
   const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||"");
@@ -2755,7 +2825,7 @@ document.addEventListener("input",e=>{
   else if(d.field){S[d.field]=el.value;saveS();rerender();if(d.field==="event"&&CAST){csTitleThumb();if(csCur===-1)csDraw();}document.querySelectorAll(`[data-field="${d.field}"]`).forEach(x=>{if(x!==el)x.value=el.value;});}
   else if(d.set){const c=S[d.set][+d.i];
     if(el.type==="color"){c.hex=el.value;const sw=document.querySelector(`[data-pick="${d.set}:${d.i}"]`);if(sw)sw.style.background=el.value;
-      const wc=document.querySelector(`[data-wct="${d.set}-${d.i}"]`);if(wc){wc.style.setProperty("--tc",el.value);wc.querySelector(".rock path").setAttribute("fill",el.value);wc.querySelectorAll(".wc-pal .pal:not(.custom)").forEach(b=>b.classList.remove("on"));}}else c.name=el.value;
+      const wc=document.querySelector(`[data-wct="${d.set}-${d.i}"]`);if(wc){wc.style.setProperty("--tc",el.value);wc.querySelector(".wc-colorbtn .rock path").setAttribute("fill",el.value);wc.querySelectorAll(".wc-pal .pal:not(.custom)").forEach(b=>b.classList.remove("on"));}}else c.name=el.value;
     saveS();rerender();}
 });
 

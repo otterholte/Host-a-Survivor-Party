@@ -908,6 +908,13 @@ body.wiz-on{overflow:hidden}
 .wiz-menu{flex:none;display:grid;place-items:center;width:40px;height:36px;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.06);color:#e4ebe6;cursor:pointer}
 .wiz-menu:hover{background:rgba(255,255,255,.14);color:#fff}
 .wiz-menu svg{width:20px;height:20px}
+@media (max-width:759px){
+  /* Phones: just the menu button, top right, above a full-width progress bar */
+  .wiz-topbar{flex-wrap:wrap;gap:10px}
+  .wiz-topbar .wiz-x{display:none}
+  .wiz-topbar .wiz-menu{order:-1;margin-left:auto}
+  .wiz-topbar .wiz-dots{flex:0 0 100%}
+}
 .wiz-menu-fixed{position:fixed;top:calc(14px + env(safe-area-inset-top));right:16px;z-index:5;width:44px;height:44px}
 .wiz-x b{font-size:22px;line-height:1;font-weight:400;margin-top:-2px}
 .wiz-dots{display:flex;gap:6px;margin-top:8px}

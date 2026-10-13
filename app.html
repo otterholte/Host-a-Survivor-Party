@@ -110,6 +110,7 @@ p.sec-sub{margin:0 0 16px;color:var(--ink-2)}
 .foot-links.row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px}
 .foot-links.row h4{flex-basis:100%}
 .subhead{display:none}
+.subhead.off{display:none!important}
 @media (max-width:999px){
   .site-foot{display:none}
   .subhead{display:block;position:relative;overflow:hidden;background:linear-gradient(180deg,#16241d,#1b2e23);border-bottom:1px solid rgba(255,255,255,.06)}
@@ -212,7 +213,7 @@ details.more[open] summary::after{transform:rotate(-135deg)}
 .chip{flex:none;height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-2);white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chip .c{opacity:.7;font-weight:500;margin-left:5px}
-.group-h{display:flex;align-items:center;gap:10px;margin:34px 0 10px}
+.group-h{display:flex;align-items:center;gap:10px;margin:26px 0 10px;padding:8px 0;position:sticky;top:calc(var(--toph,0px) + var(--suph,62px));z-index:15;background:var(--bg)}
 .group-h i{width:12px;height:12px;border-radius:50%;flex:none}
 .group-h h3{margin:0;font:800 23px/1.2 var(--serif);color:var(--ink)}
 .group-h::after{content:"";flex:1;height:1px;background:var(--line);order:2}
@@ -266,7 +267,7 @@ details.more[open] summary::after{transform:rotate(-135deg)}
 .pz-imgs figcaption,.figs figcaption{font-size:12px;color:#55615a;text-align:center;margin-top:4px}
 
 /* ---------- Script view ---------- */
-.seg-nav{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0}
+.seg-nav{display:none!important;position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0}
 .seg-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
 .seg-chips::-webkit-scrollbar{display:none}
 .seg-chips a{flex:none;display:flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:20px;border:1px solid var(--line);background:var(--surface);
@@ -466,6 +467,7 @@ article.is-done .done-btn{background:var(--ok);border-color:var(--ok);color:#fff
   .top-tabs .tab .badge{position:static}
   .icon-btn{margin-left:8px}
   .sup-head{top:56px}
+  :root{--toph:56px}
   .script-layout{display:grid;grid-template-columns:minmax(0,1fr);max-width:880px;margin:0 auto}
   .seg-nav{display:none}
   nav.toc{display:none;position:sticky;top:56px;max-height:calc(100vh - 56px);overflow:auto;padding:20px 0}
@@ -927,7 +929,13 @@ body.wiz-on{overflow:hidden}
   .wiz-colors.rows .wc-tribe>*{grid-column:1}
   .wiz-colors.rows .wc-row{grid-column:2;grid-row:1/span 3;align-self:center;margin:0}
   .wiz-colors.rows .wc-pal{grid-column:1/-1}}
-.wc-group-h{margin:4px 0 10px}
+.wc-head{display:grid;gap:4px;margin:6px 0 14px;font:800 24px/1.15 var(--serif);color:#fff}
+.wc-head span{font:400 15px/1.45 var(--sans);color:#b9c8be}
+.wc-break{display:flex;align-items:center;gap:14px;margin:40px 0 26px;color:#f0b48c}
+.wc-break::before,.wc-break::after{content:"";flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,rgba(240,180,140,0),rgba(240,180,140,.55))}
+.wc-break::after{background:linear-gradient(90deg,rgba(240,180,140,.55),rgba(240,180,140,0))}
+.wc-break span{display:flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid rgba(240,180,140,.4);border-radius:999px;background:rgba(236,122,63,.12);font:700 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.wc-break svg{width:15px;height:15px;transform:rotate(90deg)}
 /* A clear break before the swap tribes: space, a divider line, then its own heading */
 .wc-swap-h{margin:44px 0 12px;padding-top:30px;border-top:1px solid rgba(255,255,255,.24)}
 @media (max-width:619px){.wc-swap-h,.wc-group-h{flex-direction:column;align-items:flex-start;gap:4px}}
@@ -2030,7 +2038,10 @@ function goStep(k){CAR=Math.max(0,Math.min(STEPS.length-1,k));renderCarousel();c
 let got=new Set(store.get("svh-got",[]));
 let where=store.get("svh-where-item",{});
 const KIND={buy:"To buy",print:"To print",make:"To make",have:"From home"};
-function renderSupplies(){
+/* Keep the sticky category headings just under the sticky progress bar */
+function supSticky(){const h=$("#view-supplies .sup-head");if(h&&h.offsetHeight)document.documentElement.style.setProperty("--suph",h.offsetHeight+"px");}
+addEventListener("resize",supSticky);
+function renderSupplies(){setTimeout(supSticky,0);
   const groups=supplyGroups(PL);
   const all=groups.flatMap(g=>g.items);
   const done=all.filter(i=>got.has(i.id)).length, left=all.length-done;
@@ -2270,8 +2281,8 @@ function wizTribesHTML(){
 }
 function wizColorsHTML(){
   const T=tribesFor(S.players),p=computePlan();
-  return (p.swap?`<h3 class="wiz-sub wc-group-h">Starting tribes <span>from the opening draw</span></h3>`:"")+`<div class="wiz-colors rows">${wizColorCards("colors",S.colors.slice(0,T),split(S.players,T).map(n=>`${n} castaways`))}</div>`
-    +(p.swap?`<h3 class="wiz-sub wc-swap-h">After the tribe swap <span>everyone left redraws into 2 new tribes</span></h3><div class="wiz-colors rows">${wizColorCards("swap",S.swap,(p.swapSizes||[]).map(n=>`${n} castaways`))}</div>`:"");
+  return (p.swap?`<h3 class="wc-head">Starting tribes<span>Everyone draws a stone at the start of the night to find their tribe.</span></h3>`:"")+`<div class="wiz-colors rows">${wizColorCards("colors",S.colors.slice(0,T),split(S.players,T).map(n=>`${n} castaways`))}</div>`
+    +(p.swap?`<div class="wc-break" aria-hidden="true"><span>${IC.arrow}Midway through the game</span></div><h3 class="wc-head">After the tribe swap<span>Everyone still in the game redraws into 2 new tribes.</span></h3><div class="wiz-colors rows">${wizColorCards("swap",S.swap,(p.swapSizes||[]).map(n=>`${n} castaways`))}</div>`:"");
 }
 let wizPal="";  /* which tribe card has its color swatches open */
 function wizColorCards(set,cols,subs){
@@ -2860,7 +2871,7 @@ function show(v,top=true){
   const tab=v==="cast"?"party":v;
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.view===tab));
   if(v==="cast")openCastStudio();
-  const SUB={setup:"Game overview",script:"Host script",supplies:"Supplies",party:"Ambiance"};$("#sub-sec").textContent=SUB[tab]||"";
+  const SUB={setup:"Game overview",script:"Host script",supplies:"Supplies",party:"Ambiance"};$("#sub-sec").textContent=SUB[tab]||"";$("#subhead").classList.toggle("off",tab==="script");if(tab==="supplies")setTimeout(supSticky,0);
   if(top)window.scrollTo(0,0);
 }
 function route(){

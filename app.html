@@ -999,6 +999,13 @@ body.wl .pal-note{color:var(--ink-3)}
 .wiz-card small{color:#cfd8d1;font-size:14px;line-height:1.4}
 .wc-big{font:700 18px/1.2 var(--sans);color:#f0b48c}
 .wc-ic svg{width:26px;height:26px;color:#f0b48c}
+/* "How long should it last?": compact rows too — clock left, name + note middle, hours right */
+.wiz[data-step="length"] .wiz-cards{grid-template-columns:1fr!important;gap:10px}
+.wiz[data-step="length"] .wiz-card{grid-template-columns:44px minmax(0,1fr) auto;grid-template-areas:"ic nm hr" "ic sm hr";column-gap:14px;row-gap:3px;align-items:center;padding:14px 16px}
+.wiz[data-step="length"] .wiz-card .wc-ic{grid-area:ic;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,#ec7a3f 14%,transparent)}
+.wiz[data-step="length"] .wiz-card b{grid-area:nm;align-self:end;font-size:20px}
+.wiz[data-step="length"] .wiz-card .wc-big{grid-area:hr;font-size:17px;white-space:nowrap}
+.wiz[data-step="length"] .wiz-card small{grid-area:sm;align-self:start}
 /* "What kind of game?": one row per style, picture left, words right, all three fit on one screen */
 .wiz[data-step="style"] .wiz-cards{grid-template-columns:1fr!important;gap:10px}
 .wiz[data-step="style"] .wiz-card{grid-template-columns:96px minmax(0,1fr);grid-template-rows:auto auto;column-gap:16px;row-gap:4px;align-items:center;padding:12px 14px}

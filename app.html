@@ -367,6 +367,8 @@ mark.var{background:var(--hl);color:inherit;padding:0 4px;border-radius:4px;font
 .notes p:last-child{margin:0}
 .seg-foot{display:flex;gap:8px;padding:4px 10px 14px}
 .seg-foot .btn{flex:1}
+.script-end{display:flex;justify-content:center;padding:26px 0 36px}
+.script-end .btn{flex:none;padding:0 20px}
 .end-mark{display:block;height:1px}
 .btn.nudge{animation:nextNudge 1.6s ease-in-out infinite}
 @keyframes nextNudge{0%,100%{box-shadow:0 0 0 0 rgba(196,84,28,0);transform:translateX(0)}50%{box-shadow:0 0 0 6px rgba(196,84,28,.25);transform:translateX(3px)}}
@@ -1168,7 +1170,7 @@ body.wiz-on{overflow:hidden}
   <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
     <div class="eyebrow">Game overview</div>
     <h1>Your game <em>plan</em></h1>
-    <p>A walkthrough of every step of your game. Each step shows what you need, with the full description and host script at the bottom.</p>
+    <p>Every step of your night, in order.</p>
     <div class="stats" id="stats"></div>
   </div></div>
   <div class="wrap">
@@ -1235,7 +1237,7 @@ body.wiz-on{overflow:hidden}
   <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
     <div class="eyebrow">Host script</div>
     <h1>Every word, <em>step by step</em></h1>
-    <p>Everything you'll say and do. Tap a step to open it, or download the whole script as a PDF.</p>
+    <p>What to say at every step.</p>
   </div></div>
   <div class="seg-nav"><div class="wrap"><div class="seg-chips" id="seg-chips"></div></div></div>
   <div class="wrap script-layout">
@@ -2076,7 +2078,7 @@ function renderSupplies(){setTimeout(supSticky,0);
   $("#sup-bar").style.width=`${done/Math.max(1,all.length)*100}%`;
   $("#reset-got").textContent=done===all.length?"Mark all not got":"Mark all got";
   document.querySelectorAll(".tab[data-view=supplies] .badge").forEach(b=>{b.textContent=left;b.hidden=!left});
-  $("#sup-sub").textContent=`Sized for ${PL.N} players${PL.T>1?` in ${PL.T} tribes`:""} and the challenges you picked. Tap Buy to open the item on Amazon, then Mark got.`;
+  $("#sup-sub").textContent=`Sized for ${PL.N} players${PL.T>1?` in ${PL.T} tribes`:""}.`;
   let html="";
   groups.forEach(g=>{
     if(!g.items.length)return;
@@ -2195,7 +2197,7 @@ function setOpen(i,scroll){
   if(scroll&&i>=0){const a=document.getElementById("seg-"+(i+1));if(a)requestAnimationFrame(()=>a.scrollIntoView({block:"start",behavior:"smooth"}));}
   armNudges();
 }
-function renderScriptTop(){
+function renderScriptTop(){if(!$("#script-top"))return;
   const n=STEPS.filter(s=>doneSteps.has(s.id)).length;
   $("#script-top").innerHTML=`<div><b>${STEPS.length} steps</b></div><button class="btn primary" id="pdf-btn">${IC.doc}Download PDF</button>`;
 }
@@ -2204,7 +2206,7 @@ function renderScript(){
   const groups=[];STEPS.forEach((s,i)=>{let g=groups.at(-1);if(!g||g.ph!==s.phase){g={ph:s.phase,items:[]};groups.push(g)}g.items.push(i)});
   $("#seg-chips").innerHTML=STEPS.map((s,i)=>`<a href="#seg-${i+1}" data-i="${i}" style="--pc:${pc(s.phase)}"><i></i>${i+1}. ${esc(s.short)}</a>`).join("");
   $("#toc").innerHTML=groups.map(g=>`<h4 style="--pc:${pc(g.ph)}"><i></i>${g.ph}</h4>`+g.items.map(i=>`<a href="#seg-${i+1}" data-i="${i}" style="--pc:${pc(STEPS[i].phase)}"><span class="n">${i+1}</span><span>${esc(STEPS[i].title)}</span></a>`).join("")).join("");
-  $("#segments").innerHTML=`<div class="card script-top" id="script-top"></div>`+groups.map(g=>
+  $("#segments").innerHTML=``+groups.map(g=>
     `<section class="phase" style="--pc:${pc(g.ph)}"><header class="phase-h"><i></i><h2>${PH_NAME[g.ph]||g.ph}</h2><small>${PH_BLURB[g.ph]}</small><span class="phase-n">${g.items.length} step${g.items.length===1?"":"s"}</span></header>`+
     g.items.map(i=>{const s=STEPS[i],nx=STEPS[i+1],dn=doneSteps.has(s.id),open=i===openSeg;
       const meta=[esc(s.dur),esc(s.at),s.ctx.dbl&&"Two tribes at Tribal",s.isNew&&"New challenge",s.repeat&&"Repeat"].filter(Boolean).join(" · ");
@@ -2219,7 +2221,7 @@ function renderScript(){
           <div class="seg-foot"><button class="btn" data-seg-go="${i-1}" ${i?"":"disabled"}>${IC.prev}Previous</button>
             ${nx?`<button class="btn primary" data-seg-go="${i+1}">Next${IC.next}</button>`:`<button class="btn primary fin-btn" data-finish>${IC.medal}Finish</button>`}</div>
         </div>
-      </article>`}).join("")+`</section>`).join("");
+      </article>`}).join("")+`</section>`).join("")+`<div class="script-end"><button class="btn" id="pdf-btn">${IC.doc}Download the script as a PDF</button></div>`;
   syncSegDone();renderScriptTop();armNudges();
 }
 const PH_NAME={Tribes:"Group challenges",Individual:"Individual challenges"};

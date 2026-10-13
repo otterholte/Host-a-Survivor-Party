@@ -227,6 +227,8 @@ details.more[open] summary::after{transform:rotate(-135deg)}
 .chip{flex:none;height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-2);white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chip .c{opacity:.7;font-weight:500;margin-left:5px}
+.item.got.just{animation:gotFlash .9s ease}
+@keyframes gotFlash{0%{box-shadow:0 0 0 0 rgba(47,154,82,.55)}60%{box-shadow:0 0 0 8px rgba(47,154,82,0)}100%{box-shadow:var(--shadow)}}
 .group-h{display:flex;align-items:center;gap:10px;margin:26px 0 10px;padding:8px 0;position:sticky;top:var(--toph,0px);z-index:15;background:var(--bg)}
 .group-h i{width:12px;height:12px;border-radius:50%;flex:none}
 .group-h h3{margin:0;font:800 23px/1.2 var(--serif);color:var(--ink)}
@@ -2120,6 +2122,18 @@ const KIND={buy:"To buy",print:"To print",make:"To make",have:"From home"};
 /* Keep the sticky category headings just under the sticky progress bar */
 function supSticky(){const h=$("#view-supplies .sup-head");if(h&&h.offsetHeight)document.documentElement.style.setProperty("--suph",h.offsetHeight+"px");}
 addEventListener("resize",supSticky);
+/* Mark got / not got: the card smoothly shrinks (or grows) while the page glides it to just
+   under its category heading, so you can see what you marked and the next item below it. */
+function gotToggle(id){
+  const old=document.getElementById("sup-"+id),h0=old?old.offsetHeight:0;
+  got.has(id)?got.delete(id):got.add(id);store.set("svh-got",[...got]);renderSupplies();renderCarousel();
+  const card=document.getElementById("sup-"+id);if(!card||!old)return;
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches,D=reduce?0:450,h1=card.offsetHeight;
+  if(D){card.style.cssText=`height:${h0}px;overflow:hidden`;void card.offsetHeight;card.style.transition=`height ${D}ms cubic-bezier(.4,0,.2,1)`;card.style.height=h1+"px";setTimeout(()=>{card.style.cssText="";},D+60);}
+  if(got.has(id)){card.classList.add("just");setTimeout(()=>card.classList.remove("just"),900);}
+  const gh=card.closest(".sup-group")?.querySelector(".group-h"),off=(parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--toph"))||0)+(gh?gh.offsetHeight:0)+10;
+  easeScroll(card.getBoundingClientRect().top+scrollY-off,D);
+}
 function renderSupplies(){setTimeout(supSticky,0);
   const groups=supplyGroups(PL);
   const all=groups.flatMap(g=>g.items);
@@ -3035,7 +3049,7 @@ document.addEventListener("click",e=>{
   else if(t.id==="reset-got"){const live=supplyGroups(PL).flatMap(g=>g.items);
     if(live.every(i=>got.has(i.id)))got.clear();else live.forEach(i=>got.add(i.id));
     store.set("svh-got",[...got]);renderSupplies();renderCarousel();}
-  else if(d.got){got.has(d.got)?got.delete(d.got):got.add(d.got);store.set("svh-got",[...got]);renderSupplies();renderCarousel();}
+  else if(d.got){gotToggle(d.got);}
   else if(d.done){const i=+d.done,s=STEPS[i],a=document.getElementById("seg-"+(i+1));toggleDone(s.id);
     const on=doneSteps.has(s.id);a.classList.toggle("is-done",on);t.innerHTML=IC.check+(on?"Done · undo":"Mark done");a.querySelector(".num").innerHTML=on?IC.check:i+1;syncSegDone();renderScriptTop();renderCarousel();
     if(on){const nx=STEPS.findIndex((x,k)=>k>i&&!doneSteps.has(x.id));setOpen(nx,true);}}

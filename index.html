@@ -169,6 +169,40 @@ section{padding:72px 0}
 .top-cta{display:none}
 @media (min-width:760px){.top-cta{display:inline-flex}.sticky-cta{display:none}}
 .sticky-cta .btn{width:min(100%,420px);min-height:56px;font-size:17px}
+.foot-mini{display:none}
+@media (max-width:759px){
+  /* Hero: shorter, calmer, one clear action */
+  .hero .wrap{gap:26px;padding-top:34px;padding-bottom:40px}
+  .hero h1{font-size:clamp(40px,12vw,54px);margin:10px 0 12px}
+  .hero p{font-size:17px}
+  .trust{gap:6px 14px;font-size:13px;margin-top:16px}
+  .hero-shot .mini,.hero-shot .chip{display:none}
+  .hero-shot .main{aspect-ratio:16/10;border-radius:14px}
+  .hero-scene{opacity:.5;height:30%}
+  section{padding:52px 0}
+  h2{font-size:28px}
+  .lede{font-size:16px}
+  /* Photos: one big, two small, one caption */
+  .gallery{gap:10px;margin-top:22px}
+  .gallery figure:nth-child(n+4){display:none}
+  .gallery figure:not(.wide) figcaption{display:none}
+  /* Included: titles only */
+  .feats{gap:8px;margin-top:22px}
+  .feat{padding:14px;align-items:center}
+  .feat p{display:none}
+  .feat h3{margin:0;font-size:16px}
+  .feat .ic{width:38px;height:38px}
+  .steps{margin-top:22px;gap:10px}
+  .step{padding:18px}
+  .sizes{margin-top:20px;gap:10px}
+  .size{padding:16px}
+  .desk-only{display:none}
+  /* Motion: a simple fade, no sweep */
+  .btn-pulse::after{display:none}
+  /* Footer: one quiet line */
+  .foot-body,.foot-scene{display:none}
+  .foot-mini{display:block;padding:18px 16px calc(84px + env(safe-area-inset-bottom));text-align:center;font-size:12px;color:#8a968f}
+}
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*90ms)}
 .steps .reveal{transform:translateX(-32px)}
 .sizes .reveal{transform:translateY(24px) scale(.94)}
@@ -176,6 +210,10 @@ section{padding:72px 0}
 .gallery .reveal{transform:translateY(24px) scale(.97)}
 .faq .reveal{transform:translateY(14px)}
 .reveal.in{opacity:1;transform:none}
+@media (max-width:759px){
+  .reveal,.steps .reveal,.sizes .reveal,.feats .reveal,.gallery .reveal,.faq .reveal{transform:translateY(12px);transition-delay:0s!important}
+  .reveal.in,.steps .reveal.in,.sizes .reveal.in,.feats .reveal.in,.gallery .reveal.in,.faq .reveal.in{transform:none}
+}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.btn:hover{transform:none}.hero *,.btn-pulse,.btn-pulse::after,.hero-shot .main,.hero-shot .mini{animation:none!important}.step:hover,.size:hover,.feat:hover{transform:none}}
 </style>
 </head>
@@ -204,11 +242,11 @@ section{padding:72px 0}
     <div>
       <div class="kicker">Outwit · Outplay · Outlast</div>
       <h1>Host a <span>Survivor</span> party at home</h1>
-      <p>Tribes, challenges, blindsides and a real Tribal Council in your own backyard. Tell us how many castaways are coming and get the whole night planned in a couple of minutes.</p>
+      <p>Tribes, challenges, blindsides and a real Tribal Council in your backyard. Planned for you in minutes.</p>
       <div class="cta-row">
         <a class="btn btn-primary btn-pulse" id="hero-cta" href="app.html?new">Plan my party, free <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <ul class="trust"><li>Free</li><li>No sign-up</li><li>Works on your phone</li><li>5 to 24 players</li></ul>
+      <ul class="trust"><li>Free</li><li>No sign-up</li><li>5 to 24 players</li></ul>
     </div>
     <div class="hero-shot">
       <img class="main" src="assets/game-photos/winner-prize-event-v2.jpg" alt="Friends cheering as the Sole Survivor raises a trophy by the fire pit" fetchpriority="high">
@@ -227,7 +265,7 @@ section{padding:72px 0}
   <div class="wrap">
     <div class="kicker reveal">The night</div>
     <h2 class="reveal">It feels like the real show</h2>
-    <p class="lede reveal">Everyone draws a painted stone to find their tribe. Tribes battle through relay challenges, plot by the fire, and vote each other out one by one, until the jury crowns a winner.</p>
+    <p class="lede reveal">Draw stones for tribes, battle through challenges, and vote each other out until the jury crowns a winner.</p>
     <div class="gallery">
       <figure class="wide reveal"><img src="assets/game-photos/tribal-early-event-v2.jpg" alt="A tribe at Tribal Council around a fire pit" loading="lazy"><figcaption>Tribal Council around the fire</figcaption></figure>
       <figure class="reveal"><img src="assets/game-photos/tribe-draw-event-v2.jpg" alt="Players drawing hidden tribe stones" loading="lazy"><figcaption>Draw a stone to find your tribe</figcaption></figure>
@@ -247,7 +285,7 @@ section{padding:72px 0}
       <div class="step reveal"><div class="n">2</div><h3>Get your whole game plan</h3><p>A step-by-step run of show with tribes, every challenge, each Tribal Council, the supplies to grab, and a word-for-word host script.</p></div>
       <div class="step reveal"><div class="n">3</div><h3>Host the night</h3><p>Play the cast slideshow on the TV as people arrive, then follow the script from your phone. Your game gets its own link to share with co-hosts.</p></div>
     </div>
-    <div class="cta-row reveal"><a class="btn btn-primary" href="app.html?new">Start planning</a></div>
+    <div class="cta-row reveal desk-only"><a class="btn btn-primary" href="app.html?new">Start planning</a></div>
   </div>
 </section>
 
@@ -255,7 +293,7 @@ section{padding:72px 0}
   <div class="wrap">
     <div class="kicker reveal">Everything you need</div>
     <h2 class="reveal">Your host kit, done for you</h2>
-    <p class="lede reveal">No spreadsheets, no reinventing the rules. Just show up and run it.</p>
+    <p class="lede reveal">Just show up and run it.</p>
     <div class="feats">
       <div class="feat reveal"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h7"/></svg></span><div><h3>A game plan that fits your group</h3><p>Tribes, swaps, the merge and the right number of rounds, worked out for 5 to 24 players.</p></div></div>
       <div class="feat reveal"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></svg></span><div><h3>Word-for-word host script</h3><p>Know exactly what to say at every challenge and Tribal Council. Download it as a PDF.</p></div></div>
@@ -299,12 +337,13 @@ section{padding:72px 0}
   <a class="btn btn-primary btn-pulse" href="app.html?new" tabindex="-1">Plan my party, free <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </div>
 <footer class="foot">
+  <div class="foot-mini">© <span class="yr2"></span> Host a Survivor Party · Fan-made, not affiliated with CBS.</div>
   <div class="foot-body"><b>Host a Survivor Party</b><p>Plan and host Survivor at home.</p><small>© <span id="yr"></span> Host a Survivor Party · Fan-made, not affiliated with CBS.</small></div>
   <div class="foot-scene" id="foot-scene" aria-hidden="true"></div>
 </footer>
 
 <script>
-document.getElementById("yr").textContent=new Date().getFullYear();
+document.getElementById("yr").textContent=new Date().getFullYear();document.querySelectorAll(".yr2").forEach(e=>e.textContent=new Date().getFullYear());
 /* Footer art: palms + tiki torch on each side, the sun setting in the middle */
 const FL=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0C-9-1-11-11-5-18c0 4 3 5 4 2 2-6-1-10 1-15 9 6 12 15 9 22-1 4-4 9-9 9z" fill="#ff7a1a"/><path d="M0 0c-5 0-6-6-3-10 1 3 2 3 3 1 3 3 4 7 2 8-1 1-1 1-2 1z" fill="#ffd34d"/></g>`;
 const PALM=(x,y,s=1,c="#0b1411")=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}"><path d="M-2 0C0-30 4-55 12-78l4 1C9-55 5-30 4 0z"/><path d="M14-78c-14-6-30-2-40 8 12-5 26-6 40-4zM14-78c10-12 28-14 40-8-14 0-28 3-38 10zM14-78c-6-14-20-20-32-18 12 3 22 9 30 19zM14-78c4-14 16-22 30-22-11 5-20 12-27 23zM14-78c-16 4-26 16-28 30 6-12 16-22 29-27zM14-78c14 2 26 12 30 26-8-11-18-19-31-23z"/></g>`;

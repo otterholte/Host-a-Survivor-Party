@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /vote.html
+
+Sitemap: https://hostasurvivorparty.com/sitemap.xml

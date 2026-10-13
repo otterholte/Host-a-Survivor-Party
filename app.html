@@ -4207,7 +4207,7 @@ PL=computePlan();STEPS=buildSteps(PL);
 renderSettingsStatic();
 rerender();
 route();
-loadMedia();
+if(ADMIN)loadMedia();  /* the photo-upload API only exists on the local server */
 if(!S.onboarded)openWizard(0);
 if(gameNote){const t=document.createElement("div");t.className="toast";t.textContent=gameNote;document.body.appendChild(t);setTimeout(()=>t.remove(),6000);}
 </script>

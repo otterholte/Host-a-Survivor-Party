@@ -756,6 +756,11 @@ article.seg .skip-banner{margin:16px 18px 0}
 .car-dot.on{background:var(--ink-2);box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink)}
 .car-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
 .car-media{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:16/9;background:#0b1411}
+/* Several photos: each slide is a little narrower so the neighbours peek in at the edges */
+.car-media:not([data-count="1"]){aspect-ratio:auto;gap:8px;padding:10px 7%;background:var(--surface);scroll-padding:0 7%}
+.car-media:not([data-count="1"]) .mi{flex:0 0 100%;aspect-ratio:16/10;border-radius:14px;box-shadow:0 8px 20px -12px rgba(0,0,0,.45)}
+.car-media:not([data-count="1"]) .mi figcaption{border-radius:0 0 14px 14px}
+.car-media:not([data-count="1"])~.mi-arrow{top:calc(50% - 4px)}
 .car-media::-webkit-scrollbar{display:none}
 .mi{position:relative;flex:0 0 100%;margin:0;display:grid;place-items:center;overflow:hidden;scroll-snap-align:center}
 .mi img,.mi video{display:block;width:100%;height:100%;object-fit:cover;background:#000}
@@ -1961,6 +1966,9 @@ async function uploadMedia(key,file){
 /* ---------- Game plan carousel ---------- */
 let CAR=store.get("svh-car",0), carScriptOpen=false;
 let doneSteps=new Set();  /* steps are no longer marked done; Previous / Next instead */
+/* Photo strip: which slide is centered, and where to scroll to center slide k */
+const miIdx=st=>{const sr=st.getBoundingClientRect(),c=sr.left+sr.width/2;let best=0,bd=1e9;[...st.children].forEach((el,i)=>{const r=el.getBoundingClientRect(),d=Math.abs(r.left+r.width/2-c);if(d<bd){bd=d;best=i;}});return best;};
+const miX=(st,k)=>{const el=st.children[k];if(!el)return st.scrollLeft;const sr=st.getBoundingClientRect(),r=el.getBoundingClientRect();return st.scrollLeft+(r.left-sr.left)-(sr.width-r.width)/2;};
 function stepNeeds(step){const I=supplyIndex(PL);return (step.items||[]).map(id=>I[id]).filter(Boolean);}
 function renderCarousel(){
   if(!STEPS.length)return;
@@ -1990,7 +1998,7 @@ function renderCarousel(){
     <div class="car-script-card"><details class="car-script" ${carScriptOpen?"open":""}><summary><span class="cs-ic">${IC.doc}</span><span class="cs-t"><b>Full step description</b><small>Plus the host's script</small></span></summary><div class="seg-body">${s.blocks.map(b=>renderBlock(b,s.ctx)).join("")}<i class="end-mark"></i></div></details></div>
 `;
   const strip=$("#car .car-media"),dots=[...document.querySelectorAll("#car .mi-dots button")];
-  if(strip&&dots.length)strip.addEventListener("scroll",()=>{const k=Math.round(strip.scrollLeft/strip.clientWidth);dots.forEach((d,j)=>d.classList.toggle("on",j===k));
+  if(strip&&dots.length)strip.addEventListener("scroll",()=>{const k=miIdx(strip);dots.forEach((d,j)=>d.classList.toggle("on",j===k));
     const pv=$("#car .mi-arrow.prev"),nx=$("#car .mi-arrow.next");if(pv)pv.disabled=k<=0;if(nx)nx.disabled=k>=dots.length-1;},{passive:true});
   btDraw();armNudges();
 }
@@ -2899,8 +2907,8 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("button");if(!t)return;
   const d=t.dataset;
   if(d.view){if(location.hash==="#"+d.view)show(d.view);else location.hash=d.view;}
-  else if(d.miGo!==undefined||d.miTo!==undefined){const st=$("#car .car-media");if(st){const n=st.children.length,cur=Math.round(st.scrollLeft/st.clientWidth);
-    const k=Math.max(0,Math.min(n-1,d.miTo!==undefined?+d.miTo:cur+ +d.miGo));const x=k*st.clientWidth,from=st.scrollLeft;st.scrollTo({left:x,behavior:"smooth"});
+  else if(d.miGo!==undefined||d.miTo!==undefined){const st=$("#car .car-media");if(st){const n=st.children.length,cur=miIdx(st);
+    const k=Math.max(0,Math.min(n-1,d.miTo!==undefined?+d.miTo:cur+ +d.miGo));const x=miX(st,k),from=st.scrollLeft;st.scrollTo({left:x,behavior:"smooth"});
     setTimeout(()=>{if(Math.abs(st.scrollLeft-from)<2&&Math.abs(x-from)>2)st.scrollLeft=x;},450);}}
   else if(d.share!==undefined){$("#share-url").value=shareURL();$("#share-slug").textContent="?g="+GAME.slug;$("#share-copy").textContent="Copy";$("#share-dlg").showModal();}
   else if(d.shareClose!==undefined)$("#share-dlg").close();

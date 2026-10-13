@@ -218,7 +218,13 @@ details.more[open] summary::after{transform:rotate(-135deg)}
 .rock{width:54px;height:40px}
 
 /* ---------- Supplies ---------- */
-.sup-head{position:sticky;bottom:0;z-index:20;margin-top:24px;background:var(--bg);padding:12px 0 calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);box-shadow:0 -10px 20px -16px rgba(0,0,0,.35)}
+.sup-head{position:sticky;bottom:0;z-index:20;margin-top:24px;background:linear-gradient(160deg,var(--jungle-2),var(--jungle) 70%);color:#fff;padding:12px 0 calc(12px + env(safe-area-inset-bottom));box-shadow:0 -10px 24px -12px rgba(0,0,0,.45)}
+/* Ready bar: dark green so it reads as its own control */
+.sup-head #sup-count{color:#fff;font-weight:700}
+.sup-head .pbar{background:rgba(255,255,255,.18)}
+.sup-head .pbar i{background:linear-gradient(90deg,#f0b48c,#ec7a3f)}
+.sup-head .reset-got{background:#fff;border-color:#fff;color:#1d2a24;font-weight:700}
+.sup-head .reset-got:hover{background:#f4efe4}
 .progress-line{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:600;white-space:nowrap}
 .pbar{flex:1;height:8px;border-radius:8px;background:var(--line);overflow:hidden}
 .pbar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}

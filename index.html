@@ -132,16 +132,48 @@ section{padding:72px 0}
 
 /* footer */
 .foot{background:#111c17;color:#cfd8d1;text-align:center}
-.foot-body{padding:26px 16px 14px}
+.foot-body{padding:30px 16px 18px}
+.foot{border-top:1px solid rgba(255,255,255,.06)}
 .foot-body b{display:block;font:800 19px/1.2 var(--serif);color:#fff}
 .foot-body p{margin:4px 0 0;font-size:14px;color:#b9c8be}
 .foot-body small{display:block;margin-top:10px;font-size:13px;color:#8a968f}
-.foot-scene{height:84px}
-.foot-scene svg{width:100%;height:100%;display:block}
+.foot-scene{display:flex;align-items:flex-end;justify-content:space-between;height:84px;background:linear-gradient(180deg,#111c17 0%,#1b261c 22%,#26281c 42%,#36301f 62%,#4a3624 82%,#5c3f27 100%);border-bottom:6px solid #050907}
+.foot-scene svg{display:block;width:100%;height:100%}
+.fs-side{flex:0 1 300px;height:100%}
+.fs-side.right svg{transform:scaleX(-1)}
+.fs-mid{flex:0 1 400px;height:100%}
+@media (max-width:620px){.foot-scene{height:70px}.fs-side{flex-basis:150px}.fs-mid{flex-basis:170px}}
 
+/* Hero: staggered entrance, floating photo, light sweep + soft pulse on the main button */
+.hero .kicker,.hero h1,.hero p,.hero .cta-row,.hero .trust{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{animation-delay:.08s}.hero p{animation-delay:.18s}.hero .cta-row{animation-delay:.28s}.hero .trust{animation-delay:.38s}
+.hero-shot{animation:rise 1s .2s cubic-bezier(.2,.7,.2,1) both}
+.hero-shot .main{animation:floaty 7s ease-in-out 1.2s infinite}
+.hero-shot .mini{animation:floatyMini 8s ease-in-out 1.2s infinite}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes floatyMini{0%,100%{transform:rotate(3deg) translateY(0)}50%{transform:rotate(1.5deg) translateY(6px)}}
+.btn-pulse{position:relative;overflow:hidden;animation:ctaPulse 2.6s ease-in-out 1.4s infinite}
+.btn-pulse::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);animation:sheen 3.6s ease-in-out 1.8s infinite}
+@keyframes ctaPulse{0%,100%{box-shadow:0 10px 26px -10px rgba(196,84,28,.8),0 0 0 0 rgba(236,122,63,.55)}60%{box-shadow:0 10px 26px -10px rgba(196,84,28,.8),0 0 0 12px rgba(236,122,63,0)}}
+@keyframes sheen{0%,55%{left:-60%}80%,100%{left:130%}}
+.btn svg{transition:transform .2s}.btn:hover svg{transform:translateX(3px)}
+/* Cards lift gently on hover */
+.step,.feat,.size,.faq details,.game{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.step:hover,.size:hover{transform:translateY(-4px);box-shadow:0 18px 40px -22px rgba(30,40,30,.45);border-color:#d8cbb4}
+.feat:hover{transform:translateY(-3px);background:rgba(255,255,255,.09);border-color:rgba(236,122,63,.35)}
+.faq details:hover{border-color:#d8cbb4}
+.step .n{transition:transform .25s ease}.step:hover .n{transform:rotate(-6deg) scale(1.06)}
+.gallery figure{box-shadow:0 10px 30px -18px rgba(0,0,0,.5);transition:box-shadow .3s}
+.gallery figure:hover{box-shadow:0 22px 44px -18px rgba(0,0,0,.55)}
+.gallery figcaption{transition:padding .3s}.gallery figure:hover figcaption{padding-bottom:15px}
+/* Sticky call to action */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(rgba(22,36,29,0),rgba(22,36,29,.92) 45%);transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.sticky-cta.show{transform:none;pointer-events:auto}
+.sticky-cta .btn{width:min(100%,420px);min-height:56px;font-size:17px}
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.btn:hover{transform:none}}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.btn:hover{transform:none}.hero *,.btn-pulse,.btn-pulse::after,.hero-shot .main,.hero-shot .mini{animation:none!important}.step:hover,.size:hover,.feat:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -149,7 +181,6 @@ section{padding:72px 0}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="./"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 4 7 6 7 12a7 7 0 0 1-14 0c0-3 1.5-5 3-6.5.3 2 1.2 3.3 2.6 3.8C14 8.5 14.6 5.6 16 3z" fill="#ec7a3f"/><path d="M16 13c1.6 2 3 3.3 3 5.6a3 3 0 0 1-6 0c0-1.5.8-2.6 1.6-3.4.2.9.6 1.4 1.1 1.6-.2-1.4 0-2.6.3-3.8z" fill="#ffd27a"/><path d="M7 27l18-6M7 21l18 6" stroke="#d9b07a" stroke-width="2.4" stroke-linecap="round"/></svg>Host a Survivor Party</a>
-    <a class="btn btn-primary" href="app.html?new">Plan my party</a>
   </div>
 </header>
 
@@ -171,8 +202,7 @@ section{padding:72px 0}
       <h1>Host a <span>Survivor</span> party at home</h1>
       <p>Tribes, challenges, blindsides and a real Tribal Council in your own backyard. Tell us how many castaways are coming and get the whole night planned in a couple of minutes.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="app.html?new">Plan my party, free <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a class="btn btn-ghost" href="#how">See how it works</a>
+        <a class="btn btn-primary btn-pulse" id="hero-cta" href="app.html?new">Plan my party, free <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
       <ul class="trust"><li>Free</li><li>No sign-up</li><li>Works on your phone</li><li>5 to 24 players</li></ul>
     </div>
@@ -259,28 +289,36 @@ section{padding:72px 0}
   </div>
 </section>
 
-<section class="dark final">
-  <div class="wrap">
-    <div class="kicker reveal">Your tribe is waiting</div>
-    <h2 class="reveal">Ready to read the votes?</h2>
-    <p class="lede reveal">Set up your Survivor party in a couple of minutes.</p>
-    <div class="cta-row reveal"><a class="btn btn-primary" href="app.html?new">Plan my party, free</a></div>
-  </div>
-</section>
 </main>
 
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true">
+  <a class="btn btn-primary btn-pulse" href="app.html?new" tabindex="-1">Plan my party, free <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</div>
 <footer class="foot">
   <div class="foot-body"><b>Host a Survivor Party</b><p>Plan and host Survivor at home.</p><small>© <span id="yr"></span> Host a Survivor Party · Fan-made, not affiliated with CBS.</small></div>
-  <div class="foot-scene" aria-hidden="true"><svg viewBox="0 0 1200 84" preserveAspectRatio="xMidYMax slice"><defs><linearGradient id="fs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#111c17"/><stop offset=".45" stop-color="#26281c"/><stop offset=".8" stop-color="#4a3624"/><stop offset="1" stop-color="#5c3f27"/></linearGradient></defs>
-    <rect width="1200" height="84" fill="url(#fs)"/><path d="M574 76a26 26 0 0 1 52 0z" fill="#ffc861"/>
-    <path d="M0 84V70c60-8 140-8 220 2 30 4 50 8 70 12z" fill="#050907"/><path d="M1200 84V70c-60-8-140-8-220 2-30 4-50 8-70 12z" fill="#050907"/>
-    <g fill="#050907"><path d="M58 74c1-22 5-40 12-56l4 1c-6 16-10 34-10 55z"/><path d="M72 18c-14-6-30-2-40 8 12-5 26-6 40-4zM72 18c10-12 28-14 40-8-14 0-28 3-38 10zM72 18c-6-14-20-20-32-18 12 3 22 9 30 19z"/></g>
-    <g fill="#050907"><path d="M1142 74c-1-22-5-40-12-56l-4 1c6 16 10 34 10 55z"/><path d="M1128 18c14-6 30-2 40 8-12-5-26-6-40-4zM1128 18c-10-12-28-14-40-8 14 0 28 3 38 10zM1128 18c6-14 20-20 32-18-12 3-22 9-30 19z"/></g>
-  </svg></div>
+  <div class="foot-scene" id="foot-scene" aria-hidden="true"></div>
 </footer>
 
 <script>
 document.getElementById("yr").textContent=new Date().getFullYear();
+/* Footer art: palms + tiki torch on each side, the sun setting in the middle */
+const FL=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0C-9-1-11-11-5-18c0 4 3 5 4 2 2-6-1-10 1-15 9 6 12 15 9 22-1 4-4 9-9 9z" fill="#ff7a1a"/><path d="M0 0c-5 0-6-6-3-10 1 3 2 3 3 1 3 3 4 7 2 8-1 1-1 1-2 1z" fill="#ffd34d"/></g>`;
+const PALM=(x,y,s=1,c="#0b1411")=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}"><path d="M-2 0C0-30 4-55 12-78l4 1C9-55 5-30 4 0z"/><path d="M14-78c-14-6-30-2-40 8 12-5 26-6 40-4zM14-78c10-12 28-14 40-8-14 0-28 3-38 10zM14-78c-6-14-20-20-32-18 12 3 22 9 30 19zM14-78c4-14 16-22 30-22-11 5-20 12-27 23zM14-78c-16 4-26 16-28 30 6-12 16-22 29-27zM14-78c14 2 26 12 30 26-8-11-18-19-31-23z"/></g>`;
+const FOOT_TORCH=(x,s=1)=>`<g transform="translate(${x} 120) scale(${s})"><rect x="-2" y="-46" width="4" height="46" rx="1.5" fill="#050907"/><path d="M-8-56h16l-3 11h-10z" fill="#050907"/><path d="M-8-52h16" stroke="#3a2416" stroke-width="1.5"/>${FL(0,-56,.75)}</g>`;
+const FOOT_SIDE=`<svg viewBox="0 0 300 120" preserveAspectRatio="xMinYMax meet"><path d="M0 120V98c40-10 110-12 170-2 40 7 80 16 130 24z" fill="#050907"/>${PALM(58,104,.95,"#050907")}${PALM(112,106,.7,"#050907")}${FOOT_TORCH(196)}<ellipse cx="236" cy="117" rx="9" ry="4" fill="#050907"/><ellipse cx="250" cy="118" rx="6" ry="3" fill="#050907"/></svg>`;
+const FOOT_SCENE=`<div class="fs-side">${FOOT_SIDE}</div>
+<div class="fs-mid"><svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMax meet"><defs><radialGradient id="fs-glow"><stop offset="0" stop-color="#ffb35c" stop-opacity=".55"/><stop offset="1" stop-color="#ffb35c" stop-opacity="0"/></radialGradient></defs>
+<circle cx="200" cy="104" r="80" fill="url(#fs-glow)"/><path d="M174 104a26 26 0 0 1 52 0z" fill="#ffc861"/>
+<g stroke="#ffc861" stroke-linecap="round" opacity=".6"><path d="M178 110h44" stroke-width="2.5"/><path d="M188 116h24" stroke-width="2"/></g>
+<path d="M262 106c10-9 26-12 42-9 10 2 18 6 24 9z" fill="#050907"/>${PALM(292,100,.38,"#050907")}<path d="M60 107c8-6 20-8 32-6 6 1 12 4 16 6z" fill="#050907"/></svg></div>
+<div class="fs-side right">${FOOT_SIDE}</div>`;
+document.getElementById("foot-scene").innerHTML=FOOT_SCENE;
+
+/* Sticky "Plan my party" bar once the hero button is out of view */
+const heroCta=document.getElementById("hero-cta"),bar=document.getElementById("sticky-cta");
+const footEl=document.querySelector(".foot");
+function checkBar(){const r=heroCta.getBoundingClientRect(),show=(r.bottom<0||r.top>innerHeight)&&footEl.getBoundingClientRect().top>innerHeight-20;bar.classList.toggle("show",show);bar.setAttribute("aria-hidden",!show);bar.querySelector("a").tabIndex=show?0:-1;}
+addEventListener("scroll",checkBar,{passive:true});addEventListener("resize",checkBar);checkBar();
 /* Fade sections in as they scroll into view */
 const io="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -8% 0px"}):null;
 document.querySelectorAll(".reveal").forEach(el=>io?io.observe(el):el.classList.add("in"));

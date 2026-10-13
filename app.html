@@ -767,7 +767,7 @@ article.seg .skip-banner{margin:16px 18px 0}
 .car-media{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:16/9;background:#0b1411}
 /* Several photos: each slide is a little narrower so the neighbours peek in at the edges */
 .car-media:not([data-count="1"]){aspect-ratio:auto;gap:6px;padding:0 4.5%;background:var(--surface);scroll-padding:0 4.5%}
-.car-media:not([data-count="1"]) .mi{flex:0 0 100%;aspect-ratio:16/10}
+.car-media:not([data-count="1"]) .mi{flex:0 0 100%;aspect-ratio:16/10;border-radius:6px}
 /* Swipe hint: the photos glide left a little and back, once, when the strip first comes into view */
 .car-media.hint .mi{animation:peekHint 1.3s cubic-bezier(.45,0,.25,1) 2}
 @keyframes peekHint{0%,100%{transform:none}45%{transform:translateX(-34px)}}

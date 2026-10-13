@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>if(location.protocol==="http:"&&!/^(localhost|127\.|10\.|192\.168\.|\[::1\])/.test(location.hostname))location.replace("https:"+location.href.slice(5));</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b110e">
+<meta name="robots" content="noindex">
+<title>Survivor · TV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;800&family=Inter:wght@500;700&family=Anton&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"Survivor Carved";src:url("assets/cast/survivor-carved.ttf") format("truetype");font-display:swap}
+:root{--fire:#f0843a;--fire-2:#ffc46b;--ink:#f6f0e3;--ink-2:#cfc6b4;--serif:"Roboto Slab",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--big:"Anton",Impact,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#070b09;color:var(--ink);font:16px/1.4 var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
+body.idle-cursor{cursor:none}
+.stage{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden}
+.bg{position:absolute;inset:-4%;background:#0b110e center/cover;opacity:0;transition:opacity 1.2s ease;animation:kb 26s ease-in-out infinite alternate}
+.bg.on{opacity:1}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.08) translate(-1%,-1%)}}
+.shade{position:absolute;inset:0;background:radial-gradient(90% 70% at 50% 110%,rgba(240,132,58,.28),transparent 60%),linear-gradient(180deg,rgba(7,11,9,.15),rgba(7,11,9,.82) 78%)}
+.shade.dark{background:radial-gradient(80% 70% at 50% 115%,rgba(240,132,58,.45),transparent 62%),#0a0f0c}
+.scene{position:relative;z-index:2;width:min(92vw,1500px);text-align:center;padding:4vh 4vw;animation:in .9s cubic-bezier(.2,.7,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(3vh) scale(.98)}}
+.kick{font:700 clamp(14px,1.6vw,26px)/1.2 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--fire-2)}
+.title{font:400 clamp(48px,8.6vw,170px)/.98 var(--big);text-transform:uppercase;letter-spacing:.01em;margin:1.4vh 0;text-shadow:0 6px 40px rgba(0,0,0,.6);overflow-wrap:anywhere}
+.logo{font-family:"Survivor Carved",var(--big);font-size:clamp(70px,14vw,260px);color:#fff4dc;letter-spacing:.03em}
+.sub{font:600 clamp(18px,2.2vw,40px)/1.35 var(--serif);color:var(--ink-2);max-width:62ch;margin:0 auto}
+.huge{font:400 clamp(90px,20vw,380px)/1 var(--big);letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.dots{display:flex;gap:1.2vw;justify-content:center;margin-top:3vh;flex-wrap:wrap}
+.dots i{width:clamp(16px,2vw,34px);height:clamp(16px,2vw,34px);border-radius:50%;background:rgba(255,255,255,.14);transition:background .5s,transform .5s}
+.dots i.on{background:var(--fire-2);transform:scale(1.12);box-shadow:0 0 24px rgba(255,196,107,.6)}
+.parch{display:inline-block;min-width:min(60vw,900px);padding:5vh 5vw 4.5vh;border-radius:12px;color:#3b2a17;background:linear-gradient(160deg,#f1e5c6,#d8c39a);
+  box-shadow:inset 0 0 60px rgba(120,80,30,.35),0 40px 80px -30px #000;transform:rotate(-1.5deg);animation:flip .7s cubic-bezier(.2,.7,.2,1)}
+@keyframes flip{from{opacity:0;transform:rotateX(70deg) rotate(-1.5deg)}}
+.parch small{font:700 clamp(14px,1.4vw,24px)/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:#8a5a2a}
+.parch b{display:block;font:800 clamp(60px,9vw,180px)/1.05 var(--serif);margin-top:2vh;transform:rotate(-2deg);overflow-wrap:anywhere}
+.parch .void{display:inline-block;margin-top:2vh;font:700 clamp(14px,1.4vw,24px)/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#8a3a10;border:2px solid rgba(138,58,16,.4);border-radius:999px;padding:.5em 1em}
+.tally{display:flex;gap:2.4vw;justify-content:center;flex-wrap:wrap;margin-top:5vh}
+.tally div{display:grid;justify-items:center;gap:.6vh;min-width:9vw}
+.tally b{font:400 clamp(40px,5vw,96px)/1 var(--big);color:var(--fire-2)}
+.tally span{font:700 clamp(16px,1.6vw,30px)/1.1 var(--sans)}
+.torch{width:clamp(80px,9vw,170px);height:auto;margin:0 auto 2vh;display:block;overflow:visible}
+.torch .fl{transform-origin:32px 64px;animation:flick 2.2s ease-in-out infinite}
+.out .torch .fl{animation:snuff 1.4s ease forwards}
+@keyframes flick{0%,100%{transform:scale(1,1) skewX(0)}30%{transform:scale(.96,1.05) skewX(2deg)}60%{transform:scale(1.03,.95) skewX(-2deg)}}
+@keyframes snuff{0%{transform:scale(1);opacity:1}100%{transform:scale(.1,.04) translateY(40px);opacity:0}}
+.torch .smoke{opacity:0}
+.out .torch .smoke{animation:smoke 3s ease-out infinite 1.2s}
+@keyframes smoke{0%{opacity:0;transform:translateY(8px)}30%{opacity:.55}100%{opacity:0;transform:translateY(-30px)}}
+.tribes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(26vw,380px),1fr));gap:2vw;margin-top:4vh;text-align:left}
+.tribes div{border-radius:18px;padding:2.4vh 1.6vw;background:color-mix(in srgb,var(--tc) 22%,#0c120f);border:2px solid color-mix(in srgb,var(--tc) 55%,transparent)}
+.tribes h3{display:flex;align-items:center;gap:.6em;margin:0 0 1.4vh;font:800 clamp(24px,2.6vw,48px)/1 var(--serif)}
+.tribes h3 i{width:1em;height:1em;border-radius:6px;background:var(--tc)}
+.tribes span{display:block;font:700 clamp(18px,1.9vw,34px)/1.5 var(--sans);animation:in .6s both}
+.join{display:flex;gap:4vw;align-items:center;justify-content:center;text-align:left}
+.qr{width:min(34vh,30vw);aspect-ratio:1;background:#fff;border-radius:18px;padding:1.6vh;flex:none}
+.qr svg{width:100%;height:100%}
+.url{display:inline-block;margin-top:2vh;font:700 clamp(16px,1.8vw,32px)/1.3 ui-monospace,Menlo,Consolas,monospace;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:.6em 1em;word-break:break-all}
+.lvl{font:400 clamp(60px,10vw,200px)/1 var(--big);text-transform:uppercase;margin:1vh 0}
+.bar{width:min(60vw,900px);height:12px;border-radius:9px;background:rgba(255,255,255,.12);margin:3vh auto 0;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--fire-2);border-radius:9px;transition:width .5s linear}
+.crown{font:400 clamp(80px,14vw,280px)/1 var(--big);color:var(--fire-2);text-transform:uppercase;text-shadow:0 0 60px rgba(255,196,107,.45);overflow-wrap:anywhere}
+canvas.conf{position:fixed;inset:0;z-index:5;pointer-events:none}
+.net{position:fixed;right:18px;bottom:16px;z-index:10;display:flex;align-items:center;gap:8px;font:600 13px var(--sans);color:rgba(246,240,227,.5);transition:opacity .6s}
+.net i{width:8px;height:8px;border-radius:50%;background:#e0a33a}
+.net.live i{background:#4cc38a}
+.net.live{opacity:.35}
+.fs{position:fixed;left:50%;bottom:4vh;transform:translateX(-50%);z-index:10;font:700 15px var(--sans);color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:12px 20px;cursor:pointer;transition:opacity .6s}
+.fs[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="stage"><div class="bg" id="bg-a"></div><div class="bg" id="bg-b"></div><div class="shade" id="shade"></div><div class="scene" id="scene"></div></div>
+<canvas class="conf" id="conf"></canvas>
+<div class="net" id="net"><i></i><span>Connecting</span></div>
+<button class="fs" id="fs">Tap for full screen</button>
+<script>
+"use strict";
+const RELAY="https://ntfy.sh/",ROOM=(new URLSearchParams(location.search).get("r")||"").replace(/[^a-z0-9]/gi,"").slice(0,40),TOPIC="svh1-"+ROOM;
+const $=s=>document.querySelector(s),esc=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const BAL=[["One foot","Stand on one foot. Last person standing wins immunity."],["Hands up","Clasp your hands together above your head."],["Eyes closed","Close your eyes. Keep those hands up."],["Look up","Keep your eyes closed and tilt your head back to look up."],["Three hops","Open your eyes. Take three hops forward on your standing foot."],["Foot on shin","Rest your raised foot against your standing shin, and hold it."]];
+let snap=null,skewHost=0,skewLocal=0,es=null,beat=Date.now(),sig="",tick=0,bgOn="a",bgSrc="";
+const mmss=s=>{s=Math.max(0,Math.floor(s));return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;};
+const torch=()=>`<svg class="torch" viewBox="0 0 64 120" aria-hidden="true"><defs><radialGradient id="tg" cx="50%" cy="72%" r="62%"><stop offset="0" stop-color="#fff4c9"/><stop offset=".45" stop-color="#ffb24a"/><stop offset="1" stop-color="#e2531b"/></radialGradient></defs>
+  <g class="smoke" fill="none" stroke="#9aa39c" stroke-width="2.4" stroke-linecap="round"><path d="M30 52c-5-7 5-11 0-18s4-11 1-16"/><path d="M38 50c-3-5 3-8 0-13"/></g>
+  <g class="fl"><path d="M32 4c7 14 19 22 19 39a19 19 0 0 1-38 0c0-11 6-16 9-23 2 6 5 9 8 10-2-10-1-18 2-26z" fill="url(#tg)"/><path d="M32 30c3 7 9 11 9 19a9 9 0 0 1-18 0c0-5 3-8 5-11 1 3 2 4 4 5-1-5 0-9 0-13z" fill="#fff1c2"/></g>
+  <path d="M19 62h26l-5 9H24z" fill="#7b5634"/><rect x="28" y="70" width="8" height="48" rx="3" fill="#8a6038"/></svg>`;
+/* the host's clock, translated to this screen's clock */
+const elapsed=st=>st.acc+(st.run&&st.start?(Date.now()-(st.start-skewHost+skewLocal))/1000:0);
+function setBg(src,dark){$("#shade").className="shade"+(dark||!src?" dark":"");
+  if(src===bgSrc)return;bgSrc=src;const next=bgOn==="a"?"b":"a",el=$("#bg-"+next),old=$("#bg-"+bgOn);
+  if(!src){old.classList.remove("on");return;}
+  const im=new Image();im.onload=()=>{el.style.backgroundImage=`url("${src}")`;el.classList.add("on");old.classList.remove("on");bgOn=next;};im.src=src;}
+function view(){
+  const st=snap&&snap.stage||{k:"idle"},ev=snap?String(snap.ev||"").replace(/^Survivor[:\s—-]*/i,""):"";
+  switch(st.k){
+    case "title":setBg(st.img);return `<div class="kick">${esc(st.kick)}</div><div class="title${st.logo?" logo":""}">${esc(st.title)}</div>${st.sub?`<p class="sub">${esc(st.sub)}</p>`:""}`;
+    case "scene":setBg(st.img);return `<div class="kick">${esc(st.kick)}</div><div class="title">${esc(st.title)}</div>`;
+    case "tribal":setBg(st.img);return `<div class="kick">Tonight</div><div class="title">${esc(st.title||"Tribal Council")}</div>`;
+    case "reveal":setBg("",true);return `<div class="kick">${esc(st.small||"")}</div><div class="title" style="font-size:clamp(60px,11vw,220px)">${esc(st.text)}</div>`;
+    case "clock":{setBg("",true);const s=elapsed(st),hi=(st.mins||[10,15])[1]*60;
+      return `<div class="kick">${esc(st.title||"Challenge")}</div><div class="huge" id="clk">${mmss(s)}</div><div class="bar"><i id="clkbar" style="width:${Math.min(100,s/hi*100)}%"></i></div>`;}
+    case "balance":{setBg("",true);const s=elapsed(st),lv=Math.min(BAL.length-1,Math.floor(s/45)),last=lv===BAL.length-1,into=s-lv*45;
+      return `<div class="kick">Level ${lv+1} of ${BAL.length}</div><div class="lvl">${esc(BAL[lv][0])}</div><p class="sub">“${esc(BAL[lv][1])}”</p><div class="huge" style="font-size:clamp(60px,10vw,180px);margin-top:2vh" id="clk">${last?mmss(s):mmss(45-into)}</div>`;}
+    case "tribes":setBg("",true);return `<div class="kick">Your tribes</div><div class="tribes">${(st.tribes||[]).map(t=>`<div style="--tc:${esc(t.hex)}"><h3><i></i>${esc(t.name)}</h3>${(t.members||[]).map((m,i)=>`<span style="animation-delay:${i*.08}s">${esc(m)}</span>`).join("")}</div>`).join("")}</div>`;
+    case "join":setBg("",true);qrSoon(st.link);return `<div class="join"><div class="qr" id="qr"></div><div><div class="kick">Phone voting</div><div class="title" style="font-size:clamp(48px,6vw,120px)">Scan to join</div><p class="sub" style="margin:0">Open it, tap your name, and leave it open all night.</p><div class="url">${esc(String(st.link||"").replace(/^https?:\/\//,""))}</div></div></div>`;
+    case "votes":setBg("",true);return `<div class="kick">${st.final?"The jury is voting":"Tribal Council"}</div><div class="title">Votes are in: ${st.n}/${st.total}</div><div class="dots">${Array.from({length:st.total},(_,i)=>`<i class="${i<st.n?"on":""}"></i>`).join("")}</div>`;
+    case "locked":setBg("",true);return `${torch()}<div class="kick">The votes are locked</div><div class="title">I'll read the votes</div>`;
+    case "read":setBg("",true);return `<div class="parch"><small>Vote ${st.i} of ${st.total}</small><b>${esc(st.name)}</b>${st.void?`<span class="void">Does not count</span>`:""}</div>
+      <div class="tally">${(st.tally||[]).map(([n,k])=>`<div><b>${k}</b><span>${esc(n)}</span></div>`).join("")}</div>`;
+    case "out":setBg("",true);return `<div class="out">${torch()}<div class="kick">The tribe has spoken</div><div class="title">${esc((st.names||[]).join(" & ")||"")}</div><p class="sub">${(st.names||[]).length>1?"join the jury":(st.names||[]).length?"joins the jury":""}</p></div>`;
+    case "crown":setBg("",true);if(st.name)confetti();return `${torch()}<div class="kick">The jury has spoken</div><div class="crown">${esc(st.name||"")}</div><div class="title" style="font-size:clamp(40px,5vw,96px)">Sole Survivor</div>`;
+    default:setBg("",true);return `${torch()}<div class="kick">Outwit · Outplay · Outlast</div><div class="title logo">Survivor</div>${ev?`<p class="sub">${esc(ev)}</p>`:""}`;
+  }
+}
+function paint(){const n=$("#net");n.className="net"+(es&&es.readyState===1?" live":"");n.lastChild.textContent=es&&es.readyState===1?"Live":"Connecting";
+  if(!ROOM){$("#scene").innerHTML=`<div class="kick">Survivor TV</div><div class="title" style="font-size:clamp(40px,5vw,90px)">This link isn't complete</div><p class="sub">Open "Show on a TV" in the host's game to get the full link.</p>`;return;}
+  const st=snap&&snap.stage||{k:"idle"},k=JSON.stringify(st)+(snap?snap.ev:"");
+  if(k===sig)return;sig=k;$("#scene").innerHTML=`<div>${view()}</div>`;$("#scene").style.animation="none";void $("#scene").offsetWidth;$("#scene").style.animation="";}
+/* live clocks */
+setInterval(()=>{const st=snap&&snap.stage;if(!st||(st.k!=="clock"&&st.k!=="balance"))return;const c=$("#clk");if(!c)return;const s=elapsed(st);
+  if(st.k==="clock"){c.textContent=mmss(s);const b=$("#clkbar");if(b)b.style.width=Math.min(100,s/((st.mins||[10,15])[1]*60)*100)+"%";}
+  else{const lv=Math.min(BAL.length-1,Math.floor(s/45));if(lv!==Math.min(BAL.length-1,Math.floor((s-.5)/45))){sig="";paint();}else c.textContent=lv===BAL.length-1?mmss(s):mmss(45-(s-lv*45));}},500);
+let qrP=null;function qrSoon(link){const go=()=>{const el=$("#qr");if(!el||!window.qrcode)return;const q=qrcode(0,"M");q.addData(link);q.make();el.innerHTML=q.createSvgTag({cellSize:4,margin:0,scalable:true});};
+  if(window.qrcode)return setTimeout(go,0);if(!qrP){qrP=new Promise(r=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";s.onload=r;document.head.append(s);});}qrP.then(()=>setTimeout(go,0));}
+let confRun=0;function confetti(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const run=++confRun,cv=$("#conf"),ctx=cv.getContext("2d"),W=cv.width=innerWidth,H=cv.height=innerHeight,cols=["#ffc46b","#f0843a","#4cc38a","#2f6fd0","#d64545","#fff4d6"],P=[];
+  for(let i=0;i<260;i++)P.push({x:Math.random()*W,y:-Math.random()*H,vy:2+Math.random()*4,vx:(Math.random()-.5)*2,r:Math.random()*6,vr:(Math.random()-.5)*.2,w:8+Math.random()*8,h:12+Math.random()*10,c:cols[i%cols.length]});
+  const t0=performance.now();(function f(t){if(run!==confRun)return;ctx.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();});
+    if(t-t0<9000)requestAnimationFrame(f);else ctx.clearRect(0,0,W,H);})(t0);}
+function connect(){if(!ROOM)return paint();if(es)es.close();
+  es=new EventSource(RELAY+TOPIC+"/sse?since=12h");
+  es.addEventListener("open",()=>{beat=Date.now();paint();});
+  es.addEventListener("keepalive",()=>{beat=Date.now();});
+  es.onmessage=e=>{beat=Date.now();let m,b;try{m=JSON.parse(e.data);if(m.event!=="message")return;b=JSON.parse(m.message);}catch(x){return;}
+    if(b.t==="s"&&b.v===1&&(!snap||b.ts>=snap.ts)){snap=b;skewHost=b.ts-m.time*1000;skewLocal=Date.now()-m.time*1000;clearTimeout(tick);tick=setTimeout(paint,60);}};
+  es.onerror=()=>paint();}
+setInterval(()=>{if(Date.now()-beat>90000)connect();},30000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&(!es||es.readyState===2))connect();});
+$("#fs").onclick=()=>{const d=document.documentElement;(d.requestFullscreen||d.webkitRequestFullscreen||(()=>{})).call(d);$("#fs").hidden=true;
+  try{navigator.wakeLock&&navigator.wakeLock.request("screen");}catch(e){}};
+document.addEventListener("fullscreenchange",()=>{$("#fs").hidden=!!document.fullscreenElement;});
+let idleT=0;addEventListener("mousemove",()=>{document.body.classList.remove("idle-cursor");clearTimeout(idleT);idleT=setTimeout(()=>document.body.classList.add("idle-cursor"),2500);});
+setTimeout(()=>{if(!document.fullscreenElement)$("#fs").style.opacity=".55";},8000);
+paint();connect();
+</script>
+</body>
+</html>

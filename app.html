@@ -179,7 +179,7 @@ body.pv-lock{overflow:hidden}
 .icon-btn svg{width:20px;height:20px}
 
 /* ---------- Bottom nav (phone) ---------- */
-.bottom-nav{display:none!important;position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);
   background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
 .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:var(--nav-h);border:0;background:none;cursor:pointer;
@@ -326,7 +326,7 @@ details.more[open] summary::after{transform:rotate(-135deg)}
 .rock{width:54px;height:40px}
 
 /* ---------- Supplies ---------- */
-.sup-head{position:sticky;bottom:0;z-index:20;margin-top:24px;background:linear-gradient(160deg,var(--jungle-2),var(--jungle) 70%);color:#fff;padding:12px 0 calc(12px + env(safe-area-inset-bottom));box-shadow:0 -10px 24px -12px rgba(0,0,0,.45)}
+.sup-head{position:sticky;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));z-index:20;margin-top:24px;background:linear-gradient(160deg,var(--jungle-2),var(--jungle) 70%);color:#fff;padding:12px 0;box-shadow:0 -10px 24px -12px rgba(0,0,0,.45)}
 /* Ready bar: dark green so it reads as its own control */
 .sup-head #sup-count{color:#fff;font-weight:700}
 .sup-head .pbar{background:rgba(255,255,255,.18)}
@@ -1197,6 +1197,8 @@ body.wl .wiz-p,body.wl .wc-head span,body.wl .wiz-card small,body.wl .wt span,bo
 body.wl .wiz-rule,body.wl .wc-n,body.wl .ch-card small,body.wl .wiz-fields small{color:var(--ink-3)}
 body.wl .wiz-sub,body.wl .wc-lab,body.wl .wc-big,body.wl .wc-ic svg,body.wl .wf-h,body.wl .wc-break{color:var(--accent)}
 body.wl .wiz-dots i{background:var(--line)}
+body.wl .wiz-dots i.past{background:color-mix(in srgb,var(--accent) 50%,var(--line))}
+body.wl .wiz-dots i.on{background:var(--accent)}
 body.wl .wiz-ghost,body.wl .wiz-back{border-color:var(--line)!important;color:var(--ink)!important;background:var(--surface)!important}
 body.wl .wiz-x,body.wl .wiz-menu{border-color:var(--line);background:var(--surface);color:var(--ink)}
 body.wl .wiz-x:hover,body.wl .wiz-menu:hover{background:var(--surface-2);color:var(--ink)}
@@ -1341,6 +1343,306 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
 @media(max-width:639px){.instruction-photos{grid-template-columns:1fr}}
 @media(min-width:760px){.seg-body .station.game-station{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);align-items:start}
   .station-photo{height:100%}.station-photo img{height:100%;min-height:150px}}
+/* =====================================================================
+   Torchlight: season map, sheets and Play mode
+   ===================================================================== */
+/* Plan banner stats */
+.tl-stats{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;position:relative;z-index:1}
+.tl-stats span,.tl-edit{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 11px;color:#f4efe4}
+.tl-stats svg{width:15px;height:15px;opacity:.85}
+.tl-edit{cursor:pointer;background:rgba(236,122,63,.2);border-color:rgba(236,122,63,.45)}
+.tl-edit:hover{background:rgba(236,122,63,.32)}
+/* Season map */
+.smap{position:relative;max-width:720px;margin:22px auto 0;padding:14px 0 6px}
+.smap::before{content:"";position:absolute;left:50%;top:44px;bottom:44px;border-left:3px dashed color-mix(in srgb,var(--ink-3) 40%,transparent);transform:translateX(-50%)}
+.sm-node{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 68px minmax(0,1fr);align-items:center;margin:0 0 20px}
+.sm-card{grid-row:1;grid-column:1;text-align:right;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 13px;box-shadow:var(--shadow);cursor:pointer;font:inherit;color:inherit;transition:transform .15s,border-color .15s,box-shadow .15s;min-width:0}
+.sm-node.r .sm-card{grid-column:3;text-align:left}
+.sm-card:hover{border-color:color-mix(in srgb,var(--pc) 55%,var(--line))}
+.sm-card:active{transform:scale(.98)}
+.sm-card small{display:block;font:700 10.5px/1.25 var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--pc)}
+.sm-card b{display:block;font:700 15.5px/1.25 var(--sans);margin:3px 0 5px;overflow-wrap:anywhere}
+.sm-card em{font-style:normal;display:block;font-size:12.5px;line-height:1.4;color:var(--ink-3)}
+.sm-badge{grid-row:1;grid-column:2;justify-self:center;position:relative;z-index:1;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;cursor:pointer;
+  background:var(--surface);border:3px solid var(--pc);color:var(--pc);box-shadow:var(--shadow);transition:transform .15s}
+.sm-badge:active{transform:scale(.94)}
+.sm-badge svg{width:25px;height:25px}
+.sm-node.done .sm-badge{background:var(--pc);color:#fff}
+.sm-node.done .sm-card{opacity:.7}
+.sm-node.cur .sm-badge{background:var(--pc);color:#fff;animation:smPulse 1.9s infinite}
+@keyframes smPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--pc) 55%,transparent)}75%,100%{box-shadow:0 0 0 14px color-mix(in srgb,var(--pc) 0%,transparent)}}
+.sm-mile{position:relative;z-index:1;text-align:center;margin:-2px 0 22px}
+.sm-mile button{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font:700 13px/1 var(--sans);color:var(--ink);background:var(--surface);border:2px solid var(--pc);border-radius:999px;padding:7px 14px 7px 7px;box-shadow:var(--shadow)}
+.sm-mile .sm-mic{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--pc);color:#fff}
+.sm-mile .sm-mic svg{width:15px;height:15px}
+.sm-mile small{font-weight:600;color:var(--ink-3);font-size:12px}
+.sm-mile.cur button{animation:smPulse 1.9s infinite}
+.sm-mile.done button{opacity:.7}
+@media (prefers-reduced-motion:reduce){.sm-node.cur .sm-badge,.sm-mile.cur button{animation:none}}
+.plan-cta{position:sticky;bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));z-index:30;max-width:520px;margin:6px auto 0;padding:0 16px;pointer-events:none}
+.tl-cta{pointer-events:auto;width:100%;min-height:58px;border:0;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding:8px 16px;
+  background:linear-gradient(180deg,#e0702c,#c4541c);color:#fff;font:800 17px/1.2 var(--sans);box-shadow:0 14px 30px -12px rgba(196,84,28,.85)}
+.tl-cta svg{width:20px;height:20px}
+.tl-cta small{font-weight:600;font-size:13px;opacity:.85;flex-basis:100%;margin-top:-4px}
+.tl-cta:hover{filter:brightness(1.05)}
+#plan-extra{max-width:900px;margin:30px auto 0}
+.tl-boxes{display:grid;gap:10px}
+@media (min-width:760px){.tl-boxes{grid-template-columns:1fr 1fr}}
+.tl-box{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+.tl-box.muted{box-shadow:none;background:transparent}
+.tl-bic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--accent-soft);color:var(--accent)}
+.tl-bic svg{width:22px;height:22px}
+.tl-bt{min-width:0;flex:1}
+.tl-bt b{display:block;font-size:15.5px}
+.tl-bt small{display:block;color:var(--ink-3);font-size:13.5px;line-height:1.45;margin-top:2px}
+.tl-bb{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tl-bb .btn{flex:none;min-height:40px;padding:0 14px;font-size:14px}
+.tl-bb .btn svg{width:17px;height:17px}
+
+/* Sheets */
+.tl-sheet{position:fixed;inset:0;z-index:85;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,15,12,0);transition:background .22s}
+.tl-sheet[hidden]{display:none}
+.tl-sheet.show{background:rgba(10,15,12,.55)}
+.tl-sh{position:relative;text-align:left;width:min(560px,100%);max-height:88vh;max-height:88dvh;overflow-y:auto;overscroll-behavior:contain;background:var(--surface);color:var(--ink);border-radius:24px 24px 0 0;
+  padding:8px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(0,0,0,.25);transform:translateY(40px);opacity:0;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .25s}
+.tl-sheet.show .tl-sh{transform:none;opacity:1}
+@media (min-width:760px){.tl-sheet{align-items:center}.tl-sh{border-radius:22px}}
+.tl-grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:4px auto 14px}
+.tl-x{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface-2);display:grid;place-items:center;cursor:pointer;color:var(--ink-2);z-index:2}
+.tl-x svg{width:16px;height:16px}
+.tl-hero{height:170px;border-radius:16px;background:#2a3a31 center/cover;position:relative;overflow:hidden;margin-bottom:12px}
+.tl-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 35%,rgba(0,0,0,.7))}
+.tl-hero div{position:absolute;left:16px;right:16px;bottom:14px;z-index:1;color:#fff}
+.tl-hero small{font:700 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#ffc46b}
+.tl-hero b{display:block;font:800 24px/1.15 var(--serif);margin-top:6px}
+.tl-chips{display:flex;flex-wrap:wrap;gap:6px}
+.tl-chips span{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;border-radius:999px;padding:5px 11px;background:var(--surface-2);border:1px solid var(--line)}
+.tl-chips svg{width:15px;height:15px;color:var(--ink-3)}
+.tl-sh h3{font:700 12px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:18px 0 8px}
+.tl-what{margin:0;padding:0;list-style:none;counter-reset:w;display:grid;gap:9px}
+.tl-what li{counter-increment:w;display:flex;gap:10px;font-size:15px;line-height:1.45}
+.tl-what li::before{content:counter(w);flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font:800 12px/1 var(--sans);margin-top:-1px}
+.tl-need{display:grid;gap:6px}
+.tl-need a{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;text-decoration:none;color:inherit;padding:9px 12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line);font-size:14.5px;font-weight:600}
+.tl-need a svg{width:16px;height:16px;color:var(--ok)}
+.tl-need a small{font-weight:500;color:var(--ink-3);font-size:12.5px;text-align:right}
+.tl-need a.got span{color:var(--ink-3);text-decoration:line-through}
+.tl-sbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.tl-sbtns .btn{flex:1 1 auto;min-height:50px}
+.tl-k{font:700 11.5px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:2px 44px 4px 0;display:flex;align-items:center;gap:6px}
+.tl-k svg{width:15px;height:15px}
+.tl-h{font:800 24px/1.2 var(--serif);margin:0 44px 10px 0}
+.tl-p{color:var(--ink-2);margin:0 0 4px}
+.tl-fine{font-size:13px;color:var(--ink-3);margin:14px 0 0}
+.tl-link{display:grid;gap:4px;margin-top:12px}
+.tl-script{margin-top:18px}
+.tl-script h3{font:800 17px/1.25 var(--serif)!important;letter-spacing:0!important;text-transform:none!important;color:var(--ink)!important;margin:0 0 10px!important}
+.tl-note{background:var(--surface-2);border-radius:12px;padding:12px 14px;margin-top:10px}
+.tl-note p{margin:0 0 8px}.tl-note p:last-child{margin:0}
+.tl-fig{margin:12px 0 0}.tl-fig img{width:100%;border-radius:12px;background:#fff}.tl-fig figcaption{font-size:13px;color:var(--ink-3);margin-top:4px}
+.tl-menu{display:grid;gap:8px;margin-top:8px}
+.tl-menu button{display:flex;align-items:center;gap:14px;text-align:left;padding:13px 14px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);cursor:pointer;color:inherit;font:inherit}
+.tl-menu button svg{width:22px;height:22px;flex:none;color:var(--accent)}
+.tl-menu b{display:block;font-size:15px}
+.tl-menu small{display:block;font-size:13px;color:var(--ink-3)}
+body.tl-lock{overflow:hidden}
+
+/* ---------- Play mode ---------- */
+.play,.tl-sheet.dark{--bg:#0f1713;--surface:#1b2520;--surface-2:#232e28;--ink:#f4efe4;--ink-2:#cfc8b8;--ink-3:#8e9a91;--line:rgba(255,255,255,.12);
+  --accent:#f0843a;--accent-ink:#1a0d05;--accent-soft:rgba(240,132,58,.16);--ok:#4cc38a;--ok-soft:rgba(76,195,138,.15);--hl:rgba(255,196,107,.16);--note-bg:#18271e;--note-ink:#9fdcb4;--say-bg:#1e2a24;--script-bg:#18211c;--cool:#22303a;--cool-ink:#8fbfff;--btn:#f0843a;--btn-ink:#1a0d05}
+.tl-sheet.dark .tl-sh{background:#18211c;color:#f4efe4}
+.play{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;color:#f4efe4;
+  background:radial-gradient(120% 55% at 50% 112%,rgba(240,132,58,.26),transparent 62%),linear-gradient(180deg,#17271f,#0c130f 75%)}
+.play[hidden]{display:none}
+body.play-on{overflow:hidden}
+.pl-hud{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 12px 8px;max-width:760px;width:100%;margin:0 auto}
+.pl-ib{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#f4efe4;cursor:pointer}
+.pl-ib svg{width:19px;height:19px}
+.pl-where{flex:1;min-width:0}
+.pl-where small{display:block;font:700 10.5px/1.25 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:#ffc46b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-where b{display:block;font:700 15px/1.3 var(--sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-chip{display:inline-flex;align-items:center;gap:5px;flex:none;font-size:12.5px;font-weight:700;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:999px;padding:5px 10px}
+.pl-chip svg{width:14px;height:14px;opacity:.8}
+.pl-chip>span{display:inline-flex;align-items:center;gap:5px}
+.pl-tm{padding-left:8px;border-left:1px solid rgba(255,255,255,.18)}
+@media (max-width:400px){.pl-tm{display:none}}
+.pl-pips{display:flex;gap:3px;padding:2px 14px 0;max-width:760px;width:100%;margin:0 auto}
+.pl-pips i{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.12);transition:background .3s}
+.pl-pips i.d{background:color-mix(in srgb,var(--fire,#f0843a) 55%,transparent)}
+.pl-pips i.c{background:#ffc46b}
+.pl-stage{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:18px 20px 12px;display:flex;flex-direction:column;width:100%;max-width:680px;margin:0 auto}
+.pl-beat{margin:auto 0;animation:plIn .38s cubic-bezier(.2,.7,.2,1)}
+.pl-beat.back{animation-name:plBack}
+@keyframes plIn{from{opacity:0;transform:translateX(26px)}}
+@keyframes plBack{from{opacity:0;transform:translateX(-26px)}}
+.pl-kick{font:700 12px/1.3 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:#ffc46b;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.pl-kick svg{width:17px;height:17px;flex:none}
+.pl-kick.c{justify-content:center}
+.pl-part{margin-left:auto;font-weight:600;letter-spacing:.04em;color:rgba(244,239,228,.5)}
+.pl-head{display:flex;align-items:center;gap:8px;font:800 15px/1.2 var(--sans);color:#f4efe4;margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.1)}
+.pl-head svg{width:17px;height:17px;color:#ffc46b}
+.pl-say{font:600 clamp(21px,5.6vw,27px)/1.42 var(--serif);text-wrap:pretty}
+.pl-say p{margin:0 0 .6em}.pl-say p:last-child{margin:0}
+.pl-say.sm{font-size:clamp(18px,4.8vw,21px)}
+.pl-say.xs{font-size:clamp(17px,4.4vw,19px)}
+.pl-say.c{text-align:center;margin-top:16px}
+.play mark.var{background:none;color:#ffd08a;padding:0;border-bottom:1.5px dotted rgba(255,208,138,.55);border-radius:0}
+.play .blank{display:inline-block;min-width:3.2em;border-bottom:2px solid rgba(255,255,255,.5);vertical-align:baseline}
+.pl-do{font:600 clamp(18px,4.8vw,21px)/1.45 var(--sans);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-left:4px solid #ffc46b;border-radius:14px;padding:16px 18px}
+.pl-prep{border-left-color:#4cc38a}
+.pl-more,.pl-link{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font:700 13.5px/1.2 var(--sans);color:#ffc46b;background:none;border:0;padding:8px 2px}
+.pl-more{margin-top:16px;background:rgba(255,196,107,.1);border:1px solid rgba(255,196,107,.25);border-radius:999px;padding:7px 13px}
+.pl-more svg,.pl-link svg{width:16px;height:16px}
+.pl-tcard{border-radius:22px;overflow:hidden;position:relative;aspect-ratio:4/5;max-height:56vh;width:100%;background:#24332b center/cover;box-shadow:0 30px 60px -30px #000}
+@media (min-width:700px){.pl-tcard{aspect-ratio:16/10}}
+.pl-tcard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(0,0,0,.85))}
+.pl-tcard>div{position:absolute;left:20px;right:20px;bottom:20px;z-index:1}
+.pl-tcard small{font:700 11.5px/1.2 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:#ffc46b}
+.pl-tcard h2{font:400 clamp(34px,9.5vw,52px)/1 "Anton",var(--serif);text-transform:uppercase;letter-spacing:.01em;margin:8px 0 8px;overflow-wrap:anywhere}
+.pl-tcard p{margin:0;color:rgba(255,255,255,.82);font-size:15px;line-height:1.45}
+.pl-logo{font-family:"Survivor Carved","Anton",var(--serif)!important;font-size:clamp(40px,11.5vw,84px)!important;letter-spacing:0!important;white-space:nowrap;color:#fff4dc}
+.pl-logo-sub{font:800 20px/1.2 var(--serif)!important;color:#ffc46b!important}
+.pl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pl-tags span{font-size:12px;font-weight:700;background:rgba(255,255,255,.16);border-radius:999px;padding:4px 10px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.pl-sfig{margin:0 0 16px;border-radius:18px;overflow:hidden;background:#fff;max-height:34vh;display:grid;place-items:center}
+.pl-sfig img{width:100%;height:100%;max-height:34vh;object-fit:cover;display:block}
+.pl-sfig svg{width:60%;max-height:30vh;padding:14px}
+.pl-sic{display:grid;place-items:center;width:96px;height:96px;color:#c4541c}.pl-sic svg{width:56px;height:56px}
+.pl-h{font:800 clamp(24px,6.6vw,30px)/1.2 var(--serif);margin:0 0 12px}
+.pl-q{border-radius:20px;padding:22px 20px;background:#f4ead6;color:#2d2416;box-shadow:0 20px 40px -20px #000;animation:plDeal .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes plDeal{from{opacity:0;transform:translateX(40px) rotate(4deg)}}
+.pl-q small{font:700 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#a0522d}
+.pl-q p{font:600 clamp(20px,5.4vw,24px)/1.42 var(--serif);margin:10px 0 0}
+.pl-q mark.var{color:#a0522d;border-bottom-color:rgba(160,82,45,.4)}
+.pl-q .blank{border-bottom-color:rgba(45,36,22,.5)}
+.pl-deckn{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;font-size:13.5px;color:rgba(244,239,228,.55)}
+.pl-deckn button{display:inline-flex;align-items:center;gap:5px;font:700 14px/1 var(--sans);color:#ffc46b;background:none;border:0;cursor:pointer;padding:8px 2px}
+.pl-deckn button svg{width:15px;height:15px}
+.pl-reveal{text-align:center;padding:20px 0}
+.pl-reveal small{font:700 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:#ffc46b}
+.pl-reveal b{display:block;font:400 clamp(40px,12vw,72px)/1.05 "Anton",var(--serif);text-transform:uppercase;margin-top:14px;text-shadow:0 0 40px rgba(240,132,58,.55);animation:plPop .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes plPop{from{opacity:0;transform:scale(.9)}}
+.pl-clock{display:grid;place-items:center;margin:2px 0 8px}
+.pl-ring{width:min(240px,62vw);height:min(240px,62vw);position:relative}
+.pl-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pl-ring circle{fill:none;stroke-width:8}
+.pl-ring .bg{stroke:rgba(255,255,255,.08)}
+.pl-ring .fg{stroke:#ffc46b;stroke-linecap:round;transition:stroke-dashoffset .5s linear}
+.pl-rt{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.pl-rt b{font:400 clamp(50px,15vw,66px)/1 "Anton",var(--serif);letter-spacing:.02em}
+.pl-rt small{display:block;font-size:12.5px;color:rgba(244,239,228,.55);margin-top:8px;padding:0 20px}
+.pl-hint{color:rgba(244,239,228,.6);font-size:14.5px;line-height:1.5;margin:14px 0 0}
+.pl-hint.c{text-align:center}
+.pl-mini{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.pl-mini button{font:700 13px/1 var(--sans);padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:0;color:inherit;cursor:pointer}
+.pl-qh{font:800 clamp(24px,6.6vw,30px)/1.2 var(--serif);margin:0 0 6px}
+.pl-qs{color:rgba(244,239,228,.66);margin:0 0 18px;font-size:15px;line-height:1.5}
+.pl-qs b{color:#f4efe4}
+.pl-sub{font:700 12px/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:rgba(244,239,228,.55);margin:18px 0 8px}
+.pl-tribes{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.pl-tribe{border-radius:18px;padding:16px 12px;text-align:center;cursor:pointer;color:#fff;font:inherit;background:color-mix(in srgb,var(--tc) 18%,#0f1612);border:2px solid color-mix(in srgb,var(--tc) 45%,transparent);transition:transform .15s,background .2s}
+.pl-tribe:active{transform:scale(.97)}
+.pl-tribe i{display:block;width:44px;height:18px;border-radius:5px;background:var(--tc);margin:0 auto 10px;box-shadow:0 4px 14px -4px var(--tc)}
+.pl-tribe b{display:block;font:800 20px/1.15 var(--serif)}
+.pl-tribe small{display:block;margin-top:6px;font-size:12.5px;line-height:1.4;color:rgba(255,255,255,.7)}
+.pl-tribe.on{background:color-mix(in srgb,var(--tc) 55%,#0f1612);border-color:var(--tc);box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+.pl-names{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.pl-names.sm{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+.pl-name{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;cursor:pointer;color:inherit;font:600 15px/1.2 var(--sans);text-align:left;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);transition:background .15s,border-color .15s;min-width:0}
+.pl-name span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.pl-name em{font:800 18px/1 var(--sans);font-style:normal;color:#ffc46b}
+.pl-name.on{background:rgba(255,196,107,.16);border-color:#ffc46b}
+.pl-names[class] .pl-name[data-ply="voter"]:not(.on){opacity:.5;border-style:dashed}
+.pl-av{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;font:800 13px/1 var(--serif);color:#fff;background:hsl(var(--h) 42% 38%)}
+.pl-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);flex:none}
+.pl-dot.on{background:#4cc38a}
+.pl-rocks{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin:10px 0 4px}
+.pl-rocks div{display:grid;justify-items:center;gap:2px}
+.pl-rocks .rock{width:62px;height:46px}
+.pl-rocks b{font:400 30px/1 "Anton",var(--serif)}
+.pl-rocks small{font-size:13px;color:rgba(244,239,228,.65)}
+.pl-dealt{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.pl-dealt div{border-radius:16px;padding:12px;background:color-mix(in srgb,var(--tc) 16%,#0f1612);border:1px solid color-mix(in srgb,var(--tc) 45%,transparent)}
+.pl-dealt h4{display:flex;align-items:center;gap:8px;margin:0 0 8px;font:800 17px/1 var(--serif)}
+.pl-dealt h4 i{width:14px;height:14px;border-radius:4px;background:var(--tc)}
+.pl-dealt span{display:block;font-weight:600;padding:3px 0;animation:plPop .4s both}
+.pl-join{display:flex;gap:18px;align-items:center}
+.pl-join .pv-qr.big{width:min(200px,46vw);height:min(200px,46vw);margin:0;flex:none}
+.pl-join .pv-url{margin-top:8px}
+@media (max-width:540px){.pl-join{flex-direction:column;text-align:center}}
+.pl-live{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:#8fe0b5;margin:0 0 6px}
+.pl-live i{width:9px;height:9px;border-radius:50%;background:#4cc38a;animation:plLive 1.6s infinite}
+@keyframes plLive{0%{box-shadow:0 0 0 0 rgba(76,195,138,.6)}80%,100%{box-shadow:0 0 0 8px rgba(76,195,138,0)}}
+.pl-count{display:flex;align-items:baseline;gap:10px;margin:2px 0 12px}
+.pl-count b{font:400 64px/1 "Anton",var(--serif)}
+.pl-count span{color:rgba(244,239,228,.65)}
+.pl-meter{height:6px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden;margin-bottom:16px}
+.pl-meter i{display:block;height:100%;background:#4cc38a;border-radius:9px;transition:width .5s}
+.pl-vchips{display:flex;flex-wrap:wrap;gap:6px}
+.pl-vchips span{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;border-radius:999px;padding:6px 11px;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.18);color:rgba(244,239,228,.6)}
+.pl-vchips span.in{background:rgba(76,195,138,.16);border:1px solid rgba(76,195,138,.5);color:#8fe0b5}
+.pl-vchips svg{width:14px;height:14px}
+.pl-parch{border-radius:8px;padding:28px 16px 24px;text-align:center;color:#3b2a17;background:linear-gradient(160deg,#f1e5c6,#d8c39a);box-shadow:inset 0 0 30px rgba(120,80,30,.35),0 24px 40px -22px #000;transform:rotate(-1.5deg);animation:plFlip .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes plFlip{from{opacity:0;transform:rotateX(70deg) rotate(-1.5deg)}}
+.pl-parch small{font:700 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#8a5a2a}
+.pl-parch b{display:block;font:800 clamp(34px,10vw,48px)/1.1 var(--serif);margin-top:10px;transform:rotate(-2deg);overflow-wrap:anywhere}
+.pl-parch span{display:inline-block;margin-top:8px;font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#8a3a10;border:1px solid rgba(138,58,16,.4);border-radius:999px;padding:4px 10px}
+.pl-tally{display:grid;gap:8px;margin-top:20px}
+.pl-tally div{display:grid;grid-template-columns:minmax(70px,auto) 1fr 24px;gap:10px;align-items:center;font-weight:600;font-size:15px}
+.pl-tally span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-tally i{height:12px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden}
+.pl-tally u{display:block;height:100%;background:#f0843a;border-radius:9px;transition:width .4s}
+.pl-tally b{text-align:right;font-variant-numeric:tabular-nums}
+.pl-res{margin-top:18px;padding:16px;border-radius:14px;text-align:center;background:rgba(240,132,58,.16);border:1px solid rgba(240,132,58,.35)}
+.pl-res small{font:700 11.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#ffc46b}
+.pl-res b{display:block;font:800 26px/1.2 var(--serif);margin-top:6px}
+.pl-res.tie{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.pl-done{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:14px;background:rgba(76,195,138,.13);border:1px solid rgba(76,195,138,.35)}
+.pl-done>svg{width:24px;height:24px;color:#4cc38a;flex:none}
+.pl-done b{display:block;font-size:17px}.pl-done small{display:block;color:rgba(244,239,228,.65)}
+.pl-err{color:#ff9b8a;font-size:14px;margin:12px 0 0}
+.pl-out{text-align:center}
+.pl-out h2{font:800 clamp(26px,7.4vw,36px)/1.2 var(--serif);margin:0 0 8px}
+.pl-torch{width:90px;height:160px;margin:0 auto 12px;display:block;overflow:visible}
+.pl-torch .fl{transform-origin:32px 64px;animation:plFlick 2.2s ease-in-out infinite;transition:transform .9s ease,opacity .9s}
+.pl-torch .smoke{opacity:0}
+.snuffed .pl-torch .fl{transform:scale(.1,.05) translateY(40px);opacity:0;animation:none}
+.snuffed .pl-torch .smoke{animation:plSmoke 2.6s ease-out infinite .6s}
+@keyframes plFlick{0%,100%{transform:scale(1,1) skewX(0)}30%{transform:scale(.96,1.05) skewX(2deg)}60%{transform:scale(1.03,.95) skewX(-2deg)}}
+@keyframes plSmoke{0%{opacity:0;transform:translateY(8px)}30%{opacity:.55}100%{opacity:0;transform:translateY(-30px)}}
+.pl-crown{font:400 clamp(46px,14vw,72px)/1 "Anton",var(--serif);color:#ffc46b;text-transform:uppercase;margin:6px 0 8px;overflow-wrap:anywhere}
+.pl-foot{padding:6px 16px calc(14px + env(safe-area-inset-bottom));display:grid;gap:6px;width:100%;max-width:680px;margin:0 auto}
+.pl-sec{text-align:center;font-size:13px;color:rgba(244,239,228,.5)}
+.pl-sec .pl-link{padding:4px 2px}
+.pl-next{font-size:12.5px;color:rgba(244,239,228,.48);text-align:center;min-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-next b{color:rgba(244,239,228,.78);font-weight:600}
+.pl-row{display:flex;gap:8px}
+.pl-back{width:58px;min-height:58px;border-radius:16px;background:rgba(255,255,255,.08);border:0;color:inherit;display:grid;place-items:center;flex:none;cursor:pointer}
+.pl-back svg{width:20px;height:20px}
+.pl-back:disabled{opacity:.3;cursor:default}
+.pl-cta{flex:1;min-height:58px;border-radius:16px;border:0;cursor:pointer;font:800 17px/1.2 var(--sans);color:#fff;padding:0 14px;
+  background:linear-gradient(180deg,#f39250,#df6a22);box-shadow:0 12px 30px -12px rgba(240,132,58,.9);transition:filter .15s,transform .1s}
+.pl-cta:active{transform:scale(.99)}
+.pl-cta.ok{background:linear-gradient(180deg,#3fb377,#1f7a45);box-shadow:0 12px 30px -12px rgba(63,179,119,.8)}
+.pl-cta.warn{background:linear-gradient(180deg,#e05a3a,#b23a1f);box-shadow:0 12px 30px -12px rgba(224,90,58,.8)}
+.pl-cta:disabled{opacity:.45;box-shadow:none;cursor:default}
+.play .blk.bt{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1)}
+@media (prefers-reduced-motion:reduce){.play *{animation:none!important;transition:none!important}}
+
+/* New setup steps: same compact rows as the length step */
+.wiz[data-step="venue"] .wiz-cards,.wiz[data-step="voting"] .wiz-cards{grid-template-columns:1fr!important;gap:10px}
+.wiz[data-step="venue"] .wiz-card,.wiz[data-step="voting"] .wiz-card{grid-template-columns:44px minmax(0,1fr);grid-template-areas:"ic nm" "ic sm";column-gap:14px;row-gap:3px;align-items:center;padding:14px 16px}
+.wiz[data-step="venue"] .wiz-card .wc-ic,.wiz[data-step="voting"] .wiz-card .wc-ic{grid-area:ic;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,#ec7a3f 14%,transparent)}
+.wiz[data-step="venue"] .wiz-card b,.wiz[data-step="voting"] .wiz-card b{grid-area:nm;align-self:end;font-size:20px}
+.wiz[data-step="venue"] .wiz-card small,.wiz[data-step="voting"] .wiz-card small{grid-area:sm;align-self:start}
+.ch-where{display:inline-block;margin-left:4px;font-weight:700;color:#f0b48c}
+/* Phones and tablets: the four sections live in a tab bar at the bottom */
+@media (max-width:999px){
+  :root{--nav-h:62px}
+  body{padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom))!important}
+  body.wiz-on .bottom-nav,body.play-on .bottom-nav{display:none!important}
+}
 </style>
 <script src="assets/cast/jszip.min.js"></script>
 <style>.cs-bg-btn[hidden],#cs-photo-btn[hidden]{display:none}.cs-bar-in{flex-wrap:wrap}#cs-title-hint{font-size:13px;opacity:.75}</style>
@@ -1360,17 +1662,19 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
   </div>
 </header>
 
-<!-- ============ SETUP ============ -->
+<!-- ============ PLAN: the season map ============ -->
 <section class="view" id="view-setup">
   <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
-    <div class="eyebrow">Game overview</div>
-    <h1>Your game <em>plan</em></h1>
-    <p>Every step of your night, in order: what happens, what you need, and the full host script tucked under each step.</p>
-    <div class="stats" id="stats"></div>
+    <div class="eyebrow">Your season</div>
+    <h1>The whole night, <em>at a glance</em></h1>
+    <p>Every stop of the game in order. Tap one to preview it, or start the game and play it one screen at a time.</p>
+    <div class="tl-stats" id="tl-stats"></div>
   </div></div>
   <div class="wrap">
-    <section class="plan-car" id="car" aria-label="Game plan, one step at a time"></section>
+    <div class="smap" id="smap"></div>
   </div>
+  <div class="plan-cta" id="plan-cta"></div>
+  <div class="wrap"><div id="plan-extra"></div></div>
 </section>
 
 <!-- ============ SUPPLIES ============ -->
@@ -1427,21 +1731,6 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
   <div class="cs-bg-grid" id="cs-bg-grid"></div>
 </dialog>
 
-<!-- ============ SCRIPT ============ -->
-<section class="view" id="view-script" hidden>
-  <button class="seg-stick" id="seg-stick" hidden aria-label="Back to the top of this step"><span class="ss-n"></span><span class="ss-t"></span><span class="ss-up" aria-hidden="true"></span></button>
-  <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
-    <div class="eyebrow">Host script</div>
-    <h1>Every word, <em>step by step</em></h1>
-    <p>Word-for-word lines for every challenge and Tribal Council, plus quiet host notes so the night runs itself.</p>
-  </div></div>
-  <div class="seg-nav"><div class="wrap"><div class="seg-chips" id="seg-chips"></div></div></div>
-  <div class="wrap script-layout">
-    <nav class="toc" id="toc" aria-label="Run of show"></nav>
-    <main id="segments"></main>
-  </div>
-</section>
-
 <dialog class="ch-info" id="ch-info" aria-labelledby="chi-title"></dialog>
 <dialog class="confirm" id="share-dlg" aria-labelledby="share-title">
   <h3 id="share-title">Share this game</h3>
@@ -1474,7 +1763,7 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
     <div class="wiz-kicker">The tribe has spoken</div>
     <h1 class="wiz-logo fin-logo" id="fin-title"><span>SOLE SURVIVOR</span><em id="fin-sub"></em></h1>
     <p class="wiz-tag" id="fin-tag"></p>
-    <div class="wiz-cta"><button class="btn primary wiz-big" data-fin-close>Back to the game plan</button><button class="btn wiz-ghost" data-fin-again>Start again from step 1</button></div>
+    <div class="wiz-cta"><button class="btn primary wiz-big" data-fin-close>Back to the season map</button><button class="btn wiz-ghost" data-fin-again>Restart the game</button></div>
   </div>
 </div>
 <div class="wiz" id="wiz" hidden>
@@ -1482,6 +1771,12 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
   <div class="wiz-panel" id="wiz-panel"></div>
 </div>
 
+<section class="play" id="play" hidden aria-label="Play mode">
+  <div class="pl-hud" id="pl-hud"></div><div class="pl-pips" id="pl-pips"></div>
+  <div class="pl-stage" id="pl-stage" aria-live="polite"></div>
+  <div class="pl-foot" id="pl-foot"></div>
+</section>
+<div class="tl-sheet" id="tl-sheet" hidden><div class="tl-sh" id="tl-sh" role="dialog" aria-modal="true"></div></div>
 <div class="menu" id="menu" hidden>
   <div class="menu-back" data-menu-close></div>
   <nav class="menu-panel" aria-label="Menu">
@@ -1506,7 +1801,7 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
    Settings: edited on the Setup tab and saved in this browser.
    ===================================================================== */
 const DEFAULTS={
-  players:16, length:"standard", style:"balanced", challenges:null, onboarded:false,
+  players:16, length:"standard", style:"balanced", challenges:null, onboarded:false, venue:"both", vote:"room",
   event:"Party Edition",
   prize:"$100 gift card",
   council:"the fire pit",
@@ -1723,7 +2018,7 @@ const STYLE_TAG={physical:"Physical",strategy:"Strategy",mixed:"Skill"};
 
 /* ---------- Challenge library ---------- */
 const CH={
-relay:{name:"Three-Part Relay",kind:"tribe",style:"physical",mins:[15,20],sum:"Three stations in a row: flip cup, a blindfolded beanbag toss, then a triangle puzzle.",
+relay:{name:"Three-Part Relay",kind:"tribe",where:"out",style:"physical",mins:[15,20],sum:"Three stations in a row: flip cup, a blindfolded beanbag toss, then a triangle puzzle.",
   media:[{img:CUP_ART,cap:"Flip cup"},{img:P.beanbags.img,cap:"Blindfold beanbag toss"},{img:"assets/puzzle-a-cuts.png",cap:"Triangle puzzle: cut lines"},{img:"assets/puzzle-a-reference.png",cap:"Triangle puzzle: reference"}],
   items:["cups","beanbags","mats","puzzleA","tables"],blocks:[
   {t:"say",text:"Survivors, this challenge has three stations. All {tribes} tribes will race through the same course. Each person can only compete in one station. {safeLine}. {loseLine}."},
@@ -1753,7 +2048,7 @@ fishbowl:{name:"Fishbowl",kind:"tribe",style:"strategy",mins:[20,30],sum:"A team
     {name:"Round 2 — One word",icon:"one",text:"Same slips back in the bowl. Now you can only give ONE word as your clue."},
     {name:"Round 3 — Charades",icon:"mime",text:"Same slips one last time. No talking at all — act it out."}]},
   {t:"say",h:"Scoring",text:"We rotate turns so everyone plays. Every correct guess is 1 point in any round. After Round 3, the most total points wins. {safeShort}. {loseTo}."}]},
-brigade:{name:"Bucket Brigade",kind:"tribe",style:"physical",mins:[10,15],isNew:true,sum:"Pass water cup to cup down the line to fill your tribe's bucket first.",
+brigade:{name:"Bucket Brigade",kind:"tribe",where:"out",style:"physical",mins:[10,15],isNew:true,sum:"Pass water cup to cup down the line to fill your tribe's bucket first.",
   media:[{il:"brigade",cap:"Full bucket to empty bucket"},{img:CUP_ART,cap:"A red cup for every player"}],
   items:["buckets","cups","tape"],blocks:[
   {t:"say",text:"Each tribe lines up between a full bucket of water and an empty bucket with a line taped on it. Everyone gets a red cup. The first person scoops water and pours it into the next person's cup, all the way down the line, until it reaches the empty bucket. Once we start, your feet don't move.\n\nThe first tribe to fill their bucket to the line wins. {safeShort}. {loseTo}."},
@@ -1786,7 +2081,7 @@ pennies:{name:"Penny Stack",kind:"solo",style:"mixed",mins:[5,10],sum:"Sixty sec
 cupbounce:{name:"Cup Bounce",kind:"solo",style:"physical",mins:[5,10],sum:"Bounce a ping-pong ball into the cup or you're out. Last one in wins.",
   media:[{img:CUP_ART,cap:"One cup at the end of a table"},{il:"ball",cap:"One bounce per turn"}],items:["cups","pingpong","tape"],blocks:[
   {t:"say",text:"Everyone line up behind the tape. One at a time, bounce a ping-pong ball off the table and into the red cup. Make it, you stay in. Miss, you're out.\n\nWe keep going around until one person is left. If everyone still in misses in the same round, you all stay in and go again. The last person standing wins the {immunity}."}]},
-rocktoss:{name:"Rock Toss",kind:"solo",style:"physical",mins:[5,10],sum:"Toss a rock toward a cup. Closest rock wins.",
+rocktoss:{name:"Rock Toss",kind:"solo",where:"out",style:"physical",mins:[5,10],sum:"Toss a rock toward a cup. Closest rock wins.",
   media:[{rock:true,cap:"One rock each"},{img:CUP_ART,cap:"Cup about 15 feet away"}],items:["rocks","cups","tape"],blocks:[
   {t:"say",text:"Everyone grab one rock. Stand behind the line and, one at a time, toss your rock toward the cup. Leave it where it lands.\n\nWhoever's rock ends up closest to the cup wins the {immunity}. Knocking another rock is part of the game. Too close to call? Those players toss again."}]},
 trivia:{name:"Survivor Trivia",kind:"solo",style:"strategy",mins:[8,12],isNew:true,sum:"Ten questions about tonight's game and the people in it. Most correct answers wins.",
@@ -1806,10 +2101,10 @@ const TRIBAL_MINS=[8,12];
 
 /* ---------- Planner ---------- */
 function selection(){
-  const o=ORDER[S.style]||ORDER.balanced,c=S.challenges;
+  const o=ORDER[S.style]||ORDER.balanced,c=S.challenges,fit=id=>S.venue!=="in"||CH[id].where!=="out";
   if(c&&c.tribe&&c.solo&&(c.tribe.length||c.solo.length))return {tribe:o.tribe.filter(id=>c.tribe.includes(id)),solo:o.solo.filter(id=>c.solo.includes(id))};
   // Nothing picked yet: start with exactly the challenges this game plays, in the style's order.
-  const p=planFor(S.players,S.length,{tribe:[...o.tribe],solo:[...o.solo]}),used=new Set(p.rounds.map(r=>r.ch));
+  const p=planFor(S.players,S.length,{tribe:o.tribe.filter(fit),solo:o.solo.filter(fit)}),used=new Set(p.rounds.map(r=>r.ch));
   return {tribe:o.tribe.filter(id=>used.has(id)),solo:o.solo.filter(id=>used.has(id))};
 }
 function buildPlan(N,T,F,E,R,sel,mode="standard"){
@@ -1894,9 +2189,26 @@ function tokens(ctx={}){
     loseTo:dbl?`The last two tribes each go to Tribal Council, where ${people(E)} from each tribe will be voted out`:`The last tribe goes to Tribal Council, where ${people(E)} will be voted out`,
     indOutLine:new Set(es).size===1?`We'll vote out ${people(es[0])} each round`:`We'll vote out ${people(Math.max(...es))} most rounds, and ${people(Math.min(...es))} when we need to land exactly on the final ${WORD[F]}`,
     finalN:String(F), finalWord:WORD[F], others:F===2?"the other finalist":"the other two",
-    hours:PL?`about ${hoursRange(PL).replace(" hrs"," hours")}`:"a couple of hours", jury:PL?String(PL.jury):""
+    hours:PL?`about ${hoursRange(PL).replace(" hrs"," hours")}`:"a couple of hours", jury:PL?String(PL.jury):"",
+    ...voteWords()
   };
 }
+/* How people vote tonight (phones, a private voting room, or paper at their seat) changes the script's wording */
+function voteWords(){const V=S.voteSpot,ev=S.event,m=S.vote==="phones"?"phones":S.vote==="table"?"table":"room";
+  return {
+    voteHow:{room:`One at a time you'll walk over to ${V}, where there's parchment to write on. Write down the name of the one person you want to vote out.`,
+      table:"You'll each get a slip of parchment. Write down the name of the one person you want to vote out, fold it so nobody can see, and drop it in the urn.",
+      phones:"Keep the voting page open on your phone. When I open the vote, your ballot appears. Tap the one person you want to vote out. It's secret: only I can see the votes."}[m],
+    voteAgain:{room:`go one at a time to ${V}, write a name on the parchment, and come back here.`,table:"write a name on your parchment, fold it, and drop it in the urn.",phones:"when I open the vote, cast it on your phone."}[m],
+    voteSame:{room:`One at a time, walk over to ${V}, write down a name on the parchment, and come back here.`,table:"Write a name on your parchment, fold it, and drop it in the urn.",phones:"When I open the vote, cast your vote on your phone."}[m],
+    voteSend:{room:`Send them to vote at ${V}, one at a time.`,table:"Hand out parchment and pens. Everyone votes where they sit, folds it, and drops it in the urn.",phones:"Open the vote from this screen. Ballots appear on everyone's phone."}[m],
+    voteFlow:{room:`Vote one at a time at ${V}`,table:"Write it, fold it, into the urn",phones:"Vote on phones"}[m],
+    juryHow:{room:`One at a time, head over to ${V} and write down the name of the person you want to win Survivor: ${ev}.`,
+      table:`Write the name of the person you want to win Survivor: ${ev} on your parchment, fold it, and drop it in the urn.`,
+      phones:`When I open the vote, tap the finalist you want to win Survivor: ${ev} on your phone.`}[m],
+    juryMove:{room:`We'll still vote at ${V}, but Tribal Council conversations move to ${S.porch} so there's room for everyone.`,
+      table:`Tribal Council moves to ${S.porch} so there's room for everyone.`,phones:`Tribal Council moves to ${S.porch} so there's room for everyone.`}[m]
+  };}
 /* Escape, fill {tokens} (highlighted unless plain), and turn ___ into fill-in blanks */
 function fmt(s,plain,ctx){
   const t=tokens(ctx);
@@ -1910,7 +2222,7 @@ const txt=(s,ctx)=>{const t=tokens(ctx);return s.replace(/\{(\w+)\}/g,(_,k)=>t[k
 /* =====================================================================
    Steps: the night, in order (drives the Game plan, Script and PDF)
    ===================================================================== */
-const TRIBAL_FLOW={t:"flow",items:["Talk at {council}","Vote one at a time at {voteSpot}","Ask for idols","Read the votes","Buff off → jury"]};
+const TRIBAL_FLOW={t:"flow",items:["Talk at {council}","{voteFlow}","Ask for idols","Read the votes","Buff off → jury"]};
 const TRIBAL_Q=[
   ["Does anyone feel completely safe tonight?","Did anyone surprise you in the challenge — in a good way or a bad way?"],
   ["Who do you think is feeling the most pressure right now?","Does anyone think their name is being written down?","Does anyone think someone here might have an idol?","Have alliances already started forming?"]];
@@ -1920,7 +2232,7 @@ function stepOpening(p){
   const one=p.T===1,cols=S.colors.slice(0,p.T);
   const blocks=[
     {t:"note",text:one?"Before guests arrive: hide the idols, light the torches, get the fire keeper started, and put the cast slideshow on the TV (Ambiance tab).":"Before guests arrive: hide the idols, put the rocks colored-side-down in a bag, and lay the buffs out by color. Light the torches, get the fire keeper started, and put the cast slideshow on the TV (Ambiance tab)."},
-    {t:"pvjoin"},
+    {t:"pvjoin",if:()=>S.vote==="phones"},
     {t:"say",text:one?"Welcome to Survivor: {event}. If you've never watched Survivor, don't worry — this is meant to be easy to follow. Tonight you're all one tribe. Every challenge is for individual immunity, and after each one, we vote someone out.\n\nIf you're voted out, you're not out of the party. You join the jury: you'll sit in on every Tribal Council after that, keep an eye on how people are playing, and at the end of the night you decide the winner.\n\nThere's a {prize} for the winner. Tonight is competitive, but it is supposed to be fun. Talk, scheme, make alliances, betray them — just don't take any of it personally."
       :"Welcome to Survivor: {event}. If you've never watched Survivor, don't worry — this is meant to be easy to follow. You'll start on tribes, compete in simple challenges, and sometimes vote people out.\n\nIf you're voted out, you're not out of the party. You join the jury later in the game, keep hanging out, watch the challenges, grab a drink, and when I call you for Tribal Council during the later rounds, you come and watch. Keep a general eye on how people are playing, because at the end of the game, you as the jury decide the winner.\n\nThere's a {prize} for the winner. Tonight is competitive, but it is supposed to be fun. Talk, scheme, make alliances, betray them — just don't take any of it personally."},
     {t:"say",h:"Hidden immunity idols",text:"There are hidden immunity idols around the property. Ours are {idol}. If you find one, you can keep it secret, or not — that's up to you. An idol can be played for yourself or someone else at Tribal Council, and any votes cast against that person don't count. Once you use an idol, it's no longer in the game.\n\nThis game will last {hours}, with plenty of downtime and mingling."}];
@@ -1946,7 +2258,7 @@ function stepMerge(p){
   return {kind:"merge",phase:"Individual",title:"The merge",short:"Merge",dur:"5 min",at:`${p.merge} players left`,
     sum:"No more tribes. From here on, everyone plays for individual immunity and the jury sits in at Tribal.",media:[{il:"medal",cap:"Individual immunity"},{il:"bench",cap:"The jury sits in from now on"}],mediaKey:"merge",items:["immunity"],blocks:[
     {t:"say",text:"Congratulations — you've made it to the merge. From this point on, there are no tribes. Every challenge is individual.\n\nWin the challenge and you earn the {immunity}, which means you can't be voted out at the next Tribal Council. After each challenge, you'll have a few minutes to strategize, then everyone still in the game votes. {indOutLine}.\n\nAt the end of the night, the final {finalWord} will plead their case to the jury for the {prize}. To convince them, you'll need a strong résumé: winning challenges, pulling off a blindside, or playing the middle so well that nobody ever wrote your name down."},
-    {t:"say",h:"To the jury",text:"Anyone who's been voted out, please sit in at Tribal Council from now on. We'll still vote at {voteSpot}, but Tribal Council conversations move to {porch} so there's room for everyone."}]};
+    {t:"say",h:"To the jury",text:"Anyone who's been voted out, please sit in at Tribal Council from now on. {juryMove}"}]};
 }
 function stepChallenge(p,r,label){
   const c=CH[r.ch],ctx={e:r.e,dbl:r.dbl,T:r.T};
@@ -1964,21 +2276,21 @@ function stepTribal(p,r,i,soloIdx,tribeIdx){
   if(r.type==="tribe"){
     title=`Tribal Council ${tribeIdx+1}`;
     if(r.dbl)blocks.push({t:"double"});
-    blocks.push({t:"say",h:"At Tribal",text:tribeIdx===0?"Welcome to Tribal Council. Everyone on this tribe gets one vote. One at a time you'll walk over to {voteSpot}, where there's parchment to write on. Write down the name of the one person you want to vote out. Once everyone's voted, I'll read the votes. Tonight, the {elimMost} will be eliminated and join the jury.":"This works the same way as last time: go one at a time to {voteSpot}, write a name on the parchment, and come back here. {elimMostCap} eliminated."},
+    blocks.push({t:"say",h:"At Tribal",text:tribeIdx===0?"Welcome to Tribal Council. Everyone on this tribe gets one vote. {voteHow} Once everyone's voted, I'll read the votes. Tonight, the {elimMost} will be eliminated and join the jury.":"This works the same way as last time: {voteAgain} {elimMostCap} eliminated."},
       TRIBAL_FLOW,{t:"q",h:"Jeff-style questions: pick 2",items:TRIBAL_Q[Math.min(tribeIdx,1)]});
   }else if(r.type==="swap"){
     title="Swap Tribal";
-    blocks.push({t:"say",h:"At Tribal",text:"Same process as before. Everyone on this tribe gets one vote. One at a time, walk over to {voteSpot}, write down a name on the parchment, and come back here."},
+    blocks.push({t:"say",h:"At Tribal",text:"Same process as before. Everyone on this tribe gets one vote. {voteSame}"},
       TRIBAL_FLOW,{t:"q",h:"Jeff-style questions",items:["How much did the tribe swap change who you trust?","Does anyone feel safe tonight?","Have alliances changed already with the swap?"]});
   }else{
     title=p.T===1?`Tribal Council ${soloIdx+1}`:`Tribal Council · ${r.before} players`;
     const first=p.T===1&&soloIdx===0;
-    blocks.push({t:"say",text:first?"Welcome to your first Tribal Council. The immunity winner is safe tonight and can't be voted for. Everyone else gets one vote. One at a time, walk over to {voteSpot}, write the name of the person you want to vote out on the parchment, and come back here. The {elimMost} will be eliminated and join the jury.":"Welcome back to Tribal Council. The immunity winner is safe tonight and can't be voted for. Everyone else is vulnerable. Each active player gets one vote."});
+    blocks.push({t:"say",text:first?"Welcome to your first Tribal Council. The immunity winner is safe tonight and can't be voted for. Everyone else gets one vote. {voteSame} The {elimMost} will be eliminated and join the jury.":"Welcome back to Tribal Council. The immunity winner is safe tonight and can't be voted for. Everyone else is vulnerable. Each active player gets one vote."});
     if(!first)blocks.push({t:"say",h:"To the jury",text:"Jury, you're here to watch and listen. You don't vote during these Tribal Councils. You're gathering information because you'll decide the winner at the end."});
-    blocks.push({t:"flow",items:["Talk on {porch}","Vote one at a time at {voteSpot}","Ask for idols","Read the votes","Join the jury"]},
+    blocks.push({t:"flow",items:["Talk on {porch}","{voteFlow}","Ask for idols","Read the votes","Join the jury"]},
       {t:"q",h:"Jeff-style questions: read 2",items:[SOLO_Q[(soloIdx*2)%SOLO_Q.length],SOLO_Q[(soloIdx*2+1)%SOLO_Q.length]]});
   }
-  blocks.push({t:"cue",text:"Send them to vote at {voteSpot}, one at a time."},
+  blocks.push({t:"cue",text:"{voteSend}"},
     {t:"pvote",mode:"tribal",key:title,e:r.e,solo:r.type==="solo",last:!!r.last},
     {t:"say",h:"Before reading votes",text:"If anyone has a hidden immunity idol and wants to play it, now's the time."},
     {t:"votes"},
@@ -1998,7 +2310,7 @@ function stepFinal(p){
     {t:"say",h:"Jury questions",text:"Jury, this is your chance to ask questions. Ask anything that helps you decide who played the game you want to reward."},
     {t:"q",h:"Survivor-style questions for the finalists",items:["Which juror's vote did you work hardest to earn, and how?","What was the biggest blindside you were part of tonight?","Who would you have hated to sit next to at the end, and why didn't you take them out?","When were you closest to going home, and how did you survive it?","Did you ever hold, play, or hunt for an idol? Tell us about it.","If you could replay one Tribal Council, which one, and what would you change?","Everyone on this jury was voted out by someone. Whose votes are you proudest of?","Describe your game tonight in three words."]},
     {t:"q",h:"If the jury is quiet",items:["What was your best move of the night?","Who did you trust the most, and why?","What vote was hardest for you?","Did you make a move the jury may not have seen?","Why should the jury vote for you instead of {others}?"]},
-    {t:"say",h:"Final vote",text:"Jury, you're now voting for a winner. One at a time, head over to {voteSpot} and write down the name of the person you want to win Survivor: {event}. Then come back here for the reveal."},
+    {t:"say",h:"Final vote",text:"Jury, you're now voting for a winner. {juryHow} Then we'll reveal the votes."},
     {t:"pvote",mode:"final",key:"Final Tribal Council"},
     {t:"cue",text:"Read the votes one at a time and keep a running count. The finalist with the most votes wins the {prize}."},
     {t:"reveal",small:"Final line",text:"Congratulations ______ — you are the Sole Survivor!"},
@@ -2039,7 +2351,7 @@ function supplyIndex(p){
     idols:{kind:"have",icon:"duck",title:"Hidden immunity idols",qty:fmt("{idol}",1),note:"Hide around the property before guests arrive."},
     immunity:{kind:"have",icon:"medal",title:"Individual immunity",qty:fmt("{immunity}",1),note:"Goes to each immunity challenge winner."},
     prize:{kind:"buy",icon:"gift",title:"Winner's prize",qty:fmt("{prize}",1),note:"Awarded after the final jury vote."},
-    ballots:{kind:"make",icon:"ballot",title:"Parchment ballots + pens",qty:`~${Math.ceil((p.rounds.reduce((a,r)=>a+r.voters,0)+p.jury)*1.15/5)*5} slips · 2 pens`,note:fmt("Covers every vote tonight plus spares. Set up at {voteSpot} with a bowl or box for votes. For extra ambiance, dye the paper with strong tea or coffee and carefully burn the edges so it looks aged.",1)},
+    ballots:S.vote==="phones"?{kind:"make",icon:"ballot",title:"Spare paper ballots",qty:"About 10 slips · 2 pens",note:"Votes happen on phones tonight. Keep a few slips in case a phone dies."}:{kind:"make",icon:"ballot",title:"Parchment ballots + pens",qty:`~${Math.ceil((p.rounds.reduce((a,r)=>a+r.voters,0)+p.jury)*1.15/5)*5} slips · 2 pens`,note:fmt((S.vote==="table"?"Covers every vote tonight plus spares, with a bowl or urn for the folded votes.":"Covers every vote tonight plus spares. Set up at {voteSpot} with a bowl or box for votes.")+" For extra ambiance, dye the paper with strong tea or coffee and carefully burn the edges so it looks aged.",1)},
     council:{kind:"have",icon:"fire",title:"Tribal Council seating",qty:fmt("{council} + {porch}",1),note:"Seats for whoever's voting. Once the jury forms, they sit in too."},
     cups:{kind:"buy",p:"cups",img:CUP_ART,title:"Red solo cups",qty:packs(cups,50,"cups"),note:`Used in ${chNames("cups")}. Reuse the same cups between challenges.`},
     beanbags:{kind:"buy",p:"beanbags",title:"Mini bean bags",qty:packs(6*maxOf("beanbags",tribesAt),20,"bags"),note:"About 6 per tribe. The blindfold is the tribe's buff."},
@@ -2092,7 +2404,7 @@ const pc=ph=>`var(${PH[ph]})`;
 function renderHeader(){
   const ev=S.event.replace(/^Survivor[:\s—-]*/i,"");
   $("#brand-name").textContent=`Survivor: ${ev}`;$("#menu-name").textContent=`Survivor: ${ev}`;document.title=`Survivor: ${ev} · Host a Survivor Party`;
-  $("#stats").innerHTML=`<button class="stat stat-edit" data-wiz-go="0">${IC.edit}<span>Edit game settings</span></button><button class="stat stat-share" data-share>${IC.ext}<span>Share link</span></button>`;
+  if($("#stats"))$("#stats").innerHTML=`<button class="stat stat-edit" data-wiz-go="0">${IC.edit}<span>Edit game settings</span></button><button class="stat stat-share" data-share>${IC.ext}<span>Share link</span></button>`;
 }
 function renderGameCard(){if(!$("#game-card"))return;
   const used=[...new Set(PL.rounds.map(r=>r.ch))];
@@ -2177,63 +2489,9 @@ async function uploadMedia(key,file){
   const lab=document.querySelector(`[data-media-key="${key}"]`)?.closest(".mi-add");if(lab)lab.classList.add("busy");
   try{const r=await fetch(`/api/media/${key}?name=${encodeURIComponent(file.name)}`,{method:"POST",headers:{"Content-Type":file.type||"application/octet-stream"},body:file});if(!r.ok)throw new Error(await r.text());}
   catch(e){alert("That file couldn't be added: "+(e.message||e));}
-  await loadMedia();renderCarousel();
+  await loadMedia();renderMap();
 }
 
-/* ---------- Game plan carousel ---------- */
-let CAR=store.get("svh-car",0), carScriptOpen=false;
-let doneSteps=new Set();  /* steps are no longer marked done; Previous / Next instead */
-/* Photo strip: which slide is centered, and where to scroll to center slide k */
-const miIdx=st=>{const sr=st.getBoundingClientRect(),c=sr.left+sr.width/2;let best=0,bd=1e9;[...st.children].forEach((el,i)=>{const r=el.getBoundingClientRect(),d=Math.abs(r.left+r.width/2-c);if(d<bd){bd=d;best=i;}});return best;};
-const miX=(st,k)=>{const el=st.children[k];if(!el)return st.scrollLeft;const sr=st.getBoundingClientRect(),r=el.getBoundingClientRect();return st.scrollLeft+(r.left-sr.left)-(sr.width-r.width)/2;};
-function stepNeeds(step){const I=supplyIndex(PL);return (step.items||[]).map(id=>I[id]).filter(Boolean);}
-function renderCarousel(){
-  if(!STEPS.length)return;
-  CAR=Math.max(0,Math.min(STEPS.length-1,CAR));store.set("svh-car",CAR);
-  const s=STEPS[CAR],n=STEPS.length,dn=doneSteps.has(s.id),needs=stepNeeds(s);
-  $("#car").innerHTML=`<div class="card car-main">
-    <div class="car-head"><h2 class="sec">Game plan</h2><span class="car-count">Step ${CAR+1} of ${n}</span></div>
-    <div class="car-prog" role="tablist">${STEPS.map((x,k)=>`<button class="car-dot${k===CAR?" on":""}${doneSteps.has(x.id)?" done":""}" data-car="${k}" style="--pc:${pc(x.phase)}" aria-label="Step ${k+1}: ${esc(x.title)}" title="${esc(x.title)}"></button>`).join("")}</div>
-    <div class="car-card" style="--pc:${pc(s.phase)}">
-      <div class="car-body car-top">
-        ${(t=>t.length?`<div class="car-phase">${t.map(x=>`<b>${x}</b>`).join(" · ")}</div>`:"")([s.isNew&&"New challenge",s.repeat&&"Repeat",s.ctx&&s.ctx.dbl&&"Two tribes at Tribal"].filter(Boolean))}
-        <h3>${esc(s.title)}</h3>
-        <div class="car-meta">${esc(s.dur)} · ${esc(s.at)}</div>
-        <p class="car-sum">${esc(s.sum)}</p>
-      </div>
-      ${mediaStrip(s)}
-      ${needs.length?`<div class="car-body car-bottom">
-        ${needs.length?`<div class="car-need"><h4>What you need</h4><div class="need-list">${needs.map(it=>{const prod=it.p&&P[it.p],img=(prod&&prod.img)||it.img||(it.imgs&&it.imgs[0][0]);
-          const th=it.il?illo(it.il):it.icon==="rock"?rockSVG(S.colors[0].hex,"thumb-rock"):img?`<img src="${img}" alt="">`:(ILLO[it.icon]||IC[it.icon]||"");
-          return `<div class="need${got.has(it.id)?" got":""}"><a class="need-main" href="#supplies" data-need="${it.id}"><span><b>${esc(it.title)}</b><small>${it.qty}</small></span>${got.has(it.id)?IC.check:""}</a></div>`}).join("")}</div></div>`:""}
-      </div>`:""}
-    </div>
-    <div class="car-nav">
-      <button class="btn" data-car="${CAR-1}" ${CAR?"":"disabled"} aria-label="Previous step">${IC.prev}<span>Back</span></button>
-      ${CAR<n-1?`<button class="btn primary" data-car="${CAR+1}" aria-label="Next step"><span>Next</span>${IC.next}</button>`:`<button class="btn primary fin-btn" data-finish>${IC.medal}<span>Finish</span></button>`}
-    </div></div>
-    <div class="car-script-card"><details class="car-script" ${carScriptOpen?"open":""}><summary><span class="cs-ic">${IC.doc}</span><span class="cs-t"><b>Full step description</b><small>Plus the host's script</small></span></summary><div class="seg-body">${s.blocks.map(b=>renderBlock(b,s.ctx)).join("")}<i class="end-mark"></i></div></details></div>
-`;
-  const strip=$("#car .car-media"),dots=[...document.querySelectorAll("#car .mi-dots button")];
-  if(strip&&dots.length)strip.addEventListener("scroll",()=>{const k=miIdx(strip);dots.forEach((d,j)=>d.classList.toggle("on",j===k));
-    const pv=$("#car .mi-arrow.prev"),nx=$("#car .mi-arrow.next");if(pv)pv.disabled=k<=0;if(nx)nx.disabled=k>=dots.length-1;},{passive:true});
-  btDraw();armNudges();miHintArm();
-}
-let miHintDone=new Set();
-function miHintArm(){const st=$("#car .car-media");if(!st||st.children.length<2||miHintDone.has(CAR))return;
-  const go=()=>{const r=st.getBoundingClientRect();if(!st.isConnected)return removeEventListener("scroll",go);
-    if(r.top<innerHeight*.8&&r.bottom>60&&miIdx(st)===0){removeEventListener("scroll",go);miHintDone.add(CAR);setTimeout(()=>{st.classList.add("hint");setTimeout(()=>st.classList.remove("hint"),1800);},500);}};
-  addEventListener("scroll",go,{passive:true});go();}
-/* Reached the end of a step's script? Give its Next button a little pulse */
-function armNudges(){
-  const seen=el=>{if(!el||!el.offsetParent)return false;const r=el.getBoundingClientRect();return r.bottom>0&&r.bottom<=innerHeight-8;};
-  document.querySelectorAll("#segments article.seg").forEach(a=>{const f=a.querySelector(".seg-foot"),b=f&&f.querySelector(".btn.primary");
-    if(b)b.classList.toggle("nudge",a.classList.contains("open")&&!b.disabled&&seen(f));});
-  const b=$("#car .car-nav .btn.primary"),m=$("#car .end-mark"),d=$("#car .car-script");
-  if(b)b.classList.toggle("nudge",!!(d&&d.open)&&!b.disabled&&seen(m));
-}
-addEventListener("scroll",()=>{if(!armNudges.q){armNudges.q=1;setTimeout(()=>{armNudges.q=0;armNudges();},120);}},{passive:true});
-addEventListener("resize",()=>armNudges());
 /* Finale: the closing title card with confetti in the tribe colors */
 let finRun=0;
 function openFinish(){
@@ -2264,12 +2522,6 @@ function finConfetti(){
     if(P.length||t-t0<1600)requestAnimationFrame(tick);else ctx.clearRect(0,0,W,H);})(t0);
 }
 
-/* Scroll so the whole Game plan card shows, with a little gap under the (sticky, on desktop) header */
-const stickyHead=()=>{const t=$(".top");return t&&getComputedStyle(t).position==="sticky"?t.offsetHeight:0;};
-function goStep(k){CAR=Math.max(0,Math.min(STEPS.length-1,k));renderCarousel();const c=$("#car"),head=stickyHead(),top=c.getBoundingClientRect().top;
-  if(top<head){const y=top+scrollY-head-16,from=scrollY;window.scrollTo({top:y,behavior:"smooth"});
-    setTimeout(()=>{if(Math.abs(scrollY-from)<2&&Math.abs(y-from)>2)window.scrollTo(0,y);},450);}}
-
 /* ---------- Supplies ---------- */
 let got=new Set(store.get("svh-got",[]));
 let where=store.get("svh-where-item",{});
@@ -2281,7 +2533,7 @@ addEventListener("resize",supSticky);
    under its category heading, so you can see what you marked and the next item below it. */
 function gotToggle(id){
   const old=document.getElementById("sup-"+id),h0=old?old.offsetHeight:0;
-  got.has(id)?got.delete(id):got.add(id);store.set("svh-got",[...got]);renderSupplies();renderCarousel();
+  got.has(id)?got.delete(id):got.add(id);store.set("svh-got",[...got]);renderSupplies();
   const card=document.getElementById("sup-"+id);if(!card||!old)return;
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches,D=reduce?0:450,h1=card.offsetHeight;
   if(D){card.style.cssText=`height:${h0}px;overflow:hidden`;void card.offsetHeight;card.style.transition=`height ${D}ms cubic-bezier(.4,0,.2,1)`;card.style.height=h1+"px";setTimeout(()=>{card.style.cssText="";},D+60);}
@@ -2406,51 +2658,12 @@ function renderBlock(b,ctx={}){
       return `<div class="blk results">${Array.from({length:T},(_,i)=>i<T-lose?`<div><b>${ord[i]}</b><span>Safe</span></div>`:`<div class="lose"><b>${i===T-1?"Last":ord[i]}</b><span>Tribal Council</span></div>`).join("")}</div>`;}
     case "rocks":{const swap=b.set==="swap",cols=swap?S.swap:S.colors.slice(0,PL.T),sizes=swap?PL.swapSizes:PL.startSizes;
       return `<div class="blk tribe-viz">${cols.map((c,i)=>`<div class="tv">${rockSVG(c.hex)}<b>${sizes[i]}</b><span>${esc(c.name)} rocks + buffs</span></div>`).join("")}</div>`;}
-    case "pvjoin":return `<div class="blk pv pv-host" data-pv-kind="join"></div>`;
-    case "pvote":return `<div class="blk pv pv-host" data-pv-kind="vote" data-pv-key="${esc(b.key)}" data-pv-mode="${b.mode}" data-pv-e="${b.e||1}"${b.solo?' data-pv-solo="1"':""}${b.last?' data-pv-last="1"':""}></div>`;
+    case "pvjoin":case "pvote":return "";
     case "votes":{const E=ctx.e||1,n="______",line=E===1?n:`${n}, and ${n}`;
       return `<div class="blk say"><div class="lab">${IC.mic}Read the votes</div>${PS(`That's ___ votes for ______. That's enough.\n\n${line}, come on over.\n\nThe tribe has spoken.\n\nHand over your ${PL.T>1?"buff":"torch"}. You've joined the jury — you're still in this, just from the other side now.`)}</div>`;}
   }
   return "";
 }
-let openSeg=null;
-const firstOpen=()=>STEPS.findIndex(s=>!doneSteps.has(s.id));
-function setOpen(i,scroll){
-  openSeg=i;
-  document.querySelectorAll("article.seg-hint").forEach(a=>a.classList.remove("seg-hint"));
-  document.querySelectorAll("article.seg").forEach((a,k)=>{const on=k===i;a.classList.toggle("open",on);a.querySelector(".seg-head").setAttribute("aria-expanded",on)});
-  if(scroll&&i>=0){const a=document.getElementById("seg-"+(i+1));if(a)requestAnimationFrame(()=>a.scrollIntoView({block:"start",behavior:"smooth"}));}
-  armNudges();segStick();
-}
-/* Script Previous/Next: glide to the step's title, then open it there.
-   Going forward the finished step collapses off-screen above while the view is held steady. */
-function glideTo(y,done){const from=scrollY;window.scrollTo({top:y,behavior:"smooth"});let t0=Date.now();
-  (function wait(){if(Math.abs(scrollY-y)<3||Date.now()-t0>900){if(Math.abs(scrollY-y)>=3&&Math.abs(scrollY-from)<3)window.scrollTo(0,y);done&&done();return;}setTimeout(wait,40);})();}
-function easeScroll(y,D,done){const y0=scrollY;let fin=false;const end=()=>{if(fin)return;fin=true;window.scrollTo(0,y);done&&done();};
-  if(!D)return end();const t0=performance.now();
-  (function f(now){if(fin)return;const p=Math.min(1,(now-t0)/D),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;window.scrollTo(0,y0+(y-y0)*e);p<1?requestAnimationFrame(f):end();})(t0);
-  setTimeout(end,D+250);}
-function segGo(k){
-  /* Open step k while the page glides its title to the top. A step open below it closes first
-     (nothing above moves); a step open above it tucks away after the glide, with the view held steady. */
-  const el=document.getElementById("seg-"+(k+1));if(!el)return;
-  const head=(typeof stickyHead==="function"?stickyHead():0)+12,prev=openSeg;
-  if(prev>k){const p=document.getElementById("seg-"+(prev+1));if(p){p.classList.remove("open");p.querySelector(".seg-head").setAttribute("aria-expanded",false);}}
-  document.querySelectorAll("article.seg-hint").forEach(a=>a.classList.remove("seg-hint"));
-  const panel=el.querySelector(".seg-panel"),D=matchMedia("(prefers-reduced-motion: reduce)").matches?0:700;
-  el.classList.add("open");el.querySelector(".seg-head").setAttribute("aria-expanded",true);
-  const full=panel.scrollHeight;panel.style.cssText="height:0;opacity:0;overflow:hidden";void panel.offsetHeight;
-  panel.style.transition=`height ${D}ms cubic-bezier(.4,0,.2,1),opacity ${D}ms ease`;panel.style.height=full+"px";panel.style.opacity="1";
-  easeScroll(el.getBoundingClientRect().top+scrollY-head,D,()=>{panel.style.cssText="";const before=el.getBoundingClientRect().top;setOpen(k,false);
-    window.scrollTo(0,scrollY+(el.getBoundingClientRect().top-before));});
-}
-/* Script page: a slim bar with the open step's number and title, shown while you read below its title */
-function segStick(){const bar=$("#seg-stick");if(!bar)return;const a=openSeg>=0&&!$("#view-script").hidden&&document.getElementById("seg-"+(openSeg+1));
-  if(!a){bar.hidden=true;return;}const toph=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--toph"))||0,
-    hr=a.querySelector(".seg-head").getBoundingClientRect(),ar=a.getBoundingClientRect(),show=hr.bottom<toph+4&&ar.bottom>toph+70;
-  if(show){const s=STEPS[openSeg];bar.querySelector(".ss-n").textContent=openSeg+1;bar.querySelector(".ss-t").textContent=s.title;bar.style.setProperty("--pc",pc(s.phase));}
-  bar.hidden=!show;}
-addEventListener("scroll",segStick,{passive:true});
 /* ---------- Phone voting (optional) ----------
    Players open vote.html on their own phones and keep it open. This device publishes the game state to a private
    ntfy.sh topic; players' votes come back the same way, encrypted on their phone with this device's public key. */
@@ -2475,7 +2688,7 @@ async function pvSetup(){pvGet();if(PV.room)return;PV.room=pvRid(18);PV.made=Dat
   pvSave();pvListen();pvPublish(true);}
 /* relay */
 let pvPubT=0;
-function pvSnap(){const c=PV.cur;return {t:"s",v:1,ts:Date.now(),ev:S.event,roster:PV.roster,out:PV.out,win:PV.win,last:PV.last,
+function pvSnap(){const c=PV.cur;return {t:"s",v:1,ts:Date.now(),ev:S.event,stage:typeof PLY_STAGE!=="undefined"?PLY_STAGE:{k:"idle"},roster:PV.roster,out:PV.out,win:PV.win,last:PV.last,
   tc:c?{id:c.id,mode:c.mode,title:c.title,voters:c.voters,cands:c.cands,immune:c.immune,phase:c.phase==="open"?"open":"closed",pub:c.phase==="open"?PV.keys.pub:null}:null};}
 function pvPublish(now){clearTimeout(pvPubT);if(!PV||!PV.room)return Promise.resolve(false);
   if(!now){pvPubT=setTimeout(()=>pvPublish(true),900);return Promise.resolve(true);}
@@ -2619,7 +2832,8 @@ function pvCloseModal(){const m=$("#pv-modal");if(m)m.remove();document.body.cla
 function pvCopy(b){const t=b.textContent,ok=()=>{b.textContent="Copied";setTimeout(()=>b.textContent=t,1600);};
   if(navigator.clipboard)navigator.clipboard.writeText(pvLink()).then(ok,()=>prompt("Copy this link:",pvLink()));else prompt("Copy this link:",pvLink());}
 const pvCache=new WeakMap();
-function pvRender(){pvGet();document.querySelectorAll(".pv-host").forEach(h=>{const html=pvHTML(h);if(pvCache.get(h)!==html){h.innerHTML=html;pvCache.set(h,html);}h.dataset.pvOn=1;});pvModalFill();}
+function pvRender(){pvGet();document.querySelectorAll(".pv-host").forEach(h=>{const html=pvHTML(h);if(pvCache.get(h)!==html){h.innerHTML=html;pvCache.set(h,html);}h.dataset.pvOn=1;});pvModalFill();
+  if(typeof plyRefresh==="function")plyRefresh();if(typeof renderPlanExtra==="function"&&!$("#view-setup").hidden)renderPlanExtra();}
 let pvRT=0;function pvRenderSoon(){clearTimeout(pvRT);pvRT=setTimeout(pvRender,30);}
 async function pvAct(a,n,h,b){pvGet();const c=PV.cur;
   switch(a){
@@ -2664,38 +2878,6 @@ document.addEventListener("submit",e=>{if(e.target.dataset.pvForm!=="add")return
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#pv-modal"))pvCloseModal();});
 setTimeout(()=>{pvGet();if(PV.room){pvListen();pvPublish(true);}pvRender();
   new MutationObserver(()=>{if(document.querySelector(".pv-host:not([data-pv-on])"))pvRenderSoon();}).observe(document.body,{childList:true,subtree:true});},0);
-function renderScriptTop(){if(!$("#script-top"))return;
-  const n=STEPS.filter(s=>doneSteps.has(s.id)).length;
-  $("#script-top").innerHTML=`<div><b>${STEPS.length} steps</b></div><button class="btn primary" id="pdf-btn">${IC.doc}Download PDF</button>`;
-}
-function renderScript(){
-  if(openSeg===null||openSeg>=STEPS.length)openSeg=-1;
-  const groups=[];STEPS.forEach((s,i)=>{let g=groups.at(-1);if(!g||g.ph!==s.phase){g={ph:s.phase,items:[]};groups.push(g)}g.items.push(i)});
-  $("#seg-chips").innerHTML=STEPS.map((s,i)=>`<a href="#seg-${i+1}" data-i="${i}" style="--pc:${pc(s.phase)}"><i></i>${i+1}. ${esc(s.short)}</a>`).join("");
-  $("#toc").innerHTML=groups.map(g=>`<h4 style="--pc:${pc(g.ph)}"><i></i>${g.ph}</h4>`+g.items.map(i=>`<a href="#seg-${i+1}" data-i="${i}" style="--pc:${pc(STEPS[i].phase)}"><span class="n">${i+1}</span><span>${esc(STEPS[i].title)}</span></a>`).join("")).join("");
-  $("#segments").innerHTML=``+groups.map(g=>
-    `<section class="phase" style="--pc:${pc(g.ph)}"><header class="phase-h"><i></i><h2>${PH_NAME[g.ph]||g.ph}</h2><small>${PH_BLURB[g.ph]}</small><span class="phase-n">${g.items.length} step${g.items.length===1?"":"s"}</span></header>`+
-    g.items.map(i=>{const s=STEPS[i],nx=STEPS[i+1],dn=doneSteps.has(s.id),open=i===openSeg;
-      const meta=[esc(s.dur),esc(s.at),s.ctx.dbl&&"Two tribes at Tribal",s.isNew&&"New challenge",s.repeat&&"Repeat"].filter(Boolean).join(" · ");
-      return `<article class="seg${open?" open":""}${i===0&&openSeg<0?" seg-hint":""}" id="seg-${i+1}" style="--pc:${pc(s.phase)}">
-        <div class="seg-head" role="button" tabindex="0" data-open="${i}" aria-expanded="${open}">
-          <span class="num">${i+1}</span>
-          <span class="seg-title">${i===0?`<span class="start-tag">Start here</span>`:""}<h3>${esc(s.title)}</h3><span class="seg-meta">${meta}</span><span class="seg-sum">${esc(s.sum)}</span></span>
-          <span class="chev" aria-hidden="true"></span>
-        </div>
-        <div class="seg-panel">
-          <div class="seg-body">${instructionPhotos(s)}${s.blocks.map(b=>renderBlock(b,s.ctx)).join("")}</div>
-          <div class="seg-foot"><button class="btn" data-seg-go="${i-1}" ${i?"":"disabled"}>${IC.prev}Previous</button>
-            ${nx?`<button class="btn primary" data-seg-go="${i+1}">Next${IC.next}</button>`:`<button class="btn primary fin-btn" data-finish>${IC.medal}Finish</button>`}</div>
-        </div>
-      </article>`}).join("")+`</section>`).join("")+`<div class="script-end"><button class="btn" id="pdf-btn">${IC.doc}Download the script as a PDF</button></div>`;
-  syncSegDone();renderScriptTop();armNudges();
-}
-const PH_NAME={Tribes:"Group challenges",Individual:"Individual challenges"};
-function syncSegDone(){document.querySelectorAll("#seg-chips a,#toc a").forEach(a=>a.classList.toggle("done",doneSteps.has(STEPS[+a.dataset.i]?.id)))}
-function toggleDone(id){doneSteps.has(id)?doneSteps.delete(id):doneSteps.add(id);store.set("svh-done-v3",[...doneSteps]);}
-
-/* ---------- Printable PDF of the script ---------- */
 function loadScript(src){return new Promise((res,rej)=>{if(window.PDFLib)return res();const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>rej(new Error("Couldn't load the PDF tool"));document.head.append(s);});}
 const pdfSafe=s=>String(s).replace(/→/g,"->").replace(/[−–]/g,"-").replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/…/g,"...").replace(/×/g,"x").replace(/·/g,"·").replace(/[^\x00-\xFF—·]/g,"");
 async function downloadPDF(){
@@ -2761,7 +2943,7 @@ async function downloadPDF(){
    Title screen + setup flow
    ===================================================================== */
 let WIZ=0;
-const WIZ_STEPS=["title","players","colors","length","style","challenges","places","cast"];
+const WIZ_STEPS=["title","players","colors","length","venue","style","challenges","voting","places","cast"];
 /* One tribe has no colors to pick, so that step drops out */
 const wizSkip=k=>k==="colors"&&tribesFor(S.players)===1;
 function wizMove(dir){let i=WIZ;do{i+=dir;}while(i>0&&i<WIZ_STEPS.length-1&&wizSkip(WIZ_STEPS[i]));WIZ=Math.min(WIZ_STEPS.length-1,Math.max(0,i));renderWizard();$("#wiz").scrollTop=0;}
@@ -2772,7 +2954,7 @@ function openWizard(step=0){WIZ=step;$("#wiz").hidden=false;document.body.classL
 let wizFrom="setup";
 let csFromWiz=false;
 function closeWizard(to="setup"){document.body.classList.remove("wl");csFromWiz=to==="cast";S.onboarded=true;saveS();
-  if(GAME.fresh){const sl=slugify(S.event.replace(/^Survivor[:\s—-]*/i,""))+"-"+rid(4);gameTouch({slug:sl,fresh:false});history.replaceState(null,"",location.pathname+"?g="+sl+location.hash);}CAR=0;store.set("svh-car",0);window.scrollTo(0,0);$("#wiz").hidden=true;document.body.classList.remove("wiz-on");rerender();if(location.hash==="#"+to)route();else location.hash=to;}
+  if(GAME.fresh){const sl=slugify(S.event.replace(/^Survivor[:\s—-]*/i,""))+"-"+rid(4);gameTouch({slug:sl,fresh:false});history.replaceState(null,"",location.pathname+"?g="+sl+location.hash);}window.scrollTo(0,0);$("#wiz").hidden=true;document.body.classList.remove("wiz-on");rerender();if(location.hash==="#"+to)route();else location.hash=to;}
 function wizPlan(over={}){const keep={...S};Object.assign(S,over);const p=computePlan();Object.assign(S,keep);return p;}
 function wizTribesHTML(){
   const T=tribesFor(S.players),cols=S.colors.slice(0,T),sizes=split(S.players,T);
@@ -2824,6 +3006,14 @@ function renderWizard(anim=true){
   }else if(k==="length"){
     w.innerHTML=`${dots}<h2 class="wiz-h">How long should it last?</h2><p class="wiz-p">Times are estimates for ${S.players} players, including Tribal Councils.</p>
       <div class="wiz-cards">${Object.entries(LENGTHS).map(([id,L])=>{const p=wizPlan({length:id});return `<button class="wiz-card${S.length===id?" on":""}" data-wiz-length="${id}"><span class="wc-ic">${IC.clock}</span><b>${L.name}</b><span class="wc-big">${hoursRange(p)}</span><small>${p.R} rounds · ${L.blurb}</small></button>`}).join("")}</div>${nav()}`;
+  }else if(k==="venue"){
+    const V=[["out",TL.tree,"Backyard","Run-around challenges outside, like the relay, the bucket brigade and rock toss."],["in",TL.home,"Living room","Every challenge fits indoors, in a small space. Nothing gets wet."],["both",TL.both,"Inside + out","Use every challenge. Great if you have a yard and a living room."]];
+    w.innerHTML=`${dots}<h2 class="wiz-h">Where are you playing?</h2><p class="wiz-p">This picks challenges that fit your space. You can still change them.</p>
+      <div class="wiz-cards">${V.map(([id,ic,n,t])=>`<button class="wiz-card${S.venue===id?" on":""}" data-wiz-venue="${id}"><span class="wc-ic">${ic}</span><b>${n}</b><small>${t}</small></button>`).join("")}</div>${nav()}`;
+  }else if(k==="voting"){
+    const V=[["phones",TL.phone,"On their phones","Everyone opens one link. At Tribal, a secret ballot appears on their phone and you reveal the votes."],["room",TL.door,"Voting room","One at a time, players walk to a private spot and write a name on parchment."],["table",TL.urn,"Paper at their seat","No extra room needed. Write a name, fold it, and drop it in the urn."]];
+    w.innerHTML=`${dots}<h2 class="wiz-h">How do people vote?</h2><p class="wiz-p">The script's wording follows your choice. You can switch any time.</p>
+      <div class="wiz-cards">${V.map(([id,ic,n,t])=>`<button class="wiz-card${S.vote===id?" on":""}" data-wiz-vote="${id}"><span class="wc-ic">${ic}</span><b>${n}</b><small>${t}</small></button>`).join("")}</div>${nav()}`;
   }else if(k==="style"){
     w.innerHTML=`${dots}<h2 class="wiz-h">What kind of game?</h2><p class="wiz-p">This picks your starting challenges. You can change them next.</p>
       <div class="wiz-cards">${Object.entries(STYLES).map(([id,st])=>`<button class="wiz-card${S.style===id?" on":""}" data-wiz-style="${id}"><span class="wc-art">${illo(st.il)}</span><b>${st.name}</b><small>${st.blurb}</small></button>`).join("")}</div>${nav()}`;
@@ -2831,7 +3021,7 @@ function renderWizard(anim=true){
     const sel=selection(),used=new Map();P2.rounds.forEach((r,i)=>{if(!used.has(r.ch))used.set(r.ch,i);});
     const card=id=>{const c=CH[id],on=sel[c.kind].includes(id),order=[...used.keys()].indexOf(id);
       const m=c.media[0],art=m.img?`<img src="${m.img}" alt="">`:m.il?illo(m.il):m.rock?rockSVG(S.colors[0].hex):"";
-      return `<button class="ch-card${on?" on":""}${on&&order<0?" bench":""}" data-wiz-ch="${id}" aria-pressed="${on}"><span class="ch-art">${art}</span><span class="ch-check">${IC.check}</span>${order>=0?`<span class="ch-ord">${order+1}</span>`:""}<b>${esc(c.name)}</b><small>${STYLE_TAG[c.style]} · ${c.mins[0]}–${c.mins[1]} min${c.isNew?" · New":""}</small></button>`;};
+      return `<button class="ch-card${on?" on":""}${on&&order<0?" bench":""}" data-wiz-ch="${id}" aria-pressed="${on}"><span class="ch-art">${art}</span><span class="ch-check">${IC.check}</span>${order>=0?`<span class="ch-ord">${order+1}</span>`:""}<b>${esc(c.name)}</b><small>${STYLE_TAG[c.style]} · ${c.mins[0]}–${c.mins[1]} min${c.isNew?" · New":""}${c.where==="out"?`<span class="ch-where">· Outside</span>`:""}</small></button>`;};
     const cardW=id=>{const on=sel[CH[id].kind].includes(id);return `<div class="ch-wrap${on?" on":""}">${card(id)}<button class="ch-more" data-wiz-info="${id}" aria-label="How to play ${esc(CH[id].name)}">${IC.q}How to play</button></div>`;};
     const o=ORDER[S.style];
     const tUsed=P2.rounds.filter(r=>r.type!=="solo").length,sUsed=P2.rounds.filter(r=>r.type==="solo").length;
@@ -2841,7 +3031,7 @@ function renderWizard(anim=true){
       ${P2.rounds.some(r=>r.repeat)?`<p class="wiz-warn">${IC.bulb}Pick a few more and nothing repeats. Right now some challenges run twice.</p>`:""}${nav()}`;
   }else if(k==="places"){
     w.innerHTML=`${dots}<h2 class="wiz-h">Name your game</h2><p class="wiz-p">The script fills these in for you. Tap a box to see what it's for.</p>
-      ${[["The game",IC.gift,["event","prize","immunity","idol"]],["The places",IC.pin,["council","voteSpot","porch","swapRoom"]]].map(([g,ic,keys])=>`<section class="wf-group"><h3 class="wf-h">${ic}${g}</h3><div class="wiz-fields">${keys.map(k=>FIELDS.find(x=>x[0]===k)).map(([f,l,h])=>`<label><span class="wf-l">${l}</span><input type="text" data-field="${f}" value="${esc(S[f])}" autocomplete="off"><small>${h}</small></label>`).join("")}</div></section>`).join("")}${nav()}`;
+      ${[["The game",IC.gift,["event","prize","immunity","idol"]],["The places",IC.pin,["council",...(S.vote==="room"?["voteSpot"]:[]),"porch","swapRoom"]]].map(([g,ic,keys])=>`<section class="wf-group"><h3 class="wf-h">${ic}${g}</h3><div class="wiz-fields">${keys.map(k=>FIELDS.find(x=>x[0]===k)).map(([f,l,h])=>`<label><span class="wf-l">${l}</span><input type="text" data-field="${f}" value="${esc(S[f])}" autocomplete="off"><small>${h}</small></label>`).join("")}</div></section>`).join("")}${nav()}`;
   }else if(k==="cast"){
     w.innerHTML=`${dots}<h2 class="wiz-h">Make your cast slideshow?</h2><p class="wiz-p">A slide for every castaway with their name and photo, played on the TV with the Survivor intro music as people arrive.</p>
       <div class="wiz-cast"><img id="wiz-cast-img" alt=""></div>
@@ -3367,14 +3557,535 @@ csBindInCrop();
 csBindStage();
 
 /* ---------- Tabs / routing ---------- */
-const TABS=[["setup","Game overview",IC.setup],["script","Script",IC.script],["supplies","Supplies",IC.supplies],["party","Ambiance",IC.fire]];
+/* =====================================================================
+   Torchlight: the season map (Plan tab) and Play mode.
+   The night is grouped into rounds (a challenge + its Tribal Council),
+   and Play turns each round's script into beats: one screen, one button.
+   ===================================================================== */
+const TL={
+  map:I('<path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/>'),
+  x:I('<path d="M6 6l12 12M18 6 6 18"/>'),
+  dots:I('<circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/>'),
+  tv:I('<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/>'),
+  phone:I('<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>'),
+  swap:I('<path d="M4 8h13l-3-3M20 16H7l3 3"/>'),
+  merge:I('<path d="M6 3v5a6 6 0 0 0 12 0V3M12 14v7"/>'),
+  crown:I('<path d="M3 18h18M4 18 3 7l5 4 4-6 4 6 5-4-1 11"/>'),
+  restart:I('<path d="M4 4v6h6"/><path d="M4.6 15A8 8 0 1 0 6.4 6.7L4 10"/>'),
+  flag:I('<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>'),
+  home:I('<path d="M4 11 12 4l8 7v9H4z"/><path d="M10 20v-5h4v5"/>'),
+  tree:I('<path d="M12 3 6 11h3l-4 6h14l-4-6h3z"/><path d="M12 17v4"/>'),
+  both:I('<path d="M3 12 9 7l6 5v8H3z"/><path d="M17 4l-3 5h2l-2 4h6l-2-4h2z"/>'),
+  door:I('<path d="M5 21V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v17M3 21h18"/><path d="M15 12h.01"/>'),
+  urn:I('<path d="M7 4h10M8 4c0 3-3 4-3 9a7 7 0 0 0 14 0c0-5-3-6-3-9"/><path d="M9.5 12h5"/>'),
+  book:I('<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/>'),
+  share:I('<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>'),
+  users:I('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/>'),
+  qr:I('<rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h2.5v2.5M20.5 14v.01M18 18h2.5v2.5M14 20.5h.01"/>')
+};
+const TL_PC={Opening:"var(--p-opening)",Tribes:"var(--p-tribes)",Swap:"var(--p-swap)",Individual:"var(--p-individual)",Finale:"var(--p-finale)",Merge:"#d9a923"};
+const tlPhoto=k=>(GAME_PHOTOS[k]||{}).img||"";
+const tlMinsLabel=m=>m>=60?`${Math.floor(m/60)}h${m%60?` ${m%60}m`:""}`:`${m} min`;
+const tlWhere={out:"Outdoors",in:"Indoors",both:"In or out"};
+
+/* ---------- Play state (per game) ---------- */
+const PLY_FRESH=()=>({pos:null,done:[],lose:{},immune:{},last:{},tribes:null,swapTribes:null,paper:{}});
+let PLY=PLY_FRESH();
+try{PLY=Object.assign(PLY_FRESH(),JSON.parse(localStorage.getItem("svh-play@"+GAME.id)||"null")||{});}catch(e){}
+const plySave=()=>{try{localStorage.setItem("svh-play@"+GAME.id,JSON.stringify(PLY))}catch(e){}};
+/* in-memory only */
+let plyDraft={},plyTally={},plySnuff={},plyQi={},plyAgain={},plyDir=1,plyStageJSON="";
+const CLK={start:0,acc:0,run:false,id:0};
+
+/* ---------- Rounds ---------- */
+let ROUNDS=[];
+function buildRounds(){
+  const R=[];let n=0;
+  STEPS.forEach(s=>{const last=R[R.length-1];
+    if(s.kind==="tribal"&&last&&last.kind==="round"&&last.steps.length===1){last.steps.push(s);return;}
+    if(s.kind==="challenge")R.push({kind:"round",steps:[s],n:++n});else R.push({kind:s.kind,steps:[s]});});
+  const one=PL.T===1;
+  R.forEach((r,i)=>{const s=r.steps[0],rd=s.round;r.i=i;r.id=r.steps.map(x=>x.id).join("+");
+    if(r.kind==="round"){const c=CH[s.ch],t=rd.type,tr=r.steps[1];
+      r.ph=s.phase;r.kick=`Round ${r.n} · ${t==="solo"?"Individual":t==="swap"?"Swap tribes":"Tribes"}`;r.title=c.name;
+      r.mins=Math.round((c.mins[0]+c.mins[1])/2+(TRIBAL_MINS[0]+TRIBAL_MINS[1])/2*(rd.dbl?2:1));
+      r.left=[rd.before,rd.after];r.where=c.where||"both";r.icon=t==="solo"?IC.medal:IC.people;
+      r.img=(gamePhotos(s)[0]||{}).img||(c.media.find(m=>m.img)||{}).img||"";
+      r.what=[c.sum,t==="solo"?(rd.last?"Last place in the challenge goes home; the winner gets immunity":"The winner gets immunity"):rd.dbl?"The last two tribes go to Tribal Council":"The losing tribe goes to Tribal Council",tr?tr.sum:""].filter(Boolean);}
+    else if(r.kind==="opening"){r.ph="Opening";r.kick="Opening";r.title=one?"Welcome to the island":"Welcome + tribe draw";r.mins=12;r.left=[PL.N,PL.N];r.icon=IC.fire;r.img=tlPhoto(one?"yellow-tribe":"tribe-draw");
+      r.what=["Welcome everyone and explain how the night works","Hidden immunity idols",one?"How individual immunity works":`Draw rocks to form ${WORD[PL.T]} tribes`].concat(S.vote==="phones"?["Everyone joins phone voting"]:[]);}
+    else if(r.kind==="swap"){r.ph="Swap";r.kick="Twist";r.title="Tribe swap";r.mins=5;const b=rd?rd.before:PL.rounds.find(x=>x.type==="swap").before;r.left=[b,b];r.icon=TL.swap;r.img=tlPhoto("tribe-swap");
+      r.what=["Everyone drops their buff","Redraw rocks into two brand-new tribes","Straight on to the next challenge"];}
+    else if(r.kind==="merge"){r.ph="Merge";r.kick="Milestone";r.title="The merge";r.mins=5;r.left=[PL.merge,PL.merge];r.icon=TL.merge;r.img=tlPhoto("merge-drop");
+      r.what=["No more tribes: every challenge is individual","Voted-out players sit in as the jury","The race to the final "+WORD[PL.F]+" begins"];}
+    else{r.ph="Finale";r.kick="Finale";r.title="Final Tribal Council";r.mins=22;r.left=[PL.F,PL.F];r.icon=TL.crown;r.img=tlPhoto("final-council");
+      r.what=[`The final ${WORD[PL.F]} plead their case`,"The jury asks questions",`The jury of ${PL.jury} votes and you crown the Sole Survivor`];}
+    r.pc=TL_PC[r.ph]||"var(--accent)";
+    const I2=supplyIndex(PL),seen=new Set();r.need=r.steps.flatMap(x=>x.items||[]).filter(id=>I2[id]&&!seen.has(id)&&seen.add(id)).map(id=>I2[id]);});
+  return R;
+}
+const plyRoundIdx=()=>{const i=ROUNDS.findIndex(r=>!PLY.done.includes(r.id));return i;};
+
+/* ---------- Beats: one screen each, built from the step's script ---------- */
+function stepBeats(s,r,B){
+  const ctx=s.ctx||{},rd=s.round,c=s.ch&&CH[s.ch];
+  const add=b=>{b.s=s;b.ctx=ctx;b.notes=b.notes||[];B.push(b);return b;};
+  const lastB=()=>B[B.length-1];
+  const ph=(gamePhotos(s)[0]||{}).img;
+  if(s.kind==="opening")add({t:"title",kick:"Outwit · Outplay · Outlast",title:"Survivor",sub:S.event.replace(/^Survivor[:\s—-]*/i,""),img:r.img,logo:true});
+  else if(s.kind==="challenge")add({t:"title",kick:r.kick,title:c.name,sub:c.sum,img:r.img,tags:[`${c.mins[0]}–${c.mins[1]} min`,rd.type==="solo"?"Individual immunity":rd.dbl?"Two tribes lose":"Tribe vs. tribe"]});
+  else if(s.kind!=="tribal")add({t:"title",kick:r.kick,title:r.title,sub:s.sum,img:r.img});
+  let tribalHead=s.kind==="tribal",outBeat=null;
+  const blocks=s.blocks.filter(b=>!b.if||b.if(PL));
+  blocks.forEach((b,k)=>{
+    switch(b.t){
+      case "say":{
+        if(s.kind==="tribal"&&b.h==="Before reading votes")return;
+        if(outBeat){outBeat.after=b.text;return;}
+        const parts=b.text.split(/\n\n+/),long=b.text.length>300&&parts.length>1;
+        (long?parts:[b.text]).forEach((p,j)=>add({t:"say",kick:b.h||(tribalHead?"Tribal Council":"Say"),text:p,part:long?[j+1,parts.length]:null,head:tribalHead&&j===0?s.title:null}));
+        tribalHead=false;return;}
+      case "cue":
+        if(s.kind==="tribal"&&blocks.slice(k+1).some(x=>x.t==="pvote"))return;
+        if(s.kind==="final"&&blocks.slice(0,k).some(x=>x.t==="pvote"))return;
+        if(s.kind==="challenge"&&rd&&rd.type==="solo"&&k===blocks.length-1){if(!B.some(x=>x.s===s&&(x.t==="clock"||x.t==="balance")))add({t:"clock",mins:c.mins});if(rd.last)add({t:"last"});add({t:"immune"});}
+        add({t:"do",text:b.text});return;
+      case "note":
+        if(s.kind==="opening"&&k===0){add({t:"prep",text:b.text.replace(/^Before guests arrive:\s*/i,"")});return;}
+        (lastB()||add({t:"do",text:""})).notes.push(b.text);return;
+      case "flow":return;
+      case "q":add({t:"deck",kick:b.h,items:b.items});return;
+      case "stations":b.items.forEach((x,j)=>{const m=x.name.split(/\s+—\s+/);
+        add({t:"station",kick:m.length>1?m[0]:`Part ${j+1}`,title:m[1]||x.name,text:x.text,img:(stationPhoto(x.name)||{}).img||x.img||"",il:x.icon||"",n:[j+1,b.items.length]});});return;
+      case "figs":{const l=lastB();l.figs=(l.figs||[]).concat(b.items);return;}
+      case "reveal":
+        if(s.kind==="final"){add({t:"crown"});return;}
+        add({t:"reveal",small:b.small||"",text:b.text});
+        if(s.kind==="challenge"&&b.small==="Start")add({t:"clock",mins:c.mins});
+        return;
+      case "results":
+        if(!B.some(x=>x.s===s&&x.t==="clock"))add({t:"clock",mins:c.mins});
+        add({t:"lose",dbl:!!(rd&&rd.dbl),set:rd&&rd.type==="swap"?"swap":"colors",T:rd&&rd.T?rd.T:PL.T});return;
+      case "rocks":add({t:"rocks",set:b.set});return;
+      case "double":add({t:"do",text:`Two tribes come to Tribal tonight. Run this council twice, once for each losing tribe, with ${people(ctx.e)} voted out from each.`});return;
+      case "baltimer":add({t:"balance"});return;
+      case "pvjoin":add({t:"join"});return;
+      case "pvote":add({t:"vote",key:b.key,mode:b.mode,e:b.mode==="final"?1:(b.e||1),solo:!!b.solo,dbl:!!ctx.dbl});
+        if(b.mode!=="final")outBeat=add({t:"out",key:b.key});return;
+      case "votes":return;
+    }
+  });
+}
+function plyBeats(r){if(!r)return [];if(r._b)return r._b;const B=[];r.steps.forEach(s=>stepBeats(s,r,B));B.forEach((b,i)=>{b.i=i;b.r=r;});return r._b=B;}
+const beatName=b=>!b?"":({title:b.title,say:b.kick,do:"Host direction",prep:"Before guests arrive",deck:b.kick||"Questions",station:b.title,reveal:b.small||"Big moment",clock:"Challenge clock",
+  lose:"Who goes to Tribal?",immune:"Who won immunity?",last:"Last place goes home",rocks:"Tribe rocks",balance:"Balance levels",join:"Phone voting",vote:b.mode==="final"?"The jury votes":"The vote",out:"The tribe has spoken",crown:"Crown the winner"}[b.t]||"Next");
+
+/* ---------- Season map (Plan tab) ---------- */
+function renderMap(){
+  const el=$("#smap");if(!el)return;
+  const cur=plyRoundIdx(),pos=PLY.pos&&ROUNDS[PLY.pos.r]?PLY.pos.r:-1,mins=ROUNDS.reduce((a,r)=>a+r.mins,0);
+  $("#tl-stats").innerHTML=[[TL.users,`${PL.N} castaways`],[IC.people,PL.T===1?"One tribe":`${PL.T} tribes`],[IC.clock,hoursRange(PL)],
+    [S.venue==="in"?TL.home:S.venue==="out"?TL.tree:TL.both,S.venue==="in"?"Indoors":S.venue==="out"?"Backyard":"Inside + out"],
+    [S.vote==="phones"?TL.phone:S.vote==="table"?TL.urn:TL.door,S.vote==="phones"?"Phone votes":S.vote==="table"?"Vote at your seat":"Voting room"]]
+    .map(([ic,t])=>`<span>${ic}${esc(t)}</span>`).join("")+`<button class="tl-edit" data-wiz-go="1">${IC.edit}Edit</button>`;
+  let side=0,h="";
+  ROUNDS.forEach((r,i)=>{const st=PLY.done.includes(r.id)?"done":i===cur?"cur":"",here=i===pos&&!PLY.done.includes(r.id);
+    if(r.kind==="swap"||r.kind==="merge"){h+=`<div class="sm-mile${st?" "+st:""}" style="--pc:${r.pc}"><button data-tl-peek="${i}"><span class="sm-mic">${st==="done"?IC.check:r.icon}</span>${esc(r.title)}<small>${r.left[0]} left</small></button></div>`;return;}
+    const lr=r.left[0]===r.left[1]?`${r.left[0]} players`:`${r.left[0]} → ${r.left[1]}`;
+    h+=`<div class="sm-node${side++%2?"":" r"}${st?" "+st:""}" style="--pc:${r.pc}">
+      <button class="sm-badge" data-tl-peek="${i}" aria-label="${esc(r.kick+": "+r.title)}">${st==="done"?IC.check:r.icon}</button>
+      <button class="sm-card" data-tl-peek="${i}"><small>${esc(r.kick)}${here?" · paused here":""}</small><b>${esc(r.title)}</b>
+        <em>${[tlMinsLabel(r.mins),lr,r.kind==="round"&&r.where!=="both"?tlWhere[r.where]:""].filter(Boolean).join(" · ")}</em></button></div>`;});
+  el.innerHTML=h;
+  const all=cur<0,started=PLY.done.length||PLY.pos;
+  $("#plan-cta").innerHTML=`<button class="tl-cta" data-tl-play="${all?"again":"resume"}">${IC.play}<span>${all?"Play the season again":started?"Resume the game":"Start the game"}</span>${!all&&started?`<small>${esc(ROUNDS[pos>=0?pos:cur].title)}</small>`:""}</button>`;
+  renderPlanExtra();
+}
+function renderPlanExtra(){
+  const el=$("#plan-extra");if(!el)return;pvGet();
+  const named=PV.roster.length,phones=S.vote==="phones",joined=PV.roster.filter(n=>pvSeen[n]).length;
+  const card=(ic,title,sub,btns,cls="")=>`<div class="tl-box ${cls}"><span class="tl-bic">${ic}</span><div class="tl-bt"><b>${title}</b><small>${sub}</small><div class="tl-bb">${btns}</div></div></div>`;
+  el.innerHTML=`<h2 class="sec">Before the party</h2><p class="sec-sub">Optional extras that make the night run itself.</p><div class="tl-boxes">
+    ${card(TL.users,"Your castaways",named?`${named} of ${PL.N} named${PV.out.length?` · ${PV.out.length} on the jury`:""}. Names let the app track tribes, immunity and votes.`:"Add names (or pull them from the Cast) and the app tracks tribes, immunity and votes for you.",
+      `<button class="btn" data-pv="players">${named?"Edit players":"Add players"}</button>`)}
+    ${phones?card(TL.phone,"Phone voting",PV.room?`On · ${joined} joined. Players open the link once and leave it open.`:"Players vote on their own phones. Set it up now so the link is ready.",
+      PV.room?`<button class="btn" data-pv="link">${TL.qr}Players' link</button>`:`<button class="btn primary" data-pv="setup">Set up phone voting</button>`):""}
+    ${card(TL.tv,"TV screen","Put the game on a TV: challenge title cards, the clock, the vote reveal and the winner.",`<button class="btn" data-tl-tv>Show on a TV</button>`)}
+    ${card(IC.doc,"The full script","Every word for the whole night as a printable PDF, if you'd like paper too.",`<button class="btn" id="pdf-btn">${IC.download}<span>Download PDF</span></button>`)}
+    ${card(TL.share,"Share this game","Send the plan to a co-host. They get their own copy.",`<button class="btn" data-share>Share link</button>`)}
+    ${PLY.done.length||PLY.pos?card(TL.restart,"Start over","Clear the game's progress, votes and jury. Your settings stay.",`<button class="btn" data-tl-restart>Restart the game</button>`,"muted"):""}
+  </div>`;
+}
+/* Light or dark bottom sheet */
+function tlSheet(html,dark){const s=$("#tl-sheet");if(!html){s.hidden=true;s.classList.remove("show");document.body.classList.remove("tl-lock");return;}
+  s.classList.toggle("dark",!!dark);$("#tl-sh").innerHTML=`<div class="tl-grab"></div><button class="tl-x" data-tl-close aria-label="Close">${TL.x}</button>${html}`;
+  s.hidden=false;$("#tl-sh").scrollTop=0;document.body.classList.add("tl-lock");requestAnimationFrame(()=>s.classList.add("show"));}
+function tlPeek(i){const r=ROUNDS[i];if(!r)return;
+  tlSheet(`<div class="tl-hero"${r.img?` style="background-image:url('${r.img}')"`:""}><div><small>${esc(r.kick)}</small><b>${esc(r.title)}</b></div></div>
+    <div class="tl-chips"><span>${IC.clock}${tlMinsLabel(r.mins)}</span><span>${TL.users}${r.left[0]===r.left[1]?r.left[0]+" players":r.left[0]+" → "+r.left[1]+" players"}</span>${r.where&&r.where!=="both"?`<span>${r.where==="out"?TL.tree:TL.home}${tlWhere[r.where]}</span>`:""}</div>
+    <h3>What happens</h3><ol class="tl-what">${r.what.map(w=>`<li><span>${esc(w)}</span></li>`).join("")}</ol>
+    ${r.need.length?`<h3>You'll need</h3><div class="tl-need">${r.need.map(it=>`<a href="#supplies" data-need="${it.id}" class="${got.has(it.id)?"got":""}">${got.has(it.id)?IC.check:""}<span>${esc(it.title)}</span><small>${it.qty}</small></a>`).join("")}</div>`:""}
+    <div class="tl-sbtns"><button class="btn primary" data-tl-play="${i}">${IC.play}Play from here</button><button class="btn" data-tl-script="${i}">${TL.book}Read the full script</button></div>`);}
+function tlScript(i,dark){const r=ROUNDS[i];if(!r)return;
+  tlSheet(`<p class="tl-k">${esc(r.kick)}</p><h2 class="tl-h">${esc(r.title)}</h2>${r.steps.map(s=>`<section class="tl-script"><h3>${esc(s.title)}</h3><div class="seg-body">${s.blocks.map(b=>b.t==="pvote"||b.t==="pvjoin"?"":renderBlock(b,s.ctx)).join("")}</div></section>`).join("")}`,dark);btDraw();}
+function tlTv(dark){pvGet();
+  if(!PV.room){tlSheet(`<h2 class="tl-h">Show the game on a TV</h2><p class="tl-p">The TV screen follows your phone: challenge title cards, the clock, the vote reveal and the winner. It uses the same live link as phone voting.</p>
+    <div class="tl-sbtns"><button class="btn primary" data-tl-tvsetup>Create the live link</button></div>`,dark);return;}
+  const u=new URL("tv.html?r="+PV.room,location.href).href;
+  tlSheet(`<h2 class="tl-h">Show the game on a TV</h2><p class="tl-p">Open this link in the TV's web browser, or on a laptop plugged into the TV, and make it full screen. It follows along as you play.</p>
+    <div class="tl-link"><div class="pv-url">${esc(u.replace(/^https?:\/\//,""))}</div><div class="tl-sbtns"><button class="btn primary" data-tl-copy="${esc(u)}">Copy link</button><a class="btn" href="${esc(u)}" target="_blank" rel="noopener">Open it here</a></div></div>
+    <p class="tl-fine">Tip: on most smart TVs, open the browser app and type the address. Nothing to install.</p>`,dark);}
+
+/* ---------- Play mode ---------- */
+const plyOpenNow=()=>!$("#play").hidden;
+function plyStart(arg){
+  if(arg==="again")plyRestart(true);
+  let ri;
+  if(arg==="resume"||arg==="again"){ri=PLY.pos&&ROUNDS[PLY.pos.r]&&!PLY.done.includes(ROUNDS[PLY.pos.r].id)?PLY.pos.r:plyRoundIdx();if(ri<0)ri=0;
+    PLY.pos=PLY.pos&&PLY.pos.r===ri?PLY.pos:{r:ri,b:0};}
+  else{ri=+arg;PLY.pos={r:ri,b:0};PLY.done=PLY.done.filter(id=>{const k=ROUNDS.findIndex(x=>x.id===id);return k>=0&&k<ri;});ROUNDS.forEach((x,k)=>{if(k<ri&&!PLY.done.includes(x.id))PLY.done.push(x.id);});}
+  plySave();plyDir=1;tlSheet();plyEnsureRoster();
+  if(location.hash!=="#play")location.hash="play";else showPlay();
+}
+async function plyEnsureRoster(){pvGet();if(PV.roster.length)return;const n=await pvCastNames();if(n.length&&!PV.roster.length){PV.roster=n;pvSave();renderPlanExtra();if(plyOpenNow())renderPlay();}}
+function plyRestart(silent){
+  PLY=PLY_FRESH();plySave();plyDraft={};plyTally={};plySnuff={};plyAgain={};pvGet();
+  Object.assign(PV,{out:[],cur:null,last:null,win:null,done:{}});pvSave();pvPublish();btReset();clkReset();
+  if(!silent){renderMap();toastTl("Game restarted. Your settings and players are kept.");}
+}
+function showPlay(){
+  if(!PLY.pos||!ROUNDS[PLY.pos.r]){const i=plyRoundIdx();PLY.pos={r:i<0?0:i,b:0};}
+  $("#play").hidden=false;document.body.classList.add("play-on");renderPlay();
+  try{if("wakeLock" in navigator&&!showPlay.wl)navigator.wakeLock.request("screen").then(l=>{showPlay.wl=l;l.addEventListener("release",()=>showPlay.wl=null);}).catch(()=>{});}catch(e){}
+}
+function hidePlay(){if($("#play").hidden)return;$("#play").hidden=true;document.body.classList.remove("play-on");clkStop();tlSheet();plyStageSet({k:"idle"});renderMap();}
+function plyExit(){if(location.hash==="#play")location.hash="setup";else hidePlay();}
+const plyCur=()=>{const r=ROUNDS[PLY.pos.r],B=plyBeats(r);if(PLY.pos.b>=B.length)PLY.pos.b=Math.max(0,B.length-1);return {r,B,b:B[PLY.pos.b]};};
+function plyGo(d){const {r,B}=plyCur();plyDir=d;clkStop();
+  if(d>0){if(PLY.pos.b<B.length-1)PLY.pos.b++;
+    else{if(!PLY.done.includes(r.id))PLY.done.push(r.id);if(PLY.pos.r>=ROUNDS.length-1){plySave();plyFinish();return;}PLY.pos={r:PLY.pos.r+1,b:0};}}
+  else{if(PLY.pos.b>0)PLY.pos.b--;else if(PLY.pos.r>0){PLY.pos.r--;PLY.done=PLY.done.filter(x=>x!==ROUNDS[PLY.pos.r].id);PLY.pos.b=plyBeats(ROUNDS[PLY.pos.r]).length-1;}else return;}
+  plySave();renderPlay();$("#pl-stage").scrollTop=0;}
+function plyFinish(){const r=ROUNDS[ROUNDS.length-1];if(r&&!PLY.done.includes(r.id))PLY.done.push(r.id);plySave();plyExit();setTimeout(openFinish,250);}
+const plyLeft=()=>{pvGet();const k=PV.roster.length>=PL.N?pvIn().length:null;if(k!==null)return k;const r=ROUNDS[PLY.pos.r];return r?r.left[0]:PL.N;};
+function renderPlay(){
+  if(!plyOpenNow())return;
+  const {r,B,b}=plyCur();if(!b)return;
+  const minsLeft=ROUNDS.slice(PLY.pos.r).reduce((a,x)=>a+x.mins,0);
+  $("#pl-hud").innerHTML=`<button class="pl-ib" data-ply="exit" aria-label="Back to the season map">${TL.map}</button>
+    <div class="pl-where"><small>${esc(r.kick)} · ${PLY.pos.r+1}/${ROUNDS.length}</small><b>${esc(r.title)}</b></div>
+    <span class="pl-chip" title="Castaways still in the game · time left"><span>${TL.users}${plyLeft()}</span><span class="pl-tm">${IC.clock}~${tlMinsLabel(minsLeft)}</span></span>
+    <button class="pl-ib" data-ply="menu" aria-label="More options">${TL.dots}</button>`;
+  $("#pl-pips").innerHTML=B.map((_,k)=>`<i class="${k<PLY.pos.b?"d":k===PLY.pos.b?"c":""}"></i>`).join("");
+  const v=beatView(b),st=$("#pl-stage");
+  st.innerHTML=`<div class="pl-beat${plyDir<0?" back":""} pb-${b.t}">${v.html}</div>`;plyDir=0;
+  st.style.setProperty("--pc",r.pc);
+  const f=v.foot||{label:"Next",act:"next"};
+  const last=PLY.pos.r===ROUNDS.length-1&&PLY.pos.b===B.length-1;
+  if(last&&f.act==="next"){f.label="Finish the season";f.cls="ok";}
+  const nb=B[PLY.pos.b+1],nr=ROUNDS[PLY.pos.r+1];
+  $("#pl-foot").innerHTML=`${v.sec?`<div class="pl-sec">${v.sec}</div>`:""}<div class="pl-next">${last?"Last step of the night":`Next: <b>${esc(nb?beatName(nb):nr?nr.kick+" · "+nr.title:"")}</b>`}</div>
+    <div class="pl-row"><button class="pl-back" data-ply="back" aria-label="Back" ${PLY.pos.r===0&&PLY.pos.b===0?"disabled":""}>${IC.prev}</button>
+    <button class="pl-cta ${f.cls||""}" data-ply="${f.act}" ${f.dis?"disabled":""}>${f.label}</button></div>`;
+  if(b.t==="balance")btDraw();
+  if(b.t==="clock")clkPaint();
+  plyStageSet(plyStageFor(b));
+}
+let plyRT=0;function plyRefresh(){if(!plyOpenNow())return;clearTimeout(plyRT);plyRT=setTimeout(()=>{const a=document.activeElement;if(a&&a.closest&&a.closest("#pl-stage input"))return;renderPlay();},40);}
+const qText=(s,ctx)=>fmt(s,false,ctx);
+const sayCls=t=>t.length>420?" xs":t.length>260?" sm":"";
+const noteBtn=b=>b.notes&&b.notes.length||b.figs?`<button class="pl-more" data-ply="notes">${IC.bulb}Host tip</button>`:"";
+const plyAv=n=>`<span class="pl-av" style="--h:${[...n].reduce((h,c)=>(h*31+c.charCodeAt(0))%360,7)}">${esc((n.trim()[0]||"?").toUpperCase())}</span>`;
+const nameChip=(n,act,on,extra="")=>`<button class="pl-name${on?" on":""}" data-ply="${act}" data-n="${esc(n)}" aria-pressed="${!!on}">${plyAv(n)}<span>${esc(n)}</span>${extra}</button>`;
+const tribeSet=b=>b.set==="swap"?S.swap:S.colors.slice(0,b.T||PL.T);
+const tribesKnown=set=>set==="swap"?PLY.swapTribes:PLY.tribes;
+/* Name-based helpers (immunity, last place, dealing tribes, counting paper votes) need every castaway named */
+const plyNamed=()=>{pvGet();return PV.roster.length>=PL.N;};
+const plyNames=()=>plyNamed()?pvIn():[];
+const needNames=`<button class="pl-link" data-pv="players">${TL.users}Name all your players to track this on screen</button>`;
+
+function beatView(b){
+  const r=b.r,ctx=b.ctx;
+  switch(b.t){
+    case "title":return {html:`<div class="pl-tcard"${b.img?` style="background-image:url('${b.img}')"`:""}><div><small>${esc(b.kick)}</small>${b.logo?`<h2 class="pl-logo">SURVIVOR</h2><p class="pl-logo-sub">${esc(b.sub)}</p>`:`<h2>${esc(b.title)}</h2><p>${esc(b.sub)}</p>`}
+      ${b.tags?`<div class="pl-tags">${b.tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:""}</div></div>${noteBtn(b)}`,foot:{label:r.kind==="round"?"Let's go":"Begin",act:"next"}};
+    case "say":return {html:`${b.head?`<p class="pl-head">${TL.flag}${esc(b.head)}</p>`:""}<p class="pl-kick">${IC.mic}${esc(b.kick)}${b.part?`<span class="pl-part">${b.part[0]}/${b.part[1]}</span>`:""}</p>
+      <div class="pl-say${sayCls(b.text)}">${paras(b.text,ctx)}</div>${noteBtn(b)}`};
+    case "do":return {html:`<p class="pl-kick">${IC.arrow}Do</p><div class="pl-do">${qText(b.text,ctx)}</div>${noteBtn(b)}`};
+    case "prep":return {html:`<p class="pl-kick">${IC.note}Before guests arrive</p><div class="pl-do pl-prep">${qText(b.text,ctx)}</div>`};
+    case "deck":{const n=b.items.length,i=(plyQi[b.r.id+b.i]||0)%n,imm=PLY.immune[r.id];
+      const q=qText(b.items[i],ctx).replace('<span class="blank"></span>',imm?esc(imm):'<span class="blank"></span>');
+      return {html:`<p class="pl-kick">${IC.q}${esc(b.kick||"Questions")}</p><div class="pl-q" data-k="${i}"><small>Question ${i+1} of ${n}</small><p>${q}</p></div>
+        ${n>1?`<div class="pl-deckn"><span>Ask the ones that fit tonight</span><button data-ply="nextq">Another question ${IC.next}</button></div>`:""}`};}
+    case "station":{const pic=b.img?`<img src="${b.img}" alt="">`:b.il&&ILLO[b.il]?ILLO[b.il]:b.il&&IC[b.il]?`<span class="pl-sic">${IC[b.il]}</span>`:"";
+      return {html:`${pic?`<figure class="pl-sfig">${pic}</figure>`:""}<p class="pl-kick">${esc(b.kick)}<span class="pl-part">${b.n[0]}/${b.n[1]}</span></p><h2 class="pl-h">${esc(b.title)}</h2><div class="pl-say sm">${paras(b.text,ctx)}</div>${noteBtn(b)}`};}
+    case "reveal":return {html:`<div class="pl-reveal"><small>${esc(b.small||"Say it big")}</small><b>${qText(b.text,ctx)}</b></div>`};
+    case "clock":{const lo=b.mins[0],hi=b.mins[1];
+      return {html:`<p class="pl-kick">${IC.clock}Challenge clock</p><div class="pl-clock"><div class="pl-ring"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="44"/><circle class="fg" id="clk-fg" cx="50" cy="50" r="44" stroke-dasharray="276.5" stroke-dashoffset="276.5"/></svg>
+        <div class="pl-rt"><b id="clk-t">0:00</b><small id="clk-s">Usually ${lo}–${hi} min</small></div></div></div><p class="pl-hint">Start the clock on "GO." It's a guide, not a limit: the challenge ends when someone wins.</p>
+        <div class="pl-mini"><button data-ply="clkreset">Reset</button></div>`,
+        foot:CLK.run?{label:"Pause the clock",act:"clk"}:CLK.acc>0?{label:"They're done · Next",act:"next",cls:"ok"}:{label:"Start the clock",act:"clk"},sec:CLK.acc>0&&!CLK.run?`<button class="pl-link" data-ply="clk">Resume the clock</button>`:CLK.run?`<button class="pl-link" data-ply="next">Skip ahead: they're done</button>`:`<button class="pl-link" data-ply="next">Skip the clock</button>`};}
+    case "balance":return {html:`<p class="pl-kick">${IC.clock}Balance levels</p>${btHTML()}`};
+    case "lose":{const cols=tribeSet(b),pick=PLY.lose[r.id]||[],need=b.dbl?2:1,known=tribesKnown(b.set);
+      return {html:`<h2 class="pl-qh">${b.dbl?"Which two tribes lost?":"Which tribe lost?"}</h2><p class="pl-qs">${b.dbl?"Both go to Tribal Council tonight.":"They go to Tribal Council. Everyone else is safe."}</p>
+        <div class="pl-tribes">${cols.map(c=>{const on=pick.includes(c.name),mem=known&&known[c.name]?known[c.name].filter(n=>!PV.out.includes(n)):null;
+          return `<button class="pl-tribe${on?" on":""}" data-ply="lose" data-n="${esc(c.name)}" style="--tc:${c.hex}" aria-pressed="${on}"><i></i><b>${esc(c.name)}</b><small>${mem?mem.map(esc).join(" · "):on?"Going to Tribal":"Tap if they lost"}</small></button>`;}).join("")}</div>`,
+        foot:pick.length>=need?{label:`${pick.map(esc).join(" + ")} ${pick.length>1?"go":"goes"} to Tribal`,act:"next"}:{label:"Tap the losing tribe"+(need>1?"s":""),act:"next",dis:true},sec:`<button class="pl-link" data-ply="next">Skip this</button>`};}
+    case "immune":{const names=plyNames(),imm=PLY.immune[r.id];
+      if(!names.length)return {html:`<p class="pl-kick">${IC.medal}Immunity</p><div class="pl-do">${qText("Hand the {immunity} to the winner. They're safe at Tribal Council tonight.",ctx)}</div>${needNames}`};
+      return {html:`<h2 class="pl-qh">Who won immunity?</h2><p class="pl-qs">${qText("Hand them the {immunity}. They can't be voted out tonight.",ctx)}</p><div class="pl-names">${names.map(n=>nameChip(n,"immune",n===imm)).join("")}</div>`,
+        foot:imm?{label:`${esc(imm)} is safe tonight`,act:"next"}:{label:"Tap the winner",act:"next",dis:true},sec:`<button class="pl-link" data-ply="next">Skip this</button>`};}
+    case "last":{const names=plyNames(),who=PLY.last[r.id],gone=who&&PV.out.includes(who);
+      if(!names.length&&!gone)return {html:`<p class="pl-kick">${IC.arrow}Quick-game rule</p><div class="pl-do">Whoever finished last in the challenge goes home now and joins the jury.</div>${needNames}`};
+      return {html:`<h2 class="pl-qh">Who finished last?</h2><p class="pl-qs">Quick-game rule: last place goes home right now and joins the jury.</p><div class="pl-names">${(gone?[...names,who]:names).map(n=>nameChip(n,"last",n===who)).join("")}</div>`,
+        foot:gone?{label:"Next",act:"next"}:who?{label:`${esc(who)} goes home`,act:"lastgo",cls:"warn"}:{label:"Tap last place",act:"next",dis:true},sec:gone?"":`<button class="pl-link" data-ply="next">Skip this</button>`};}
+    case "rocks":{const swap=b.set==="swap",cols=swap?S.swap:S.colors.slice(0,PL.T),sizes=swap?PL.swapSizes:PL.startSizes,dealt=tribesKnown(b.set),pool=plyNames(),total=sizes.reduce((a,x)=>a+x,0);
+      const canDeal=pool.length>=total&&pool.length>0;
+      return {html:`<p class="pl-kick">${TL.flag}${swap?"New tribes":"Tribe rocks"}</p>
+        ${dealt?`<div class="pl-dealt">${cols.map(c=>`<div style="--tc:${c.hex}"><h4><i></i>${esc(c.name)}</h4>${(dealt[c.name]||[]).map((n,k)=>`<span style="animation-delay:${k*.06}s">${esc(n)}</span>`).join("")}</div>`).join("")}</div>`
+        :`<div class="pl-rocks">${cols.map((c,i)=>`<div>${rockSVG(c.hex)}<b>${sizes[i]}</b><small>${esc(c.name)}</small></div>`).join("")}</div><p class="pl-hint">${swap?"Put the new rocks in the bag":"Put the rocks in the bag"}, colored side hidden: ${cols.map((c,i)=>`${sizes[i]} ${esc(c.name)}`).join(" · ")}.</p>`}`,
+        sec:canDeal?`<button class="pl-link" data-ply="deal" data-n="${b.set}">${dealt?"Deal again":"No rocks? Let the app deal the tribes"}</button>`:pool.length?"":needNames.replace("track this on screen","deal tribes on the app")};}
+    case "join":{pvGet();
+      if(!PV.room)return {html:`<p class="pl-kick">${TL.phone}Phone voting</p><h2 class="pl-qh">Get everyone on the voting page</h2><p class="pl-qs">Players open one link now and leave it open. When you start a vote, their secret ballot appears.</p>`,
+        foot:{label:"Set up phone voting",act:"pvsetup"},sec:`<button class="pl-link" data-ply="next">Skip: we'll use paper tonight</button>`};
+      const j=PV.roster.filter(n=>pvSeen[n]);
+      return {html:`<p class="pl-kick">${TL.phone}Phone voting</p><div class="pl-join">${pvQR(true)}<div><h2 class="pl-qh">Scan to join</h2><p class="pl-qs">Everyone opens this and taps their name. Leave the page open all night.</p><div class="pv-url">${esc(pvLink().replace(/^https?:\/\//,""))}</div></div></div>
+        <p class="pl-hint">${j.length} of ${PV.roster.length||PL.N} joined${j.length?": "+j.map(esc).join(", "):""}</p>`,sec:`<button class="pl-link" data-pv="copy">Copy the link</button>`};}
+    case "vote":return voteView(b);
+    case "out":{const done=(PV.done||{})[b.key]||[],names=done[done.length-1]||null,sn=plySnuff[b.key+done.length];
+      const who=names?names.join(" and "):null;
+      return {html:`<div class="pl-out${sn?" snuffed":""}">${plyTorch()}<p class="pl-kick c">${IC.fire}${sn?"Voted out":"Bring them up"}</p>
+        <h2>${sn?(who?`${esc(who)}, the tribe has spoken.`:"The tribe has spoken."):who?`${esc(who)}, bring me your torch.`:"Bring me your torch."}</h2>
+        ${sn&&b.after?`<div class="pl-say sm c">${paras(b.after,ctx)}</div>`:!sn?`<p class="pl-hint c">${who?"Snuff":"Whoever had the most votes, snuff"} the torch to make it official.</p>`:""}</div>`,
+        foot:sn?{label:"Next",act:"next"}:{label:"Snuff the torch",act:"snuff",cls:"warn"}};}
+    case "crown":{pvGet();const w=PV.win;
+      return {html:`<div class="pl-out crown">${plyTorch()}<p class="pl-kick c">${TL.crown}The jury has spoken</p>${w?`<div class="pl-crown">${esc(w)}</div><h2>is the Sole Survivor!</h2>`:`<h2>${qText("Congratulations ______, you are the Sole Survivor!",ctx)}</h2>`}<p class="pl-hint c">${qText("Hand over the {prize} and get a group photo.",ctx)}</p></div>`};}
+  }
+  return {html:""};
+}
+const plyTorch=()=>`<svg class="pl-torch" viewBox="0 0 64 120" aria-hidden="true"><defs><radialGradient id="pltg" cx="50%" cy="72%" r="62%"><stop offset="0" stop-color="#fff4c9"/><stop offset=".45" stop-color="#ffb24a"/><stop offset="1" stop-color="#e2531b"/></radialGradient></defs>
+  <g class="smoke" fill="none" stroke="#9aa39c" stroke-width="2.4" stroke-linecap="round"><path d="M30 52c-5-7 5-11 0-18s4-11 1-16"/><path d="M38 50c-3-5 3-8 0-13"/></g>
+  <g class="fl"><path d="M32 4c7 14 19 22 19 39a19 19 0 0 1-38 0c0-11 6-16 9-23 2 6 5 9 8 10-2-10-1-18 2-26z" fill="url(#pltg)"/><path d="M32 30c3 7 9 11 9 19a9 9 0 0 1-18 0c0-5 3-8 5-11 1 3 2 4 4 5-1-5 0-9 0-13z" fill="#fff1c2"/></g>
+  <path d="M19 62h26l-5 9H24z" fill="#7b5634"/><rect x="28" y="70" width="8" height="48" rx="3" fill="#8a6038"/></svg>`;
+
+/* ---------- The vote: phones or paper ---------- */
+const votePool=b=>{pvGet();return b.mode==="final"?PV.out.filter(n=>PV.roster.includes(n)):pvIn();};
+function voteDraft(b){const k=b.key+"#"+(((PV.done||{})[b.key]||[]).length);if(plyDraft[k])return plyDraft[k];
+  const pool=votePool(b),r=b.r;let on=pool;
+  if(b.mode!=="final"&&!b.solo){const lost=PLY.lose[r.id],tr=tribesKnown(r.steps[0].round.type==="swap"?"swap":"colors");
+    if(lost&&lost.length&&tr){const nDone=((PV.done||{})[b.key]||[]).length,tn=lost[Math.min(nDone,lost.length-1)],mem=(tr[tn]||[]).filter(n=>pool.includes(n));if(mem.length)on=mem;}}
+  return plyDraft[k]={off:new Set(pool.filter(n=>!on.includes(n))),imm:b.solo?(PLY.immune[r.id]||""):""};}
+function votePlan(b){const d=voteDraft(b),pool=votePool(b),voters=pool.filter(n=>!d.off.has(n)),imm=b.solo&&voters.includes(d.imm)?d.imm:"",cands=b.mode==="final"?pvIn():voters.filter(n=>n!==imm);
+  return {d,pool,voters,imm,cands,ok:voters.length>=(b.mode==="final"?1:2)&&cands.length>=2};}
+async function plyVoteStart(b){const P=votePlan(b);if(!P.ok)return;
+  if(!window.crypto||!crypto.subtle){pvErr="Phone voting needs the secure (https) version of this page.";renderPlay();return;}
+  try{await pvKeys();}catch(e){pvErr="This browser couldn't set up secret ballots. Try Chrome or Safari.";renderPlay();return;}
+  const e=b.mode==="final"?1:Math.min(Math.max(1,b.e),P.cands.length-1);
+  PV.cur={id:pvRid(8),key:b.key,mode:b.mode==="final"?"final":"tribal",title:b.key,base:b.key,e,pre:[],voters:P.voters,cands:P.cands,immune:P.imm?[P.imm]:[],votes:{},phase:"open",idol:[],order:[],shown:0};
+  pvSave();renderPlay();await pvPublish(true);}
+const plyPaper=b=>S.vote!=="phones"||PLY.paper[b.key];
+function voteView(b){pvGet();
+  const fin=b.mode==="final",done=(PV.done||{})[b.key]||[],c=PV.cur&&PV.cur.key===b.key?PV.cur:null,other=PV.cur&&PV.cur.key!==b.key?PV.cur:null;
+  const kick=`<p class="pl-kick">${fin?TL.crown:TL.urn}${fin?"The jury votes":"The vote"}</p>`,err=pvErr?`<p class="pl-err">${esc(pvErr)}</p>`:"";
+  if(other)return {html:`${kick}<h2 class="pl-qh">Another vote is still open</h2><p class="pl-qs">The vote for <b>${esc(other.base)}</b> was never finished.</p>`,foot:{label:"Cancel that vote",act:"vcancel",cls:"warn"}};
+  if(done.length&&!c&&!plyAgain[b.key]){const l=done[done.length-1];
+    return {html:`${kick}<div class="pl-done">${IC.check}<div><b>${fin?`${esc(l[0])} won the jury vote`:`${esc(l.join(" and "))} voted out`}</b><small>${done.length>1?`${done.length} votes held here.`:fin?"Every phone shows the winner.":"Phones are back to waiting."}</small></div></div>`,
+      sec:b.dbl&&!fin?`<button class="pl-link" data-ply="vagain">Run the vote for the second tribe</button>`:`<button class="pl-link" data-ply="vagain">Run another vote here</button>`};}
+  if(plyPaper(b))return paperView(b,kick);
+  if(!PV.room)return {html:`${kick}<h2 class="pl-qh">Phone voting isn't set up yet</h2><p class="pl-qs">Create the link, then have everyone open it on their phone.</p>${err}`,foot:{label:"Set up phone voting",act:"pvsetup"},sec:`<button class="pl-link" data-ply="paper">Use paper ballots this time</button>`};
+  if(!c){const P=votePlan(b);
+    if(!P.pool.length)return {html:`${kick}<h2 class="pl-qh">${fin?"Who's on the jury?":"Add your players"}</h2><p class="pl-qs">${fin?"Mark voted-out players as jury under Players.":"Phone voting needs everyone's name so they can find themselves."}</p>`,foot:{label:"Add players",act:"players"},sec:`<button class="pl-link" data-ply="paper">Use paper ballots this time</button>`};
+    const joined=P.voters.filter(n=>pvSeen[n]).length;
+    return {html:`${kick}<h2 class="pl-qh">${fin?"Jury, it's time to vote":"Who's at Tribal Council?"}</h2><p class="pl-qs">${fin?`Finalists on the ballot: <b>${P.cands.map(esc).join(", ")}</b>`:b.solo?"Everyone still in votes. Tap anyone who isn't here.":(PLY.lose[b.r.id]||[]).length&&tribesKnown(b.r.steps[0].round.type==="swap"?"swap":"colors")?`The ${esc((PLY.lose[b.r.id]||[]).join(" and "))} tribe is selected. Tap names to change it.`:"Tap to leave out the tribes that won immunity."}</p>
+      <div class="pl-names">${P.pool.map(n=>nameChip(n,"voter",!P.d.off.has(n),`<i class="pl-dot${pvSeen[n]?" on":""}"></i>`)).join("")}</div>
+      ${b.solo&&P.voters.length?`<p class="pl-sub">Immunity (can't be voted for)</p><div class="pl-names sm">${P.voters.map(n=>nameChip(n,"vimm",n===P.imm)).join("")}</div>`:""}
+      <p class="pl-hint">${P.voters.length} voting · ${P.cands.length} on the ballot · ${joined} of ${P.voters.length} have the page open</p>${err}`,
+      foot:{label:fin?"Start the jury vote":"Start the vote",act:"vstart",dis:!P.ok},sec:`<button class="pl-link" data-ply="paper">Use paper ballots instead</button>`};}
+  if(c.phase==="open"){const n=c.voters.filter(v=>c.votes[v]).length,all=n>=c.voters.length,miss=c.voters.length-n;
+    return {html:`<p class="pl-live"><i></i>Voting is open</p><div class="pl-count"><b>${n}</b><span>of ${c.voters.length} votes in</span></div><div class="pl-meter"><i style="width:${Math.round(n/Math.max(1,c.voters.length)*100)}%"></i></div>
+      <div class="pl-vchips">${c.voters.map(v=>`<span class="${c.votes[v]?"in":""}">${c.votes[v]?IC.check:""}${esc(v)}</span>`).join("")}</div><p class="pl-hint">You see who has voted, never who they voted for.</p>${err}`,
+      foot:{label:c.sure?`Lock with ${miss} missing?`:all?"Lock votes & read them":`Waiting… ${n}/${c.voters.length}`,act:"vlock",dis:!n,cls:all||c.sure?"ok":""},sec:`<button class="pl-link" data-ply="vcancel">${c.sureX?"Tap again to cancel the vote":"Cancel the vote"}</button>`};}
+  if(c.phase==="closed"&&!fin)return {html:`<p class="pl-kick">${TL.urn}Votes are locked</p><div class="pl-say sm"><p>${qText("If anyone has a hidden immunity idol and wants to play it, now's the time.",b.ctx)}</p></div>
+      <p class="pl-sub">Idol played for (votes against them won't count):</p><div class="pl-names sm">${c.cands.map(n=>nameChip(n,"idol",c.idol.includes(n))).join("")}</div>`,
+      foot:{label:pvBusy?"Opening the votes…":"Read the votes",act:"vread",dis:pvBusy}};
+  if(c.phase==="closed")return {html:`${kick}<p class="pl-qs">Opening the votes…</p>`,foot:{label:"Read the votes",act:"vread",dis:pvBusy}};
+  const shown=c.order.slice(0,c.shown),cur=shown[shown.length-1],t=pvTally(shown.filter(n=>!c.idol.includes(n))),mx=t.length?t[0][1]:1,doneR=c.shown>=c.order.length;
+  const card=c.order.length?`<div class="pl-parch" data-k="${c.shown}"><small>${PV_ORD[c.shown-1]?PV_ORD[c.shown-1]+" vote":"Vote "+c.shown}${doneR&&c.order.length>1?" · the last one":""}</small><b>${esc(cur)}</b>${c.idol.includes(cur)?`<span>Does not count</span>`:""}</div>
+    ${t.length?`<div class="pl-tally">${t.map(([n,k])=>`<div><span>${esc(n)}</span><i><u style="width:${k/mx*100}%"></u></i><b>${k}</b></div>`).join("")}</div>`:""}`:`<p class="pl-qs">No valid votes came in.</p>`;
+  if(!doneR)return {html:card,foot:{label:"Read the next vote",act:"vnext"}};
+  const r=pvResult(c);
+  if(c.manual){const pool=c.cands.filter(n=>!c.idol.includes(n));
+    return {html:`${card}<p class="pl-sub">${fin?"Pick the winner":`Pick who's out (${c.e})`}</p><div class="pl-names sm">${pool.map(n=>nameChip(n,"vpick",c.pick.includes(n))).join("")}</div>`,
+      foot:{label:fin?"Crown the winner":"Confirm",act:"vconfirm",dis:c.pick.length!==c.e,cls:"ok"},sec:`<button class="pl-link" data-ply="vunmanual">Back to the result</button>`};}
+  if(r.out){const all=[...c.pre,...r.out];
+    return {html:`${card}<div class="pl-res"><small>${fin?"The winner":"Voted out"}</small><b>${esc(all.join(" and "))}</b></div>`,
+      foot:{label:fin?`Crown ${esc(all[0])}`:`${esc(all.join(" and "))} ${all.length>1?"are":"is"} out`,act:"vconfirm",cls:"ok"},sec:`<button class="pl-link" data-ply="vmanual">Change the result</button>`};}
+  const canRe=!r.none&&(fin||c.voters.some(n=>!r.tie.includes(n)));
+  return {html:`${card}<div class="pl-res tie"><small>${r.none?"No result":"It's a tie"}</small><b>${r.none?"Decide by hand":esc(r.tie.join(" · "))}</b></div>
+    ${canRe?`<p class="pl-hint">Like the show: ${fin?"the jury votes again":"everyone except the tied players revotes"}, only between ${r.tie.length===2?"these two":"them"}. Still tied? Draw rocks and decide by hand.</p>`:""}`,
+    foot:canRe?{label:"Start the revote",act:"vrevote"}:{label:"Decide by hand",act:"vmanual"},sec:canRe?`<button class="pl-link" data-ply="vmanual">Decide by hand</button>`:""};
+}
+/* Paper ballots: read each parchment and tap the name; the app keeps the count */
+function paperView(b,kick){
+  const fin=b.mode==="final",pool=votePool(b),T=plyTally[b.key]||(plyTally[b.key]={phase:"send",count:{},hist:[],idol:[],pick:[]});
+  const names=plyNames(),r=b.r;
+  let cands=fin?names:names.filter(n=>n!==(b.solo?PLY.immune[r.id]:""));
+  if(!fin&&!b.solo){const lost=PLY.lose[r.id],tr=tribesKnown(r.steps[0].round.type==="swap"?"swap":"colors");if(lost&&lost.length&&tr){const m=lost.flatMap(t=>tr[t]||[]).filter(n=>cands.includes(n));if(m.length)cands=m;}}
+  const sendTxt=fin?"{juryHow}":"{voteSend}";
+  if(T.phase==="send"||!names.length)return {html:`${kick}<div class="pl-do">${qText(sendTxt,b.ctx)}</div><div class="pl-say sm"><p>${qText("When everyone's voted: If anyone has a hidden immunity idol and wants to play it, now's the time.",b.ctx)}</p></div>
+      ${names.length?"":`<div class="pl-say sm pl-read">${paras(fin?"Read the votes one at a time and keep a running count. The finalist with the most votes wins the {prize}.":"Read the votes one at a time. \"That's ___ votes for ______. That's enough.\"\n\nThen: \"______, the tribe has spoken.\"",b.ctx)}</div>${needNames.replace("track this on screen","count the votes on screen")}`}`,
+    foot:names.length?{label:"Everyone has voted",act:"ptally"}:{label:"Next",act:"next"},sec:!fin&&S.vote==="phones"?`<button class="pl-link" data-ply="phones">Back to phone voting</button>`:""};
+  const total=Object.values(T.count).reduce((a,x)=>a+x,0),list=Object.entries(T.count).flatMap(([n,k])=>Array(k).fill(n));
+  if(T.phase==="tally"){const t=pvTally(list.filter(n=>!T.idol.includes(n))),mx=t.length?t[0][1]:1;
+    return {html:`<p class="pl-kick">${TL.urn}Read each parchment</p><h2 class="pl-qh">Tap the name on each vote</h2><p class="pl-qs">${total} read${T.idol.length?` · idol for ${T.idol.map(esc).join(", ")}`:""}</p>
+      <div class="pl-names">${cands.map(n=>nameChip(n,"ptap",false,`<em>${T.count[n]||""}</em>`)).join("")}</div>
+      <div class="pl-deckn"><button data-ply="pundo">${IC.prev}Undo</button><button data-ply="pidol">${T.idolMode?"Done marking idols":"An idol was played"}</button></div>
+      ${T.idolMode?`<div class="pl-names sm">${cands.map(n=>nameChip(n,"pidolset",T.idol.includes(n))).join("")}</div>`:""}`,
+      foot:{label:total?"Done reading":"Tap names as you read",act:"presult",dis:!total}};}
+  const c={e:fin?1:b.e,order:list,idol:T.idol},res=pvResult(c),t=pvTally(list.filter(n=>!T.idol.includes(n))),mx=t.length?t[0][1]:1;
+  const tally=`<div class="pl-tally">${t.map(([n,k])=>`<div><span>${esc(n)}</span><i><u style="width:${k/mx*100}%"></u></i><b>${k}</b></div>`).join("")}</div>`;
+  if(res.out&&!T.manual)return {html:`${tally}<div class="pl-res"><small>${fin?"The winner":"Voted out"}</small><b>${esc(res.out.join(" and "))}</b></div>`,
+    foot:{label:fin?`Crown ${esc(res.out[0])}`:`${esc(res.out.join(" and "))} ${res.out.length>1?"are":"is"} out`,act:"pconfirm",cls:"ok"},sec:`<button class="pl-link" data-ply="pmanual">Change the result</button> · <button class="pl-link" data-ply="pback">Recount</button>`};
+  const need=c.e;
+  return {html:`${tally}${res.out?"":`<div class="pl-res tie"><small>It's a tie</small><b>${esc((res.tie||[]).join(" · ")||"No result")}</b></div><p class="pl-hint">Like the show: revote between the tied players on paper (the tied players don't vote). Still tied? Draw rocks. Then tap the result.</p>`}
+    <p class="pl-sub">${fin?"Pick the winner":`Pick who's out (${need})`}</p><div class="pl-names sm">${cands.map(n=>nameChip(n,"ppick",T.pick.includes(n))).join("")}</div>`,
+    foot:{label:"Confirm",act:"pconfirm",dis:T.pick.length!==need,cls:"ok"},sec:`<button class="pl-link" data-ply="pback">Recount</button>`};
+}
+function paperConfirm(b){const T=plyTally[b.key],fin=b.mode==="final",list=Object.entries(T.count).flatMap(([n,k])=>Array(k).fill(n)),res=pvResult({e:fin?1:b.e,order:list,idol:T.idol});
+  const names=T.manual||!res.out?T.pick.slice():res.out;if(!names.length)return;
+  if(fin)PV.win=names[0];else{names.forEach(n=>{if(!PV.out.includes(n))PV.out.push(n);});PV.last={title:b.key,out:names};}
+  (PV.done[b.key]=PV.done[b.key]||[]).push(names);delete plyTally[b.key];delete plyAgain[b.key];pvSave();pvPublish(true);plyGo(1);}
+
+/* ---------- Clock ---------- */
+const clkEl=()=>CLK.acc+(CLK.run?(Date.now()-CLK.start)/1000:0);
+function clkPaint(){const t=$("#clk-t");if(!t)return;const b=plyCur().b;if(!b||b.t!=="clock")return;const s=clkEl(),hi=b.mins[1]*60;
+  t.textContent=mmss(s);$("#clk-fg").style.strokeDashoffset=String(276.5*(1-Math.min(1,s/hi)));
+  $("#clk-s").textContent=s>hi?"Running long: wrap it up soon":CLK.run?`Usually ${b.mins[0]}–${b.mins[1]} min`:s>0?"Paused":`Usually ${b.mins[0]}–${b.mins[1]} min`;}
+function clkToggle(){if(CLK.run){CLK.acc=clkEl();CLK.run=false;clearInterval(CLK.id);}else{CLK.start=Date.now();CLK.run=true;clearInterval(CLK.id);CLK.id=setInterval(clkPaint,500);}renderPlay();}
+function clkStop(){if(CLK.run){CLK.acc=clkEl();CLK.run=false;}clearInterval(CLK.id);}
+function clkReset(){clearInterval(CLK.id);CLK.run=false;CLK.acc=0;CLK.start=0;}
+
+/* ---------- TV stage: what the TV page shows right now ---------- */
+let PLY_STAGE={k:"idle"};
+function plyStageFor(b){const r=b.r,c=PV&&PV.cur&&PV.cur.key===b.key?PV.cur:null;
+  const scene={k:"scene",kick:r.kick,title:r.title,img:r.img};
+  switch(b.t){
+    case "title":return {k:"title",kick:b.kick,title:b.logo?"SURVIVOR":b.title,sub:b.logo?S.event.replace(/^Survivor[:\s—-]*/i,""):b.sub,img:b.img||r.img,logo:!!b.logo};
+    case "station":return {k:"title",kick:`${r.title} · ${b.kick}`,title:b.title,sub:"",img:b.img||r.img};
+    case "reveal":return {k:"reveal",text:txt(b.text,b.ctx),small:b.small||""};
+    case "clock":return {k:"clock",start:CLK.run?CLK.start:0,acc:CLK.run?CLK.acc:clkEl(),run:CLK.run,mins:b.mins,title:r.title};
+    case "balance":return {k:"balance",start:BT.run?BT.start:0,acc:BT.run?BT.acc:btElapsed(),run:BT.run};
+    case "rocks":{const set=b.set==="swap"?"swap":"colors",d=tribesKnown(set),cols=set==="swap"?S.swap:S.colors.slice(0,PL.T);return d?{k:"tribes",tribes:cols.map(x=>({name:x.name,hex:x.hex,members:d[x.name]||[]}))}:scene;}
+    case "join":return PV.room?{k:"join",link:pvLink()}:scene;
+    case "vote":{if(!c)return {k:"tribal",title:b.mode==="final"?"Final Tribal Council":r.steps[1]?r.steps[1].title:"Tribal Council",img:tlPhoto("tribal-early")};
+      if(c.phase==="open")return {k:"votes",n:c.voters.filter(v=>c.votes[v]).length,total:c.voters.length,final:b.mode==="final"};
+      if(c.phase==="closed")return {k:"locked"};
+      const shown=c.order.slice(0,c.shown);return {k:"read",i:c.shown,total:c.order.length,name:shown[shown.length-1]||"",void:c.idol.includes(shown[shown.length-1]),tally:pvTally(shown.filter(n=>!c.idol.includes(n)))};}
+    case "out":{const d=(PV.done||{})[b.key]||[],n=d[d.length-1];return plySnuff[b.key+d.length]?{k:"out",names:n||[]}:{k:"tribal",title:"Tribal Council",img:tlPhoto("tribal-late")};}
+    case "crown":return {k:"crown",name:PV.win||""};
+    case "deck":case "say":case "do":if(r.steps.some(s=>s.kind==="tribal")&&b.s.kind==="tribal")return {k:"tribal",title:b.s.title,img:tlPhoto(r.steps[0].round&&r.steps[0].round.type==="solo"?"tribal-late":"tribal-early")};return scene;
+  }
+  return scene;
+}
+function plyStageSet(st){const j=JSON.stringify(st);if(j===plyStageJSON)return;plyStageJSON=j;PLY_STAGE=st;if(PV&&PV.room)pvPublish();}
+
+/* ---------- Actions ---------- */
+async function plyAct(a,n,el){
+  const {r,b}=plyCur();
+  switch(a){
+    case "exit":plyExit();return;
+    case "next":if(el&&el.disabled)return;plyGo(1);return;
+    case "back":plyGo(-1);return;
+    case "menu":tlSheet(`<p class="tl-k">${esc(r.kick)}</p><h2 class="tl-h">${esc(r.title)}</h2><div class="tl-menu">
+        <button data-tl-script="${PLY.pos.r}">${TL.book}<span><b>Full script for this round</b><small>Every word, plus host notes</small></span></button>
+        <button data-pv="players">${TL.users}<span><b>Players</b><small>Names, jury, who's still in</small></span></button>
+        ${S.vote==="phones"?`<button data-pv="${PV.room?"link":"setup"}">${TL.qr}<span><b>Players' voting link</b><small>${PV.room?"QR code to join":"Set up phone voting"}</small></span></button>`:""}
+        <button data-tl-tv>${TL.tv}<span><b>Show on a TV</b><small>Title cards, clock and the vote reveal</small></span></button>
+        <button data-ply="exit">${TL.map}<span><b>Season map</b><small>Your progress is saved</small></span></button>
+        <button data-tl-restart>${TL.restart}<span><b>Restart the game</b><small>Clears progress, votes and jury</small></span></button></div>`,true);return;
+    case "notes":tlSheet(`<p class="tl-k">${IC.bulb}Host tip</p>${(b.notes||[]).map(t=>`<div class="tl-note">${paras(t,b.ctx)}</div>`).join("")}${(b.figs||[]).map(f=>`<figure class="tl-fig"><img src="${f.src}" alt="${esc(f.cap)}"><figcaption>${esc(f.cap)}</figcaption></figure>`).join("")}`,true);return;
+    case "nextq":plyQi[b.r.id+b.i]=(plyQi[b.r.id+b.i]||0)+1;renderPlay();return;
+    case "clk":clkToggle();return;
+    case "clkreset":clkReset();renderPlay();return;
+    case "lose":{const need=b.dbl?2:1,l=(PLY.lose[r.id]||[]).filter(x=>x!==n);if(l.length===(PLY.lose[r.id]||[]).length){l.push(n);if(l.length>need)l.shift();}PLY.lose[r.id]=l;plySave();renderPlay();return;}
+    case "immune":PLY.immune[r.id]=PLY.immune[r.id]===n?"":n;plySave();renderPlay();return;
+    case "last":if(PLY.last[r.id]&&PV.out.includes(PLY.last[r.id]))return;PLY.last[r.id]=PLY.last[r.id]===n?"":n;plySave();renderPlay();return;
+    case "lastgo":{const w=PLY.last[r.id];if(!w)return;if(!PV.out.includes(w))PV.out.push(w);PV.last={title:"Last place",out:[w]};pvSave();pvPublish(true);plyGo(1);return;}
+    case "deal":{const set=n,swap=set==="swap",cols=swap?S.swap:S.colors.slice(0,PL.T),sizes=swap?PL.swapSizes:PL.startSizes,pool=pvIn().slice().sort(()=>Math.random()-.5),o={};let k=0;
+      cols.forEach((c,i)=>{o[c.name]=pool.slice(k,k+sizes[i]);k+=sizes[i];});if(k<pool.length)pool.slice(k).forEach((x,i)=>o[cols[i%cols.length].name].push(x));
+      if(swap)PLY.swapTribes=o;else PLY.tribes=o;plySave();renderPlay();return;}
+    case "snuff":{const d=(PV.done||{})[b.key]||[];plySnuff[b.key+d.length]=true;renderPlay();return;}
+    case "pvsetup":el.disabled=true;await pvSetup();renderPlay();renderPlanExtra();return;
+    case "players":pvModal("players");return;
+    case "paper":PLY.paper[b.key]=true;plySave();renderPlay();return;
+    case "phones":delete PLY.paper[b.key];plySave();renderPlay();return;
+    case "voter":{const d=voteDraft(b);d.off.has(n)?d.off.delete(n):d.off.add(n);renderPlay();return;}
+    case "vimm":{const d=voteDraft(b);d.imm=d.imm===n?"":n;renderPlay();return;}
+    case "vstart":el.disabled=true;await plyVoteStart(b);return;
+    case "vagain":plyAgain[b.key]=true;renderPlay();return;
+    case "vlock":{const c=PV.cur;if(!c)return;const miss=c.voters.filter(v=>!c.votes[v]).length;
+      if(miss&&!c.sure){c.sure=1;renderPlay();setTimeout(()=>{if(PV.cur===c&&c.sure){c.sure=0;renderPlay();}},4000);return;}
+      c.sure=0;c.phase="closed";c.idol=[];pvSave();pvPublish(true);if(c.mode==="final")await pvRead();else renderPlay();return;}
+    case "vcancel":{const c=PV.cur;if(!c)return;if(c.key===b.key&&!c.sureX){c.sureX=1;renderPlay();setTimeout(()=>{if(PV.cur===c&&c.sureX){c.sureX=0;renderPlay();}},4000);return;}
+      PV.cur=null;pvSave();pvPublish(true);renderPlay();return;}
+    case "idol":{const c=PV.cur;if(!c)return;const i=c.idol.indexOf(n);i>=0?c.idol.splice(i,1):c.idol.push(n);pvSave();renderPlay();return;}
+    case "vread":await pvRead();return;
+    case "vnext":{const c=PV.cur;if(c){c.shown=Math.min(c.order.length,c.shown+1);pvSave();renderPlay();}return;}
+    case "vmanual":if(PV.cur){PV.cur.manual=true;PV.cur.pick=[];renderPlay();}return;
+    case "vunmanual":if(PV.cur){PV.cur.manual=false;renderPlay();}return;
+    case "vpick":{const c=PV.cur;if(!c)return;const i=c.pick.indexOf(n);i>=0?c.pick.splice(i,1):c.pick.length<c.e?c.pick.push(n):(c.pick.shift(),c.pick.push(n));renderPlay();return;}
+    case "vrevote":pvRevote();return;
+    case "vconfirm":{const c=PV.cur;if(!c)return;const names=c.manual?c.pick:pvResult(c).out;if(!names||!names.length)return;delete plyAgain[b.key];pvFinish(names);plyGo(1);return;}
+    case "ptally":plyTally[b.key].phase="tally";renderPlay();return;
+    case "ptap":{const T=plyTally[b.key];T.count[n]=(T.count[n]||0)+1;T.hist.push(n);renderPlay();if(navigator.vibrate)try{navigator.vibrate(15)}catch(e){}return;}
+    case "pundo":{const T=plyTally[b.key],l=T.hist.pop();if(l){T.count[l]--;if(!T.count[l])delete T.count[l];}renderPlay();return;}
+    case "pidol":{const T=plyTally[b.key];T.idolMode=!T.idolMode;renderPlay();return;}
+    case "pidolset":{const T=plyTally[b.key],i=T.idol.indexOf(n);i>=0?T.idol.splice(i,1):T.idol.push(n);renderPlay();return;}
+    case "presult":plyTally[b.key].phase="result";plyTally[b.key].pick=[];plyTally[b.key].manual=false;renderPlay();return;
+    case "pmanual":plyTally[b.key].manual=true;plyTally[b.key].pick=[];renderPlay();return;
+    case "pback":plyTally[b.key].phase="tally";plyTally[b.key].manual=false;renderPlay();return;
+    case "ppick":{const T=plyTally[b.key],need=b.mode==="final"?1:b.e,i=T.pick.indexOf(n);i>=0?T.pick.splice(i,1):T.pick.length<need?T.pick.push(n):(T.pick.shift(),T.pick.push(n));renderPlay();return;}
+    case "pconfirm":paperConfirm(b);return;
+  }
+}
+function toastTl(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
+document.addEventListener("click",async e=>{
+  const p=e.target.closest&&e.target.closest("[data-ply]");
+  if(p){e.preventDefault();if(p.disabled)return;await plyAct(p.dataset.ply,p.dataset.n,p);return;}
+  const t=e.target.closest&&e.target.closest("[data-tl-peek],[data-tl-play],[data-tl-script],[data-tl-close],[data-tl-tv],[data-tl-tvsetup],[data-tl-copy],[data-tl-restart]");
+  if(!t){if(e.target.id==="tl-sheet")tlSheet();return;}
+  const d=t.dataset,dark=plyOpenNow();
+  if(d.tlPeek!==undefined)tlPeek(+d.tlPeek);
+  else if(d.tlPlay!==undefined)plyStart(d.tlPlay);
+  else if(d.tlScript!==undefined)tlScript(+d.tlScript,dark);
+  else if(d.tlClose!==undefined)tlSheet();
+  else if(d.tlTv!==undefined)tlTv(dark);
+  else if(d.tlTvsetup!==undefined){t.disabled=true;await pvSetup();tlTv(dark);renderPlanExtra();}
+  else if(d.tlCopy!==undefined){const done=()=>{t.textContent="Copied";setTimeout(()=>t.textContent="Copy link",1600);};navigator.clipboard?navigator.clipboard.writeText(d.tlCopy).then(done,()=>prompt("Copy this link:",d.tlCopy)):prompt("Copy this link:",d.tlCopy);}
+  else if(d.tlRestart!==undefined){if(!t.dataset.sure){t.dataset.sure=1;const lab=t.querySelector("b")||t;lab.textContent="Tap again to restart";return;}tlSheet();plyRestart();if(plyOpenNow()){PLY.pos={r:0,b:0};plySave();renderPlay();}}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!$("#tl-sheet").hidden){tlSheet();return;}
+  if(!plyOpenNow()||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||"")||$("#pv-modal"))return;
+  if(e.key==="ArrowLeft"){e.preventDefault();plyGo(-1);}
+  else if(e.key==="ArrowRight"){const c=$("#pl-foot .pl-cta");if(c&&!c.disabled&&c.dataset.ply==="next"){e.preventDefault();plyGo(1);}}
+});
+/* Swipe the stage: left for next, right for back (only when Next is the main action) */
+let plySw=null;
+document.addEventListener("touchstart",e=>{plySw=null;const st=e.target.closest&&e.target.closest("#pl-stage");if(!st||e.target.closest("button,a,input,.bt"))return;plySw={x:e.touches[0].clientX,y:e.touches[0].clientY};},{passive:true});
+document.addEventListener("touchend",e=>{if(!plySw)return;const t=e.changedTouches[0],dx=t.clientX-plySw.x,dy=t.clientY-plySw.y;plySw=null;
+  if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.6)return;
+  if(dx>0)plyGo(-1);else{const c=$("#pl-foot .pl-cta");if(c&&!c.disabled&&c.dataset.ply==="next")plyGo(1);}},{passive:true});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&plyOpenNow()){renderPlay();try{if("wakeLock" in navigator&&!showPlay.wl)navigator.wakeLock.request("screen").then(l=>{showPlay.wl=l;}).catch(()=>{});}catch(x){}}});
+
+/* ---------- Tabs / routing ---------- */
+const TABS=[["setup","Plan",TL.map],["supplies","Supplies",IC.supplies],["party","Ambiance",IC.fire],["settings","Settings",IC.setup]];
 const tabHTML=TABS.map(([k,l,ic])=>`<button class="tab" role="tab" data-view="${k}">${ic}<span>${l}</span></button>`).join("");
 $("#bottom-nav").innerHTML=tabHTML; $("#top-tabs").innerHTML=tabHTML;
 function show(v,top=true){
   if(v!=="cast"){const dn=$("#cs-done");if(dn)dn.hidden=true;}
-  TABS.forEach(([k])=>$("#view-"+k).hidden=k!==v);
+  TABS.forEach(([k])=>{const el=$("#view-"+k);if(el)el.hidden=k!==v;});
   $("#view-cast").hidden=v!=="cast";
-  if(typeof segStick==="function")setTimeout(segStick,0);
   const tab=v==="cast"?"party":v;
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.view===tab));
   if(v==="cast")openCastStudio();
@@ -3383,40 +4094,32 @@ if(tab==="supplies")setTimeout(supSticky,0);
 }
 function route(){
   const h=location.hash.slice(1);
-  if(h==="settings"){if($("#wiz").hidden)openWizard(0);return;}
+  if(h==="settings"){hidePlay();if($("#wiz").hidden)openWizard(0);return;}
   if(!$("#wiz").hidden){$("#wiz").hidden=true;document.body.classList.remove("wiz-on","wl");}
-  if(h.startsWith("seg-")){show("script",false);const i=+h.slice(4)-1;if(STEPS[i])setOpen(i,true);}
-  else show(h==="cast"||TABS.some(t=>t[0]===h)?h:"setup");
+  if(h==="play"){if($("#view-setup").hidden)show("setup");showPlay();return;}
+  hidePlay();
+  show(h==="cast"||(TABS.some(t=>t[0]===h)&&h!=="settings")?h:"setup");
 }
 window.addEventListener("hashchange",route);
 
 /* ---------- Events ---------- */
 let lastT=0;
 function rerender(){PL=computePlan();STEPS=buildSteps(PL);if(PL.T!==lastT||PL.swap!==rerender.sw){lastT=PL.T;rerender.sw=PL.swap;renderColorRows();}
-  renderHeader();renderGameCard();renderCarousel();renderSupplies();renderScript();renderParty();btDraw();observe();}
+  ROUNDS=buildRounds();renderHeader();renderGameCard();renderMap();renderSupplies();renderParty();btDraw();if(plyOpenNow())renderPlay();}
 document.addEventListener("click",e=>{
-  const oh=e.target.closest("[data-open]");
-  if(oh){const i=+oh.dataset.open;if(openSeg===i)setOpen(-1,false);else segGo(i);return;}
   const nd=e.target.closest("[data-need]");
   if(nd){e.preventDefault();const id=nd.dataset.need;location.hash="supplies";setTimeout(()=>{const el=document.getElementById("sup-"+id);if(el){el.scrollIntoView({block:"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}},80);return;}
   const t=e.target.closest("button");if(!t)return;
   const d=t.dataset;
   if(d.openMenu!==undefined){openMenu();return;}
+  if(d.view==="settings"){openWizard(1);return;}
   if(d.view){if(!$("#wiz").hidden){closeWizard(d.view);return;}if(location.hash==="#"+d.view)show(d.view);else location.hash=d.view;}
-  else if(d.miGo!==undefined||d.miTo!==undefined){const st=$("#car .car-media");if(st){const n=st.children.length,cur=miIdx(st);
-    const k=Math.max(0,Math.min(n-1,d.miTo!==undefined?+d.miTo:cur+ +d.miGo));const x=miX(st,k),from=st.scrollLeft;st.scrollTo({left:x,behavior:"smooth"});
-    setTimeout(()=>{if(Math.abs(st.scrollLeft-from)<2&&Math.abs(x-from)>2)st.scrollLeft=x;},450);}}
   else if(d.share!==undefined){$("#share-url").value=shareURL();$("#share-slug").textContent="?g="+GAME.slug;$("#share-copy").textContent="Copy";$("#share-dlg").showModal();}
   else if(d.shareClose!==undefined)$("#share-dlg").close();
   else if(t.id==="share-copy"){const u=$("#share-url");u.select();(navigator.clipboard?navigator.clipboard.writeText(u.value):Promise.reject()).catch(()=>document.execCommand("copy")).finally(()=>{t.textContent="Copied!";});}
   else if(d.finish!==undefined)openFinish();
   else if(d.finClose!==undefined)closeFinish();
-  else if(d.finAgain!==undefined){closeFinish();CAR=0;if(location.hash==="#script"){setOpen(0,true);}else{location.hash="setup";goStep(0);}}
-  else if(t.id==="seg-stick"){const a=document.getElementById("seg-"+(openSeg+1));if(a)easeScroll(a.getBoundingClientRect().top+scrollY-(typeof stickyHead==="function"?stickyHead():0)-12,450);}
-  else if(d.segGo!==undefined){const k=+d.segGo;if(STEPS[k])segGo(k);}
-  else if(d.car!==undefined)goStep(+d.car);
-  else if(d.stepDone){toggleDone(d.stepDone);renderScript();observe();renderCarousel();if(doneSteps.has(d.stepDone)&&CAR<STEPS.length-1)setTimeout(()=>goStep(CAR+1),220);}
-  else if(d.mediaDel){if(confirm("Remove this from the game plan?"))fetch("/api/media/"+d.mediaDel,{method:"DELETE"}).then(loadMedia).then(renderCarousel);}
+  else if(d.finAgain!==undefined){closeFinish();plyRestart();location.hash="setup";}
   else if(d.wizGo!==undefined)openWizard(+d.wizGo);
   else if(d.wizNext!==undefined){if(WIZ_STEPS[WIZ]==="players")wizCommitN();wizMove(1);}
   else if(d.wizBack!==undefined)wizMove(-1);
@@ -3429,6 +4132,11 @@ document.addEventListener("click",e=>{
   else if(d.wizCast!==undefined)closeWizard("cast");
   else if(d.wizN){const next=S.players+ +d.wizN;if(next<MIN_P||next>MAX_P){const c=$(".wiz-count");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");return;}S.players=next;saveS();wizPlayersRefresh();}
   else if(d.wizLength){S.length=d.wizLength;saveS();renderWizard(false);}
+  else if(d.wizVenue){if(S.venue!==d.wizVenue){S.venue=d.wizVenue;S.challenges=null;
+      if(S.venue==="in"){if(S.council==="the fire pit")S.council="the living room";if(S.porch==="the back porch")S.porch="the dining room";}
+      else if(S.venue==="out"){if(S.council==="the living room")S.council="the fire pit";if(S.porch==="the dining room")S.porch="the back porch";}}
+    saveS();rerender();renderWizard(false);}
+  else if(d.wizVote){S.vote=d.wizVote;saveS();rerender();renderWizard(false);}
   else if(d.wizStyle){if(S.style!==d.wizStyle){S.style=d.wizStyle;S.challenges=null;}saveS();renderWizard(false);}
   else if(d.wizInfo)openChInfo(d.wizInfo);
   else if(d.chiClose!==undefined)$("#ch-info").close();
@@ -3436,53 +4144,22 @@ document.addEventListener("click",e=>{
   else if(d.wizCh){const c=CH[d.wizCh],sel=selection(),list=sel[c.kind],k=list.indexOf(d.wizCh);if(k>=0){if(list.length>1)list.splice(k,1);}else list.push(d.wizCh);S.challenges=sel;saveS();renderWizard(false);if($("#ch-info").open)renderChInfo();}
   else if(t.id==="reset-got"){const live=supplyGroups(PL).flatMap(g=>g.items);
     if(live.every(i=>got.has(i.id)))got.clear();else live.forEach(i=>got.add(i.id));
-    store.set("svh-got",[...got]);renderSupplies();renderCarousel();}
+    store.set("svh-got",[...got]);renderSupplies();}
   else if(d.got){gotToggle(d.got);}
-  else if(d.done){const i=+d.done,s=STEPS[i],a=document.getElementById("seg-"+(i+1));toggleDone(s.id);
-    const on=doneSteps.has(s.id);a.classList.toggle("is-done",on);t.innerHTML=IC.check+(on?"Done · undo":"Mark done");a.querySelector(".num").innerHTML=on?IC.check:i+1;syncSegDone();renderScriptTop();renderCarousel();
-    if(on){const nx=STEPS.findIndex((x,k)=>k>i&&!doneSteps.has(x.id));setOpen(nx,true);}}
   else if(d.bt){d.bt==="start"?btToggle():btReset();}
   else if(d.pick){openPal=openPal===d.pick?"":d.pick;renderColorRows();}
   else if(d.pal){const [set,i,hex,name]=d.pal.split(":");const c=S[set][+i];const wasPreset=PALETTE.some(([n])=>n.toLowerCase()===c.name.trim().toLowerCase())||!c.name.trim();c.hex=hex;if(wasPreset)c.name=name;openPal="";saveS();renderColorRows();rerender();}
-  else if(t.id==="reset-done"){doneSteps.clear();store.set("svh-done-v3",[]);openSeg=firstOpen();renderScript();renderCarousel();observe();setOpen(openSeg,true);}
   else if(t.id==="pdf-btn")downloadPDF();
   else if(t.id==="reset-settings"){S=Object.assign(structuredClone(DEFAULTS),{players:S.players,length:S.length,style:S.style,challenges:S.challenges,onboarded:true});saveS();lastT=0;rerender();renderSettingsStatic();}
 });
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&!$("#fin").hidden){closeFinish();return;}
-  if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches("[data-open]")){e.preventDefault();e.target.click();}
   if(e.key==="Enter"&&e.target.id==="wiz-n")e.target.blur();
-  const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||"");
-  if(!typing&&$("#wiz").hidden&&!$("#view-setup").hidden&&$("#show2").hidden){if(e.key==="ArrowRight")goStep(CAR+1);else if(e.key==="ArrowLeft")goStep(CAR-1);}
 });
 document.addEventListener("change",e=>{
   if(e.target.id==="wiz-n")wizCommitN();
   else if(e.target.dataset&&e.target.dataset.mediaKey)uploadMedia(e.target.dataset.mediaKey,e.target.files[0]);
 });
-document.addEventListener("toggle",e=>{const d=e.target;if(!(d.classList&&d.classList.contains("car-script")))return;
-  const nav=$("#car .car-nav");if(nav)(d.open?$("#car .car-script-card"):$("#car .car-main")).appendChild(nav);armNudges();
-  if(!d.open)return;
-  const top=$(".top"),head=top&&getComputedStyle(top).position==="sticky"?top.offsetHeight:0;
-  const y=d.getBoundingClientRect().top+scrollY-head-10,from=scrollY;window.scrollTo({top:y,behavior:"smooth"});
-  setTimeout(()=>{if(Math.abs(scrollY-from)<2&&Math.abs(y-from)>2)window.scrollTo(0,y);},450);},true);
-/* Swipe between game-plan steps: the step card follows your finger, then slides out as the next one slides in.
-   (Swipes on the photo strip stay with the photos.) */
-let sw=null;
-document.addEventListener("touchstart",e=>{const t=e.target;sw=null;
-  if(!t.closest||!t.closest("#car .car-card")||t.closest(".car-media,.mi-arrow,.mi-dots,button,a,input,details"))return;
-  sw={x:e.touches[0].clientX,y:e.touches[0].clientY,dx:0,lock:null,card:$("#car .car-card")};},{passive:true});
-document.addEventListener("touchmove",e=>{if(!sw)return;const dx=e.touches[0].clientX-sw.x,dy=e.touches[0].clientY-sw.y;
-  if(!sw.lock){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;sw.lock=Math.abs(dx)>Math.abs(dy)?"x":"y";}
-  if(sw.lock!=="x")return;e.preventDefault();
-  const edge=(dx>0&&CAR===0)||(dx<0&&CAR===STEPS.length-1),d=edge?dx*.3:dx;sw.dx=dx;sw.edge=edge;
-  sw.card.style.transition="none";sw.card.style.transform=`translateX(${d}px)`;sw.card.style.opacity=String(1-Math.min(.35,Math.abs(d)/innerWidth*.6));},{passive:false});
-document.addEventListener("touchend",()=>{if(!sw)return;const s=sw;sw=null;if(s.lock!=="x")return;const c=s.card;
-  c.style.transition="transform .22s ease,opacity .22s ease";
-  if(Math.abs(s.dx)>70&&!s.edge){const dir=s.dx<0?1:-1;c.style.transform=`translateX(${dir>0?"-":""}110%)`;c.style.opacity="0";
-    setTimeout(()=>{goStep(CAR+dir);const n=$("#car .car-card");if(!n)return;n.style.transition="none";n.style.transform=`translateX(${dir>0?"":"-"}40%)`;n.style.opacity="0";
-      void n.offsetWidth;n.style.transition="transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease";n.style.transform="";n.style.opacity="";
-      setTimeout(()=>{n.style.transition="";},320);},200);}
-  else{c.style.transform="";c.style.opacity="";setTimeout(()=>{c.style.transition="";},240);}},{passive:true});
 document.addEventListener("input",e=>{
   const el=e.target,d=el.dataset;
   if(d.whereItem!==undefined){where[d.whereItem]=el.value;store.set("svh-where-item",where);}
@@ -3492,18 +4169,6 @@ document.addEventListener("input",e=>{
       const wc=document.querySelector(`[data-wct="${d.set}-${d.i}"]`);if(wc){wc.style.setProperty("--tc",el.value);wc.querySelector(".wc-colorbtn .rock path").setAttribute("fill",el.value);wc.querySelectorAll(".wc-pal .pal:not(.custom)").forEach(b=>b.classList.remove("on"));}}else c.name=el.value;
     saveS();rerender();}
 });
-
-/* Highlight the segment in view */
-let io;
-function observe(){
-  if(io)io.disconnect();
-  io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;const i=+en.target.id.split("-")[1]-1;
-    document.querySelectorAll("#seg-chips a,#toc a").forEach(a=>a.classList.toggle("active",+a.dataset.i===i));
-    const chip=document.querySelector(`#seg-chips a[data-i="${i}"]`),box=$("#seg-chips");
-    if(chip&&box.offsetParent)box.scrollTo({left:chip.offsetLeft-box.clientWidth/2+chip.clientWidth/2,behavior:"smooth"});
-  }),{rootMargin:"-25% 0px -65% 0px"});
-  document.querySelectorAll("article.seg").forEach(a=>io.observe(a));
-}
 
 /* Theme */
 const root=document.documentElement;
@@ -3515,9 +4180,9 @@ $("#theme").onclick=()=>{root.dataset.theme=isDark()?"light":"dark";try{localSto
 const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
 const GRID='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>';
 $("#mi-edit").innerHTML=IC.edit;$("#mi-exit").innerHTML=IC.prev;$("#mi-theme").innerHTML=MOON;themeLabel();
-function openMenu(){const cur=(location.hash.slice(1)||"setup").replace(/^cast$/,"party").replace(/^seg-.*/,"script");
+function openMenu(){const cur=(location.hash.slice(1)||"setup").replace(/^cast$/,"party");
   $("#mi-edit").closest("button").toggleAttribute("aria-current",cur==="settings");
-  $("#menu-tabs").innerHTML=TABS.map(([k,l,ic])=>`<button data-view="${k}"${k===cur?' aria-current="page"':""}><span class="mi-ic c-${k}">${ic}</span>${l}</button>`).join("");
+  $("#menu-tabs").innerHTML=TABS.filter(t=>t[0]!=="settings").map(([k,l,ic])=>`<button data-view="${k}"${k===cur?' aria-current="page"':""}><span class="mi-ic c-${k}">${ic}</span>${l}</button>`).join("");
   $("#menu").hidden=false;$("#menu-btn").setAttribute("aria-expanded","true");setTimeout(()=>$("#menu").classList.add("open"),10);}
 function closeMenu(){$("#menu").classList.remove("open");$("#menu-btn").setAttribute("aria-expanded","false");setTimeout(()=>{if(!$("#menu").classList.contains("open"))$("#menu").hidden=true;},200);}
 $("#menu-btn").onclick=()=>$("#menu").hidden?openMenu():closeMenu();
@@ -3542,7 +4207,7 @@ PL=computePlan();STEPS=buildSteps(PL);
 renderSettingsStatic();
 rerender();
 route();
-loadMedia().then(()=>{if(MEDIA_OK)renderCarousel();});
+loadMedia();
 if(!S.onboarded)openWizard(0);
 if(gameNote){const t=document.createElement("div");t.className="toast";t.textContent=gameNote;document.body.appendChild(t);setTimeout(()=>t.remove(),6000);}
 </script>

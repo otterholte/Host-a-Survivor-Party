@@ -201,7 +201,8 @@ section{padding:72px 0}
   .btn-pulse::after{display:none}
   /* Footer: one quiet line */
   .foot-body,.foot-scene{display:none}
-  .foot-mini{display:block;padding:18px 16px calc(84px + env(safe-area-inset-bottom));text-align:center;font-size:12px;color:#8a968f}
+  .top{position:static}
+  .foot-mini{display:block;padding:16px 16px calc(16px + env(safe-area-inset-bottom));text-align:center;font-size:12px;color:#8a968f}
 }
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*90ms)}
 .steps .reveal{transform:translateX(-32px)}

@@ -218,7 +218,7 @@ details.more[open] summary::after{transform:rotate(-135deg)}
 .rock{width:54px;height:40px}
 
 /* ---------- Supplies ---------- */
-.sup-head{position:sticky;top:0;z-index:20;background:var(--bg);padding:12px 0 10px;border-bottom:1px solid var(--line)}
+.sup-head{position:sticky;bottom:0;z-index:20;margin-top:24px;background:var(--bg);padding:12px 0 calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);box-shadow:0 -10px 20px -16px rgba(0,0,0,.35)}
 .progress-line{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:600;white-space:nowrap}
 .pbar{flex:1;height:8px;border-radius:8px;background:var(--line);overflow:hidden}
 .pbar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
@@ -227,7 +227,7 @@ details.more[open] summary::after{transform:rotate(-135deg)}
 .chip{flex:none;height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-2);white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chip .c{opacity:.7;font-weight:500;margin-left:5px}
-.group-h{display:flex;align-items:center;gap:10px;margin:26px 0 10px;padding:8px 0;position:sticky;top:calc(var(--toph,0px) + var(--suph,62px));z-index:15;background:var(--bg)}
+.group-h{display:flex;align-items:center;gap:10px;margin:26px 0 10px;padding:8px 0;position:sticky;top:var(--toph,0px);z-index:15;background:var(--bg)}
 .group-h i{width:12px;height:12px;border-radius:50%;flex:none}
 .group-h h3{margin:0;font:800 23px/1.2 var(--serif);color:var(--ink)}
 .group-h::after{content:"";flex:1;height:1px;background:var(--line);order:2}
@@ -482,7 +482,6 @@ article.is-done .done-btn{background:var(--ok);border-color:var(--ok);color:#fff
   .top-tabs .tab[aria-selected="true"]::before{display:none}
   .top-tabs .tab .badge{position:static}
   .icon-btn{margin-left:8px}
-  .sup-head{top:56px}
   :root{--toph:56px}
   .script-layout{display:grid;grid-template-columns:minmax(0,1fr);max-width:880px;margin:0 auto}
   .seg-nav{display:none}
@@ -1221,7 +1220,7 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
   <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
     <div class="eyebrow">Game overview</div>
     <h1>Your game <em>plan</em></h1>
-    <p>Every step of your night, in order.</p>
+    <p>Every step of your night, in order: what happens, what you need, and the full host script tucked under each step.</p>
     <div class="stats" id="stats"></div>
   </div></div>
   <div class="wrap">
@@ -1236,10 +1235,10 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
     <h1>Gather your <em>gear</em></h1>
     <p id="sup-sub"></p>
   </div></div>
+  <div class="wrap" id="supplies"></div>
   <div class="sup-head"><div class="wrap">
     <div class="progress-line"><span id="sup-count"></span><div class="pbar"><i id="sup-bar"></i></div><button class="btn reset-got" id="reset-got">Mark all got</button></div>
   </div></div>
-  <div class="wrap" id="supplies"></div>
 </section>
 
 <!-- ============ PARTY ============ -->
@@ -1288,7 +1287,7 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
   <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
     <div class="eyebrow">Host script</div>
     <h1>Every word, <em>step by step</em></h1>
-    <p>What to say at every step.</p>
+    <p>Word-for-word lines for every challenge and Tribal Council, plus quiet host notes so the night runs itself.</p>
   </div></div>
   <div class="seg-nav"><div class="wrap"><div class="seg-chips" id="seg-chips"></div></div></div>
   <div class="wrap script-layout">
@@ -2129,7 +2128,7 @@ function renderSupplies(){setTimeout(supSticky,0);
   $("#sup-bar").style.width=`${done/Math.max(1,all.length)*100}%`;
   $("#reset-got").textContent=done===all.length?"Mark all not got":"Mark all got";
   document.querySelectorAll(".tab[data-view=supplies] .badge").forEach(b=>{b.textContent=left;b.hidden=!left});
-  $("#sup-sub").textContent=`Sized for ${PL.N} players${PL.T>1?` in ${PL.T} tribes`:""}.`;
+  $("#sup-sub").textContent=`Everything for your ${PL.N}-player game${PL.T>1?` with ${PL.T} tribes`:""}, sized to your challenges. Buy it, print it, or grab it from home, then mark it got.`;
   let html="";
   groups.forEach(g=>{
     if(!g.items.length)return;

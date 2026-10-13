@@ -2071,7 +2071,7 @@ function renderCarousel(){
       ${needs.length?`<div class="car-body car-bottom">
         ${needs.length?`<div class="car-need"><h4>What you need</h4><div class="need-list">${needs.map(it=>{const prod=it.p&&P[it.p],img=(prod&&prod.img)||it.img||(it.imgs&&it.imgs[0][0]);
           const th=it.il?illo(it.il):it.icon==="rock"?rockSVG(S.colors[0].hex,"thumb-rock"):img?`<img src="${img}" alt="">`:(ILLO[it.icon]||IC[it.icon]||"");
-          return `<div class="need${got.has(it.id)?" got":""}"><a class="need-main" href="#supplies" data-need="${it.id}"><span><b>${esc(it.title)}</b><small>${it.qty}</small></span>${got.has(it.id)?IC.check:""}</a>${it.link?`<a class="need-dl" href="${it.link}" download aria-label="Download ${esc(it.title)} PDF">${IC.download}<span>PDF</span></a>`:""}</div>`}).join("")}</div></div>`:""}
+          return `<div class="need${got.has(it.id)?" got":""}"><a class="need-main" href="#supplies" data-need="${it.id}"><span><b>${esc(it.title)}</b><small>${it.qty}</small></span>${got.has(it.id)?IC.check:""}</a></div>`}).join("")}</div></div>`:""}
       </div>`:""}
     </div>
     <div class="car-nav">

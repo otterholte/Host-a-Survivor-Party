@@ -127,7 +127,16 @@ p.sec-sub{margin:0 0 16px;color:var(--ink-2)}
   body{padding-bottom:20px}
 }
 /* Below desktop width the game name lives in the header and the only sunset is the small one at the bottom */
-@media (max-width:999px){#view-setup .hero{display:none}#view-setup .plan-car{margin-top:14px}.party-hero>.hero-art{display:none}}
+.hero.page-hero{padding:26px 0 30px}
+.page-hero .wrap>*{max-width:600px}
+.page-hero .eyebrow{display:block;margin-bottom:6px}
+.page-hero h1{margin:4px 0 8px}
+.page-hero p{font-size:16px;line-height:1.5}
+.hero-mini{position:absolute;right:0;bottom:0;width:min(46%,340px);height:100px;pointer-events:none}
+.hero-mini svg{width:100%;height:100%;display:block}
+@media (max-width:759px){.hero.page-hero{padding:20px 0 26px}.page-hero h1{font-size:30px}.page-hero p{font-size:15px;max-width:78%}.hero-mini{width:52%;height:72px;opacity:.9}}
+@media (max-width:999px){#view-setup .stats{display:none}}
+#view-setup .plan-car{margin-top:20px}
 /* Footer is the last thing on the page: no extra space beneath it (only the phone home-bar area) */
 .site-foot{padding-bottom:env(safe-area-inset-bottom)}
 .hero>.hero-art{left:auto;width:min(52%,700px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 40%);mask-image:linear-gradient(90deg,transparent,#000 40%)}
@@ -718,7 +727,7 @@ article.seg .skip-banner{margin:16px 18px 0}
 .share-box{display:flex;gap:8px;margin:12px 0 6px}
 .share-box input{flex:1;min-width:0;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--ink);font-size:14px}
 .share-note{margin:6px 0 0;font-size:13px;line-height:1.45;color:var(--ink-2)}
-.menu{position:fixed;inset:0;z-index:120}
+.menu{position:fixed;inset:0;z-index:260}
 .menu-back{position:absolute;inset:0;background:rgba(5,9,7,.5);opacity:0;transition:opacity .2s}
 .menu-panel{position:absolute;top:0;right:0;bottom:0;width:min(86vw,340px);display:flex;flex-direction:column;padding:calc(10px + env(safe-area-inset-top)) 12px 20px;background:var(--surface);color:var(--ink);box-shadow:-20px 0 50px rgba(0,0,0,.3);transform:translateX(100%);transition:transform .22s ease;overflow-y:auto}
 .menu.open .menu-back{opacity:1}
@@ -757,10 +766,13 @@ article.seg .skip-banner{margin:16px 18px 0}
 .car-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
 .car-media{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:16/9;background:#0b1411}
 /* Several photos: each slide is a little narrower so the neighbours peek in at the edges */
-.car-media:not([data-count="1"]){aspect-ratio:auto;gap:8px;padding:10px 7%;background:var(--surface);scroll-padding:0 7%}
-.car-media:not([data-count="1"]) .mi{flex:0 0 100%;aspect-ratio:16/10;border-radius:14px;box-shadow:0 8px 20px -12px rgba(0,0,0,.45)}
-.car-media:not([data-count="1"]) .mi figcaption{border-radius:0 0 14px 14px}
-.car-media:not([data-count="1"])~.mi-arrow{top:calc(50% - 4px)}
+.car-media:not([data-count="1"]){aspect-ratio:auto;gap:6px;padding:0 4.5%;background:var(--surface);scroll-padding:0 4.5%}
+.car-media:not([data-count="1"]) .mi{flex:0 0 100%;aspect-ratio:16/10}
+/* Swipe hint: the photos glide left a little and back, once, when the strip first comes into view */
+.car-media.hint .mi{animation:peekHint 1.3s cubic-bezier(.45,0,.25,1) 2}
+@keyframes peekHint{0%,100%{transform:none}45%{transform:translateX(-34px)}}
+@media (prefers-reduced-motion:reduce){.car-media.hint .mi{animation:none}}
+.car-media:not([data-count="1"])~.mi-arrow{top:50%}
 .car-media::-webkit-scrollbar{display:none}
 .mi{position:relative;flex:0 0 100%;margin:0;display:grid;place-items:center;overflow:hidden;scroll-snap-align:center}
 .mi img,.mi video{display:block;width:100%;height:100%;object-fit:cover;background:#000}
@@ -891,6 +903,10 @@ body.wiz-on{overflow:hidden}
 .wiz-topbar .wiz-dots{flex:1;margin-top:0}
 .wiz-x{flex:none;display:flex;align-items:center;gap:6px;height:36px;padding:0 14px 0 10px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(255,255,255,.06);color:#e4ebe6;font:600 14px/1 var(--sans);cursor:pointer}
 .wiz-x:hover{background:rgba(255,255,255,.14);color:#fff}
+.wiz-menu{flex:none;display:grid;place-items:center;width:40px;height:36px;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.06);color:#e4ebe6;cursor:pointer}
+.wiz-menu:hover{background:rgba(255,255,255,.14);color:#fff}
+.wiz-menu svg{width:20px;height:20px}
+.wiz-menu-fixed{position:fixed;top:calc(14px + env(safe-area-inset-top));right:16px;z-index:5;width:44px;height:44px}
 .wiz-x b{font-size:22px;line-height:1;font-weight:400;margin-top:-2px}
 .wiz-dots{display:flex;gap:6px;margin-top:8px}
 .wiz-dots i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.16)}
@@ -1146,39 +1162,27 @@ body.wiz-on{overflow:hidden}
     <button class="icon-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </header>
-<div class="subhead" id="subhead" aria-hidden="true">
-  <svg class="sub-art" viewBox="0 0 320 56" preserveAspectRatio="xMaxYMax meet"><defs>
-    <radialGradient id="sub-glow" cx="70%" cy="100%" r="55%"><stop offset="0" stop-color="#ec7a3f" stop-opacity=".38"/><stop offset="1" stop-color="#ec7a3f" stop-opacity="0"/></radialGradient>
-    <linearGradient id="sub-fade" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity="1"/></linearGradient>
-    <mask id="sub-m"><rect width="320" height="56" fill="url(#sub-fade)"/></mask></defs>
-    <g mask="url(#sub-m)"><rect width="320" height="56" fill="url(#sub-glow)"/><path d="M212 56a16 16 0 0 1 32 0z" fill="#f3a35f" opacity=".55"/>
-    <path d="M150 56c14-9 34-12 54-9 12 2 20 5 26 9z" fill="#0d1a14"/><path d="M252 56c10-7 26-9 40-7 9 1 16 4 20 7z" fill="#0d1a14"/>
-    <g fill="#0d1a14"><path d="M176 52c1-12 3-22 7-31l2 .6c-3 9-5 19-5 30z"/><path d="M184 21c-8-3-17-1-22 5 7-3 15-3 22-2zM184 21c6-7 16-8 23-5-8 0-16 2-22 6zM184 21c-3-8-11-11-18-10 7 2 12 5 17 11zM184 21c2-8 9-12 17-12-6 3-11 7-15 13z"/>
-      <path d="M274 52c1-9 3-16 6-23l2 .5c-3 7-4 14-4 22z"/><path d="M280 29c-6-2-13-1-17 4 5-2 11-2 17-1zM280 29c5-5 12-6 17-3-6 0-12 1-16 4zM280 29c-2-6-8-8-13-7 5 1 9 4 12 8z"/></g>
-    <rect y="54" width="320" height="2" fill="#0d1a14"/></g></svg>
-</div>
 
 <!-- ============ SETUP ============ -->
 <section class="view" id="view-setup">
-  <div class="hero">
-    <div class="hero-art"></div>
-    <div class="wrap">
-      <h1 id="title"></h1>
-      <div class="stats" id="stats"></div>
-    </div>
-  </div>
+  <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
+    <div class="eyebrow">Game overview</div>
+    <h1>Your game <em>plan</em></h1>
+    <p>A walkthrough of every step of your game. Each step shows what you need, with the full description and host script at the bottom.</p>
+    <div class="stats" id="stats"></div>
+  </div></div>
   <div class="wrap">
-    <div class="page-intro"><h2 class="sec">Game overview</h2><p class="sec-sub">A walkthrough of every step of your game. Each step shows what you need, with the full description and host script at the bottom.</p></div>
     <section class="plan-car" id="car" aria-label="Game plan, one step at a time"></section>
   </div>
 </section>
 
 <!-- ============ SUPPLIES ============ -->
 <section class="view" id="view-supplies" hidden>
-  <div class="wrap">
-    <h2 class="sec">Supplies</h2>
-    <p class="sec-sub" id="sup-sub"></p>
-  </div>
+  <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
+    <div class="eyebrow">Supplies</div>
+    <h1>Gather your <em>gear</em></h1>
+    <p id="sup-sub"></p>
+  </div></div>
   <div class="sup-head"><div class="wrap">
     <div class="progress-line"><span id="sup-count"></span><div class="pbar"><i id="sup-bar"></i></div><button class="btn reset-got" id="reset-got">Mark all got</button></div>
   </div></div>
@@ -1187,7 +1191,7 @@ body.wiz-on{overflow:hidden}
 
 <!-- ============ PARTY ============ -->
 <section class="view" id="view-party" hidden>
-  <div class="hero party-hero"><div class="hero-art"></div><div class="wrap">
+  <div class="hero party-hero page-hero"><div class="hero-mini"></div><div class="wrap">
     <div class="eyebrow">Ambiance</div>
     <h1>Set the <em>scene</em></h1>
     <p>The game runs on the script. The night runs on fire, torches, music and a little drama.</p>
@@ -1228,6 +1232,11 @@ body.wiz-on{overflow:hidden}
 
 <!-- ============ SCRIPT ============ -->
 <section class="view" id="view-script" hidden>
+  <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
+    <div class="eyebrow">Host script</div>
+    <h1>Every word, <em>step by step</em></h1>
+    <p>Everything you'll say and do. Tap a step to open it, or download the whole script as a PDF.</p>
+  </div></div>
   <div class="seg-nav"><div class="wrap"><div class="seg-chips" id="seg-chips"></div></div></div>
   <div class="wrap script-layout">
     <nav class="toc" id="toc" aria-label="Run of show"></nav>
@@ -1874,7 +1883,6 @@ const pc=ph=>`var(${PH[ph]})`;
 function renderHeader(){
   const ev=S.event.replace(/^Survivor[:\s—-]*/i,"");
   $("#brand-name").textContent=`Survivor: ${ev}`;$("#menu-name").textContent=`Survivor: ${ev}`;document.title=`Survivor: ${ev} · Host a Survivor Party`;
-  $("#title").innerHTML=`Survivor: <em>${esc(ev)}</em>`;
   $("#stats").innerHTML=`<button class="stat stat-edit" data-wiz-go="0">${IC.edit}<span>Edit game settings</span></button><button class="stat stat-share" data-share>${IC.ext}<span>Share link</span></button>`;
 }
 function renderGameCard(){if(!$("#game-card"))return;
@@ -2000,8 +2008,13 @@ function renderCarousel(){
   const strip=$("#car .car-media"),dots=[...document.querySelectorAll("#car .mi-dots button")];
   if(strip&&dots.length)strip.addEventListener("scroll",()=>{const k=miIdx(strip);dots.forEach((d,j)=>d.classList.toggle("on",j===k));
     const pv=$("#car .mi-arrow.prev"),nx=$("#car .mi-arrow.next");if(pv)pv.disabled=k<=0;if(nx)nx.disabled=k>=dots.length-1;},{passive:true});
-  btDraw();armNudges();
+  btDraw();armNudges();miHintArm();
 }
+let miHintDone=new Set();
+function miHintArm(){const st=$("#car .car-media");if(!st||st.children.length<2||miHintDone.has(CAR))return;
+  const go=()=>{const r=st.getBoundingClientRect();if(!st.isConnected)return removeEventListener("scroll",go);
+    if(r.top<innerHeight*.8&&r.bottom>60&&miIdx(st)===0){removeEventListener("scroll",go);miHintDone.add(CAR);setTimeout(()=>{st.classList.add("hint");setTimeout(()=>st.classList.remove("hint"),2700);},500);}};
+  addEventListener("scroll",go,{passive:true});go();}
 /* Reached the end of a step's script? Give its Next button a little pulse */
 function armNudges(){
   const seen=el=>{if(!el||!el.offsetParent)return false;const r=el.getBoundingClientRect();return r.bottom>0&&r.bottom<=innerHeight-8;};
@@ -2191,7 +2204,7 @@ function renderScript(){
   const groups=[];STEPS.forEach((s,i)=>{let g=groups.at(-1);if(!g||g.ph!==s.phase){g={ph:s.phase,items:[]};groups.push(g)}g.items.push(i)});
   $("#seg-chips").innerHTML=STEPS.map((s,i)=>`<a href="#seg-${i+1}" data-i="${i}" style="--pc:${pc(s.phase)}"><i></i>${i+1}. ${esc(s.short)}</a>`).join("");
   $("#toc").innerHTML=groups.map(g=>`<h4 style="--pc:${pc(g.ph)}"><i></i>${g.ph}</h4>`+g.items.map(i=>`<a href="#seg-${i+1}" data-i="${i}" style="--pc:${pc(STEPS[i].phase)}"><span class="n">${i+1}</span><span>${esc(STEPS[i].title)}</span></a>`).join("")).join("");
-  $("#segments").innerHTML=`<div class="script-intro"><h2 class="sec">Host script</h2><p class="sec-sub">Everything you'll say and do, step by step. Tap a step to open it, or download the whole script as a PDF.</p></div><div class="card script-top" id="script-top"></div>`+groups.map(g=>
+  $("#segments").innerHTML=`<div class="card script-top" id="script-top"></div>`+groups.map(g=>
     `<section class="phase" style="--pc:${pc(g.ph)}"><header class="phase-h"><i></i><h2>${PH_NAME[g.ph]||g.ph}</h2><small>${PH_BLURB[g.ph]}</small><span class="phase-n">${g.items.length} step${g.items.length===1?"":"s"}</span></header>`+
     g.items.map(i=>{const s=STEPS[i],nx=STEPS[i+1],dn=doneSteps.has(s.id),open=i===openSeg;
       const meta=[esc(s.dur),esc(s.at),s.ctx.dbl&&"Two tribes at Tribal",s.isNew&&"New challenge",s.repeat&&"Repeat"].filter(Boolean).join(" · ");
@@ -2319,9 +2332,9 @@ function wizPlayersRefresh(){
 }
 function renderWizard(anim=true){
   const k=WIZ_STEPS[WIZ],w=$("#wiz-panel");$("#wiz").dataset.step=k;w.classList.toggle("no-anim",!anim);
-  const dots=`<div class="wiz-topbar"><div class="wiz-dots">${WIZ_STEPS.map((x,i)=>[x,i]).filter(([x,i])=>i>0&&!wizSkip(x)).map(([,i])=>`<i class="${i===WIZ?"on":i<WIZ?"past":""}"></i>`).join("")}</div><button class="wiz-x" data-wiz-close aria-label="Exit setup"><b>×</b><span>Exit</span></button></div>`;
+  const dots=`<div class="wiz-topbar"><div class="wiz-dots">${WIZ_STEPS.map((x,i)=>[x,i]).filter(([x,i])=>i>0&&!wizSkip(x)).map(([,i])=>`<i class="${i===WIZ?"on":i<WIZ?"past":""}"></i>`).join("")}</div><button class="wiz-x" data-wiz-close aria-label="Exit setup"><b>×</b><span>Exit</span></button><button class="wiz-menu" data-open-menu aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>`;
   const nav=(nextLabel="Next",nextAttr='data-wiz-next')=>`<div class="wiz-nav"><button class="btn wiz-back" data-wiz-back>${IC.prev}Back</button><button class="btn primary" ${nextAttr}>${nextLabel}${IC.next}</button></div>`;
-  if(k==="title"){w.innerHTML=`<div class="wiz-title">
+  if(k==="title"){w.innerHTML=`${S.onboarded?`<button class="wiz-menu wiz-menu-fixed" data-open-menu aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>`:""}<div class="wiz-title">
       <div class="wiz-kicker">Outwit · Outplay · Outlast</div>
       <h1 class="wiz-logo"><span>SURVIVOR</span><em>${esc(S.event.replace(/^Survivor[:\s—-]*/i,""))}</em></h1>
       <p class="wiz-tag">Host a Survivor party at home. Get a game plan built for your group, the supplies, a host script, and a cast slideshow.</p>
@@ -2906,7 +2919,8 @@ document.addEventListener("click",e=>{
   if(nd){e.preventDefault();const id=nd.dataset.need;location.hash="supplies";setTimeout(()=>{const el=document.getElementById("sup-"+id);if(el){el.scrollIntoView({block:"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}},80);return;}
   const t=e.target.closest("button");if(!t)return;
   const d=t.dataset;
-  if(d.view){if(location.hash==="#"+d.view)show(d.view);else location.hash=d.view;}
+  if(d.openMenu!==undefined){openMenu();return;}
+  if(d.view){if(!$("#wiz").hidden){closeWizard(d.view);return;}if(location.hash==="#"+d.view)show(d.view);else location.hash=d.view;}
   else if(d.miGo!==undefined||d.miTo!==undefined){const st=$("#car .car-media");if(st){const n=st.children.length,cur=miIdx(st);
     const k=Math.max(0,Math.min(n-1,d.miTo!==undefined?+d.miTo:cur+ +d.miGo));const x=miX(st,k),from=st.scrollLeft;st.scrollTo({left:x,behavior:"smooth"});
     setTimeout(()=>{if(Math.abs(st.scrollLeft-from)<2&&Math.abs(x-from)>2)st.scrollLeft=x;},450);}}
@@ -3013,6 +3027,13 @@ $("#menu").addEventListener("click",e=>{if(e.target.closest("[data-menu-close],b
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#menu").hidden)closeMenu();});
 
 document.querySelectorAll(".hero-art").forEach(e=>e.innerHTML=SCENE);
+/* Page banners: a small sunset with two palms tucked into the bottom-right corner */
+document.querySelectorAll(".hero-mini").forEach((e,n)=>{e.innerHTML=`<svg viewBox="0 0 300 90" preserveAspectRatio="xMaxYMax meet" aria-hidden="true"><defs>
+  <radialGradient id="hm-g${n}" cx="62%" cy="100%" r="62%"><stop offset="0" stop-color="#ec7a3f" stop-opacity=".45"/><stop offset="1" stop-color="#ec7a3f" stop-opacity="0"/></radialGradient></defs>
+  <rect width="300" height="90" fill="url(#hm-g${n})"/><path d="M164 90a22 22 0 0 1 44 0z" fill="#f3a35f" opacity=".85"/>
+  <g stroke="#ffc861" stroke-linecap="round" opacity=".45"><path d="M170 86h32" stroke-width="2"/></g>
+  <path d="M84 90c18-12 44-16 70-12 16 2 26 6 34 12z" fill="#0d1a14"/><path d="M220 90c13-9 34-12 52-9 12 2 20 5 28 9z" fill="#0d1a14"/>
+  ${PALM(118,84,.5,"#0d1a14")}${PALM(252,86,.36,"#0d1a14")}</svg>`;});
 $("#foot-scene").innerHTML=`<svg viewBox="0 0 360 64" preserveAspectRatio="xMidYMax meet"><defs><radialGradient id="fs-g"><stop offset="0" stop-color="#ffb35c" stop-opacity=".55"/><stop offset="1" stop-color="#ffb35c" stop-opacity="0"/></radialGradient></defs>
   <circle class="fs-glow" cx="180" cy="56" r="58" fill="url(#fs-g)"/><path d="M160 56a20 20 0 0 1 40 0z" fill="#ffc861"/>
   <g class="fs-water" stroke="#ffc861" stroke-linecap="round"><path d="M164 60h32" stroke-width="2"/><path d="M172 63h16" stroke-width="1.6"/></g>

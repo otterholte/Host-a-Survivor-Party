@@ -109,6 +109,17 @@ p.sec-sub{margin:0 0 16px;color:var(--ink-2)}
 .foot-legal{margin-top:10px;font-size:13px;color:#8a968f}
 .foot-links.row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px}
 .foot-links.row h4{flex-basis:100%}
+.subhead{display:none}
+@media (max-width:999px){
+  .site-foot{display:none}
+  .subhead{display:block;position:relative;overflow:hidden;background:linear-gradient(180deg,#16241d,#1b2e23);border-bottom:1px solid rgba(255,255,255,.06)}
+  .sub-art{position:absolute;right:0;bottom:0;height:100%;width:auto;max-width:52%;pointer-events:none}
+  .sub-in{position:relative;display:grid;gap:3px;min-height:56px;padding-top:10px;padding-bottom:10px;max-width:62%;margin-left:0}
+  .sub-sec{font:700 11px/1.2 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:#f0b48c;white-space:nowrap}
+  .sub-meta{font-size:13px;color:#b9c8be;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .car-main .car-nav{position:static;box-shadow:none}
+  body{padding-bottom:20px}
+}
 /* Below desktop width the game name lives in the header and the only sunset is the small one at the bottom */
 @media (max-width:999px){#view-setup .hero{display:none}#view-setup .plan-car{margin-top:14px}.party-hero>.hero-art{display:none}}
 /* Footer is the last thing on the page: no extra space beneath it (only the phone home-bar area) */
@@ -716,6 +727,12 @@ article.seg .skip-banner{margin:16px 18px 0}
 @media (max-width:400px){.bottom-nav .tab{font-size:11px}}
 .mi-ic{display:grid;place-items:center;width:22px;height:22px;flex:none}
 .mi-ic svg{width:21px;height:21px}
+/* Menu items get colored icon tiles so each section is easy to spot */
+.menu-list .mi-ic{width:36px;height:36px;border-radius:11px;background:color-mix(in srgb,var(--c) 16%,var(--surface));color:var(--c)}
+.menu-list .mi-ic svg{width:19px;height:19px}
+.c-setup{--c:#2f9a52}.c-script{--c:#2f6fd0}.c-supplies{--c:#d08a12}.c-party{--c:#e0562a}.c-edit{--c:#7d4fc4}.c-theme{--c:#5b6b78}
+.menu-list [aria-current]{background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--ink)}
+.menu-list [aria-current] .mi-ic{background:var(--c);color:#fff}
 .menu-sep{height:1px;margin:10px 6px;background:var(--line)}
 .menu-exit{display:flex;align-items:center;gap:12px;min-height:50px;margin-top:auto;padding:0 12px;border-top:1px solid var(--line);color:var(--ink-2);font:600 15px/1 var(--sans);text-decoration:none}
 .menu-exit:hover{color:var(--ink)}
@@ -1111,6 +1128,18 @@ body.wiz-on{overflow:hidden}
     <button class="icon-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </header>
+<div class="subhead" id="subhead" aria-hidden="true">
+  <svg class="sub-art" viewBox="0 0 320 56" preserveAspectRatio="xMaxYMax meet"><defs>
+    <radialGradient id="sub-glow" cx="70%" cy="100%" r="55%"><stop offset="0" stop-color="#ec7a3f" stop-opacity=".38"/><stop offset="1" stop-color="#ec7a3f" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sub-fade" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity="1"/></linearGradient>
+    <mask id="sub-m"><rect width="320" height="56" fill="url(#sub-fade)"/></mask></defs>
+    <g mask="url(#sub-m)"><rect width="320" height="56" fill="url(#sub-glow)"/><path d="M212 56a16 16 0 0 1 32 0z" fill="#f3a35f" opacity=".55"/>
+    <path d="M150 56c14-9 34-12 54-9 12 2 20 5 26 9z" fill="#0d1a14"/><path d="M252 56c10-7 26-9 40-7 9 1 16 4 20 7z" fill="#0d1a14"/>
+    <g fill="#0d1a14"><path d="M176 52c1-12 3-22 7-31l2 .6c-3 9-5 19-5 30z"/><path d="M184 21c-8-3-17-1-22 5 7-3 15-3 22-2zM184 21c6-7 16-8 23-5-8 0-16 2-22 6zM184 21c-3-8-11-11-18-10 7 2 12 5 17 11zM184 21c2-8 9-12 17-12-6 3-11 7-15 13z"/>
+      <path d="M274 52c1-9 3-16 6-23l2 .5c-3 7-4 14-4 22z"/><path d="M280 29c-6-2-13-1-17 4 5-2 11-2 17-1zM280 29c5-5 12-6 17-3-6 0-12 1-16 4zM280 29c-2-6-8-8-13-7 5 1 9 4 12 8z"/></g>
+    <rect y="54" width="320" height="2" fill="#0d1a14"/></g></svg>
+  <div class="wrap sub-in"><span class="sub-sec" id="sub-sec">Game overview</span><span class="sub-meta" id="sub-meta"></span></div>
+</div>
 
 <!-- ============ SETUP ============ -->
 <section class="view" id="view-setup">
@@ -1234,8 +1263,8 @@ body.wiz-on{overflow:hidden}
     <div class="menu-list" id="menu-tabs"></div>
     <div class="menu-sep"></div>
     <div class="menu-list">
-      <button data-wiz-go="0"><span class="mi-ic" id="mi-edit"></span>Edit game settings</button>
-      <button id="theme"><span class="mi-ic" id="mi-theme"></span><span id="theme-label">Dark mode</span></button>
+      <button data-wiz-go="0"><span class="mi-ic c-edit" id="mi-edit"></span>Edit game settings</button>
+      <button id="theme"><span class="mi-ic c-theme" id="mi-theme"></span><span id="theme-label">Dark mode</span></button>
     </div>
     <a class="menu-exit" href="./"><span class="mi-ic" id="mi-exit"></span>Exit to home page</a>
   </nav>
@@ -1825,7 +1854,7 @@ const pc=ph=>`var(${PH[ph]})`;
 
 function renderHeader(){
   const ev=S.event.replace(/^Survivor[:\s—-]*/i,"");
-  $("#brand-name").textContent=`Survivor: ${ev}`;$("#menu-name").textContent=`Survivor: ${ev}`;document.title=`Survivor: ${ev} · Host a Survivor Party`;
+  $("#brand-name").textContent=`Survivor: ${ev}`;$("#sub-meta").textContent=`${PL.N} castaways · ${PL.T===1?"one tribe":PL.T+" tribes"}`;$("#menu-name").textContent=`Survivor: ${ev}`;document.title=`Survivor: ${ev} · Host a Survivor Party`;
   $("#title").innerHTML=`Survivor: <em>${esc(ev)}</em>`;
   $("#stats").innerHTML=`<button class="stat stat-edit" data-wiz-go="0">${IC.edit}<span>Edit game settings</span></button><button class="stat stat-share" data-share>${IC.ext}<span>Share link</span></button>`;
 }
@@ -2831,6 +2860,7 @@ function show(v,top=true){
   const tab=v==="cast"?"party":v;
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.view===tab));
   if(v==="cast")openCastStudio();
+  const SUB={setup:"Game overview",script:"Host script",supplies:"Supplies",party:"Ambiance"};$("#sub-sec").textContent=SUB[tab]||"";
   if(top)window.scrollTo(0,0);
 }
 function route(){
@@ -2950,7 +2980,7 @@ const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
 const GRID='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>';
 $("#mi-edit").innerHTML=IC.edit;$("#mi-exit").innerHTML=IC.prev;$("#mi-theme").innerHTML=MOON;themeLabel();
 function openMenu(){const cur=(location.hash.slice(1)||"setup").replace(/^cast$/,"party").replace(/^seg-.*/,"script");
-  $("#menu-tabs").innerHTML=TABS.map(([k,l,ic])=>`<button data-view="${k}"${k===cur?' aria-current="page"':""}><span class="mi-ic">${ic}</span>${l}</button>`).join("");
+  $("#menu-tabs").innerHTML=TABS.map(([k,l,ic])=>`<button data-view="${k}"${k===cur?' aria-current="page"':""}><span class="mi-ic c-${k}">${ic}</span>${l}</button>`).join("");
   $("#menu").hidden=false;$("#menu-btn").setAttribute("aria-expanded","true");setTimeout(()=>$("#menu").classList.add("open"),10);}
 function closeMenu(){$("#menu").classList.remove("open");$("#menu-btn").setAttribute("aria-expanded","false");setTimeout(()=>{if(!$("#menu").classList.contains("open"))$("#menu").hidden=true;},200);}
 $("#menu-btn").onclick=()=>$("#menu").hidden?openMenu():closeMenu();

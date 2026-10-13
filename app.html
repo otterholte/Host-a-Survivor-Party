@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>/* secure pages only: phone-vote ballots are encrypted, which browsers allow only over https */if(location.protocol==="http:"&&!/^(localhost|127\.|10\.|192\.168\.|\[::1\])/.test(location.hostname))location.replace("https:"+location.href.slice(5));</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#16241d">
 <title>Host a Survivor Party: Free Game Plan, Challenges &amp; Host Script</title>
@@ -2501,7 +2502,9 @@ function pvD(h){const fin=h.dataset.pvMode==="final",pool=fin?PV.out.filter(n=>P
   const d=pvDraft[k]||(pvDraft[k]={off:new Set(),imm:"",show:false});return {d,pool,fin};}
 function pvPlan(h){const {d,pool,fin}=pvD(h),voters=pool.filter(n=>!d.off.has(n)),imm=!fin&&h.dataset.pvSolo&&voters.includes(d.imm)?d.imm:"",
   cands=fin?pvIn():voters.filter(n=>n!==imm);return {d,pool,fin,voters,imm,cands,ok:voters.length>=(fin?1:2)&&cands.length>=2};}
-async function pvStart(h,b){const P=pvPlan(h);if(!P.ok)return;b.disabled=true;await pvKeys();
+async function pvStart(h,b){const P=pvPlan(h);if(!P.ok)return;
+  if(!window.crypto||!crypto.subtle){pvErr="Phone voting needs the secure version of this page. Open it from https://hostasurvivorparty.com and try again.";pvRender();return;}
+  b.disabled=true;try{await pvKeys();}catch(e){pvErr="This browser couldn't set up secret ballots. Try Chrome or Safari.";pvRender();return;}
   const e=P.fin?1:Math.min(Math.max(1,+h.dataset.pvE||1),P.cands.length-1);
   PV.cur={id:pvRid(8),key:h.dataset.pvKey,mode:P.fin?"final":"tribal",title:h.dataset.pvKey,base:h.dataset.pvKey,e,pre:[],voters:P.voters,cands:P.cands,
     immune:P.imm?[P.imm]:[],votes:{},phase:"open",idol:[],order:[],shown:0};

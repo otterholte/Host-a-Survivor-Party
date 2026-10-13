@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>/* secure pages only: phone-vote ballots are encrypted, which browsers allow only over https */if(location.protocol==="http:"&&!/^(localhost|127\.|10\.|192\.168\.|\[::1\])/.test(location.hostname))location.replace("https:"+location.href.slice(5));</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101a15">
 <meta name="robots" content="noindex">
@@ -162,6 +163,7 @@ function sheet(html){const s=$("#sheet");if(!html){s.hidden=true;return;}s.query
 let pt=0;function paintSoon(){clearTimeout(pt);pt=setTimeout(paint,40);}
 function screen(){
   if(!ROOM)return `<div class="scr">${torch(true)}<h1>This link isn't complete</h1><p class="sub">Ask the host to share the voting link again, or scan their QR code.</p></div>`;
+  if(!(window.crypto&&crypto.subtle))return `<div class="scr">${torch(true)}<h1>Open the secure link</h1><p class="sub">Voting only works on the https version of this page. Ask the host for the link again.</p></div>`;
   if(!st)return settled?`<div class="scr">${torch()}<p class="kick">You're in the right place</p><h1>Waiting for the host</h1><p class="sub">Keep this page open. It updates on its own when the game starts.</p></div>`
     :`<div class="scr"><div class="spin"></div><h1>Connecting to the game…</h1></div>`;
   const tc=st.tc,roster=st.roster||[],out=(st.out||[]).includes(me.name);

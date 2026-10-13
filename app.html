@@ -965,7 +965,14 @@ body.wiz-on{overflow:hidden}
 .wc-pal{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);animation:fadeUp .25s both}
 .wc-pal .pal{width:34px;height:34px;border-color:#1b2a22;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
 .wc-pal .pal.on{box-shadow:0 0 0 3px #fff}
-.wc-pal .pal.taken:not(.on){opacity:.35}
+.wc-pal .pal.taken{position:relative;opacity:.55;cursor:not-allowed;border:2px dashed rgba(255,255,255,.75);box-shadow:none}
+.wc-pal .pal.taken::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(to top right,transparent 46%,rgba(255,255,255,.95) 46%,rgba(255,255,255,.95) 54%,transparent 54%)}
+.pal-note{flex-basis:100%;margin:2px 0 0;font-size:12px;color:#b9c8be}
+.wiz-h-acc{color:#ec7a3f}
+body.wl .wiz-h-acc{color:var(--accent)}
+body.wl .wc-pal .pal.taken{border-color:var(--ink-3)}
+body.wl .wc-pal .pal.taken::after{background:linear-gradient(to top right,transparent 46%,var(--ink-2) 46%,var(--ink-2) 54%,transparent 54%)}
+body.wl .pal-note{color:var(--ink-3)}
 /* Phones: one tribe per row. Wider screens: two per row, each as wide as half the panel */
 @media (min-width:620px){.wiz-colors{grid-template-columns:repeat(var(--n,2),minmax(0,1fr))}
   /* Starting tribes: one per row, name on the left, Change color on the right */
@@ -2422,7 +2429,7 @@ function wizColorCards(set,cols,subs){
     <small class="wc-n">${subs[i]||""}</small>
     <div class="wc-row"><button class="wc-colorbtn" data-wiz-pal="${k}" aria-expanded="${open}">${rockSVG(c.hex)}<span>${open?"Done":"Change color"}</span></button></div>
     ${open?`<div class="wc-pal">${PALETTE.map(([n,h])=>{const other=cols.findIndex((o,j)=>j!==i&&o.hex.toLowerCase()===h);
-      return `<button class="pal${h===c.hex.toLowerCase()?" on":""}${other>=0?" taken":""}" data-wiz-color="${set}:${i}:${h}:${n}" style="background:${h}" title="${n}${other>=0?` (${esc(cols[other].name)} has it, tap to swap)`:""}" aria-label="${n}"></button>`}).join("")}<label class="pal custom" title="Any color"><input type="color" value="${c.hex}" data-set="${set}" data-i="${i}" aria-label="Pick any color"></label></div>`:""}</div>`}).join("");
+      return `<button class="pal${h===c.hex.toLowerCase()?" on":""}${other>=0?" taken":""}" data-wiz-color="${set}:${i}:${h}:${n}" style="background:${h}" title="${n}${other>=0?`: already used by the ${esc(cols[other].name)} tribe`:""}" aria-label="${n}${other>=0?`, already used by ${esc(cols[other].name)}`:""}"${other>=0?" disabled":""}></button>`}).join("")}<label class="pal custom" title="Any color"><input type="color" value="${c.hex}" data-set="${set}" data-i="${i}" aria-label="Pick any color"></label>${cols.length>1?`<p class="pal-note">Crossed-out colors already belong to another tribe.</p>`:""}</div>`:""}</div>`}).join("");
 }
 const wizRule=()=>{const T=tribesFor(S.players);return T===1?"5–9 players: one tribe · final 2":T===2?"10–14 players: two tribes · final 3":"15–24 players: three tribes · final 3";};
 /* Only the parts that change: no re-animating the whole step */
@@ -2449,7 +2456,7 @@ function renderWizard(anim=true){
       <div class="wiz-tribes">${wizTribesHTML()}</div>
       <p class="wiz-rule">${wizRule()}</p>${nav()}`;
   }else if(k==="colors"){
-    w.innerHTML=`${dots}<h2 class="wiz-h">Pick your tribe colors</h2><p class="wiz-p">Each tribe wears buffs and draws stones in its color. Tap a color for each tribe.</p>
+    w.innerHTML=`${dots}<h2 class="wiz-h wiz-h-acc">Pick your tribe colors</h2><p class="wiz-p">Each tribe wears buffs and draws stones in its color. Tap a color for each tribe.</p>
       ${wizColorsHTML()}${nav()}`;
   }else if(k==="length"){
     w.innerHTML=`${dots}<h2 class="wiz-h">How long should it last?</h2><p class="wiz-p">Times are estimates for ${S.players} players, including Tribal Councils.</p>
@@ -3051,8 +3058,7 @@ document.addEventListener("click",e=>{
   else if(d.wizPal){wizPal=wizPal===d.wizPal?"":d.wizPal;renderWizard(false);}
   else if(d.wizColor){const [set,i,hex,name]=d.wizColor.split(":"),list=set==="swap"?S.swap:S.colors.slice(0,tribesFor(S.players)),c=list[+i];
     const isPreset=x=>PALETTE.some(([n])=>n.toLowerCase()===x.name.trim().toLowerCase())||!x.name.trim();
-    const j=list.findIndex((o,k)=>k!==+i&&o.hex.toLowerCase()===hex);
-    if(j>=0){const o=list[j],oldHex=c.hex,oldName=c.name;o.hex=oldHex;if(isPreset(o))o.name=isPreset({name:oldName})?oldName:(PALETTE.find(([,h])=>h===oldHex.toLowerCase())||[o.name])[0];}
+    const j=list.findIndex((o,k)=>k!==+i&&o.hex.toLowerCase()===hex);if(j>=0)return;  /* already another tribe's color */
     if(isPreset(c))c.name=name;c.hex=hex;wizPal="";saveS();rerender();renderWizard(false);}
   else if(d.wizClose!==undefined)closeWizard("setup");
   else if(d.wizCast!==undefined)closeWizard("cast");

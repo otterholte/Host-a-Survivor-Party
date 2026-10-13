@@ -999,6 +999,13 @@ body.wl .pal-note{color:var(--ink-3)}
 .wiz-card small{color:#cfd8d1;font-size:14px;line-height:1.4}
 .wc-big{font:700 18px/1.2 var(--sans);color:#f0b48c}
 .wc-ic svg{width:26px;height:26px;color:#f0b48c}
+/* "What kind of game?": one row per style, picture left, words right, all three fit on one screen */
+.wiz[data-step="style"] .wiz-cards{grid-template-columns:1fr!important;gap:10px}
+.wiz[data-step="style"] .wiz-card{grid-template-columns:96px minmax(0,1fr);grid-template-rows:auto auto;column-gap:16px;row-gap:4px;align-items:center;padding:12px 14px}
+.wiz[data-step="style"] .wiz-card .wc-art{grid-row:1/3;width:96px;height:72px}
+.wiz[data-step="style"] .wiz-card b{align-self:end;font-size:20px}
+.wiz[data-step="style"] .wiz-card small{align-self:start}
+@media (max-width:380px){.wiz[data-step="style"] .wiz-card{grid-template-columns:76px minmax(0,1fr)}.wiz[data-step="style"] .wiz-card .wc-art{width:76px;height:60px}}
 .wc-art{width:100%;height:96px;padding:6px;border-radius:12px;background:radial-gradient(120% 120% at 30% 20%,#fffaf0,#f1e3c8);display:grid;place-items:center}
 .wc-art .illo-svg{width:auto;height:100%}
 .wiz-sub{display:flex;justify-content:space-between;align-items:baseline;margin:22px 0 10px;color:#f0b48c}

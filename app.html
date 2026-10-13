@@ -23,7 +23,7 @@
   --p-opening:#eda100; --p-tribes:#1baf7a; --p-swap:#2a78d6; --p-individual:#eb6834; --p-finale:#4a3aa7;
   --shadow:0 1px 2px rgba(30,40,30,.05),0 6px 20px -12px rgba(30,40,30,.22);
   --serif:"Roboto Slab",Georgia,serif; --sans:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-  --nav-h:64px; --amz:#3a86d6; --pdf:#868d89; --pdf-soft:#8d9490;
+  --nav-h:0px; --amz:#3a86d6; --pdf:#868d89; --pdf-soft:#8d9490;
   --btn:var(--accent); --btn-ink:var(--accent-ink); --btn-dark:#8f3a10; --blue:#2a6fd6; --cool:#e9edf1; --cool-line:#cdd5dd; --cool-ink:#1f5fc0; --say-bg:#f4f7fa; --shine:rgba(255,255,255,.95);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -47,7 +47,7 @@
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;
-  padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 16px)}
+  padding-bottom:0}
 button,input{font:inherit;color:inherit}
 a{color:inherit}
 svg{display:block}
@@ -71,7 +71,7 @@ p.sec-sub{margin:0 0 16px;color:var(--ink-2)}
 .icon-btn svg{width:20px;height:20px}
 
 /* ---------- Bottom nav (phone) ---------- */
-.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);
+.bottom-nav{display:none!important;position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);
   background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
 .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:var(--nav-h);border:0;background:none;cursor:pointer;
@@ -86,9 +86,14 @@ p.sec-sub{margin:0 0 16px;color:var(--ink-2)}
 .hero-art{position:absolute;inset:0;z-index:0;pointer-events:none}
 .hero-art svg{width:100%;height:100%;display:block}
 /* Footer: the same island sunset, sinking into the dark */
-.site-foot{position:relative;margin-top:28px;background:#111c17;color:#cfd8d1;border-top:1px solid rgba(255,255,255,.06)}
-.foot-scene{display:flex;align-items:flex-end;justify-content:space-between;height:84px;background:linear-gradient(180deg,#111c17 0%,#1b261c 22%,#26281c 42%,#36301f 62%,#4a3624 82%,#5c3f27 100%);border-bottom:6px solid #050907}
-.foot-scene svg{display:block;width:100%;height:100%}
+.site-foot{position:relative;margin-top:36px;background:#0b1411;color:#cfd8d1;border-top:1px solid rgba(255,255,255,.06)}
+.foot-scene{display:flex;align-items:flex-end;justify-content:center;height:64px;background:linear-gradient(180deg,#111c17 0%,#1b261c 22%,#26281c 42%,#36301f 62%,#4a3624 82%,#5c3f27 100%);box-shadow:inset 0 -7px 0 #0b1411}
+.foot-scene svg{display:block;width:min(100%,520px);height:100%}
+.fs-glow{animation:fsGlow 5s ease-in-out infinite;transform-origin:180px 56px}
+.fs-water{animation:fsWater 3.2s ease-in-out infinite}
+@keyframes fsGlow{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes fsWater{0%,100%{opacity:.35}50%{opacity:.8}}
+@media (prefers-reduced-motion:reduce){.fs-glow,.fs-water{animation:none}}
 .fs-side{flex:0 1 300px;height:100%}
 .fs-side.right svg{transform:scaleX(-1)}
 .fs-mid{flex:0 1 400px;height:100%}
@@ -104,17 +109,17 @@ p.sec-sub{margin:0 0 16px;color:var(--ink-2)}
 .foot-legal{margin-top:10px;font-size:13px;color:#8a968f}
 .foot-links.row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px}
 .foot-links.row h4{flex-basis:100%}
-@media (max-width:999px){.site-foot{--under:calc(var(--nav-h) + env(safe-area-inset-bottom) + 16px);margin-bottom:calc(-1*var(--under));padding-bottom:var(--under)}}
+/* Below desktop width the game name lives in the header and the only sunset is the small one at the bottom */
+@media (max-width:999px){#view-setup .hero{display:none}#view-setup .plan-car{margin-top:14px}.party-hero>.hero-art{display:none}}
+/* Footer is the last thing on the page: no extra space beneath it (only the phone home-bar area) */
+.site-foot{padding-bottom:env(safe-area-inset-bottom)}
 .hero>.hero-art{left:auto;width:min(52%,700px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 40%);mask-image:linear-gradient(90deg,transparent,#000 40%)}
 .hero .wrap>*{max-width:560px}
 .hero .wrap>.stats{max-width:720px}
 @media (max-width:759px){
   .hero{padding-top:0}
   /* Game overview on phones: the name lives in the header, so this band is just a thin sunset strip */
-  #view-setup .hero{padding:0}
-  #view-setup .hero .wrap{display:none}
-  #view-setup .hero>.hero-art{height:64px;margin:0}
-  #view-setup .plan-car{margin-top:12px}
+
   .hero>.hero-art{position:relative;inset:auto;width:auto;height:130px;margin-bottom:6px;-webkit-mask-image:linear-gradient(180deg,#000 60%,transparent);mask-image:linear-gradient(180deg,#000 60%,transparent)}
 }
 .hero .wrap{position:relative;z-index:1}
@@ -712,6 +717,8 @@ article.seg .skip-banner{margin:16px 18px 0}
 .mi-ic{display:grid;place-items:center;width:22px;height:22px;flex:none}
 .mi-ic svg{width:21px;height:21px}
 .menu-sep{height:1px;margin:10px 6px;background:var(--line)}
+.menu-exit{display:flex;align-items:center;gap:12px;min-height:50px;margin-top:auto;padding:0 12px;border-top:1px solid var(--line);color:var(--ink-2);font:600 15px/1 var(--sans);text-decoration:none}
+.menu-exit:hover{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.menu-panel,.menu-back{transition:none}}
 .toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 20px);transform:translateX(-50%);z-index:300;max-width:min(92vw,440px);padding:12px 16px;border-radius:12px;background:#1d2a24;color:#fff;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:fadeUp .3s both}
 @media (min-width:1000px){.toast{bottom:24px}}
@@ -1228,10 +1235,9 @@ body.wiz-on{overflow:hidden}
     <div class="menu-sep"></div>
     <div class="menu-list">
       <button data-wiz-go="0"><span class="mi-ic" id="mi-edit"></span>Edit game settings</button>
-      <button data-share><span class="mi-ic" id="mi-share"></span>Share link</button>
-      <a href="./"><span class="mi-ic" id="mi-games"></span>All my games</a>
       <button id="theme"><span class="mi-ic" id="mi-theme"></span><span id="theme-label">Dark mode</span></button>
     </div>
+    <a class="menu-exit" href="./"><span class="mi-ic" id="mi-exit"></span>Exit to home page</a>
   </nav>
 </div>
 <footer class="site-foot">
@@ -2942,7 +2948,7 @@ $("#theme").onclick=()=>{root.dataset.theme=isDark()?"light":"dark";try{localSto
 /* Menu: the four sections, game settings, sharing, all games, and light/dark */
 const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
 const GRID='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>';
-$("#mi-edit").innerHTML=IC.edit;$("#mi-share").innerHTML=IC.ext;$("#mi-games").innerHTML=GRID;$("#mi-theme").innerHTML=MOON;themeLabel();
+$("#mi-edit").innerHTML=IC.edit;$("#mi-exit").innerHTML=IC.prev;$("#mi-theme").innerHTML=MOON;themeLabel();
 function openMenu(){const cur=(location.hash.slice(1)||"setup").replace(/^cast$/,"party").replace(/^seg-.*/,"script");
   $("#menu-tabs").innerHTML=TABS.map(([k,l,ic])=>`<button data-view="${k}"${k===cur?' aria-current="page"':""}><span class="mi-ic">${ic}</span>${l}</button>`).join("");
   $("#menu").hidden=false;$("#menu-btn").setAttribute("aria-expanded","true");setTimeout(()=>$("#menu").classList.add("open"),10);}
@@ -2952,7 +2958,12 @@ $("#menu").addEventListener("click",e=>{if(e.target.closest("[data-menu-close],b
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#menu").hidden)closeMenu();});
 
 document.querySelectorAll(".hero-art").forEach(e=>e.innerHTML=SCENE);
-$("#foot-scene").innerHTML=FOOT_SCENE;
+$("#foot-scene").innerHTML=`<svg viewBox="0 0 360 64" preserveAspectRatio="xMidYMax meet"><defs><radialGradient id="fs-g"><stop offset="0" stop-color="#ffb35c" stop-opacity=".55"/><stop offset="1" stop-color="#ffb35c" stop-opacity="0"/></radialGradient></defs>
+  <circle class="fs-glow" cx="180" cy="56" r="58" fill="url(#fs-g)"/><path d="M160 56a20 20 0 0 1 40 0z" fill="#ffc861"/>
+  <g class="fs-water" stroke="#ffc861" stroke-linecap="round"><path d="M164 60h32" stroke-width="2"/><path d="M172 63h16" stroke-width="1.6"/></g>
+  <path d="M98 57c9-6 22-8 34-6 7 1 12 3 16 6z" fill="#0b1411"/>${PALM(122,53,.28,"#0b1411")}
+  <path d="M212 57c7-4 17-6 26-4 6 1 10 2 13 4z" fill="#0b1411"/>${PALM(232,54,.22,"#0b1411")}
+  <rect y="57" width="360" height="7" fill="#0b1411"/></svg>`;
 PL=computePlan();STEPS=buildSteps(PL);
 renderSettingsStatic();
 rerender();

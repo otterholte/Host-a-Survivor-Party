@@ -375,6 +375,12 @@ mark.var{background:var(--hl);color:inherit;padding:0 4px;border-radius:4px;font
 .notes p:last-child{margin:0}
 .seg-foot{display:flex;gap:8px;padding:4px 10px 14px}
 .seg-foot .btn{flex:1}
+.seg-stick{position:fixed;left:0;right:0;top:var(--toph,0px);z-index:25;display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px max(16px,calc((100vw - 880px)/2 + 16px));border:0;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(8px);box-shadow:0 8px 18px -14px rgba(0,0,0,.4);color:var(--ink);text-align:left;cursor:pointer;animation:stickIn .2s ease}
+.seg-stick[hidden]{display:none}
+@keyframes stickIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.ss-n{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:color-mix(in srgb,var(--pc) 22%,var(--surface));font:800 14px/1 var(--serif)}
+.ss-t{flex:1;min-width:0;font:800 16px/1.2 var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ss-up{flex:none;width:9px;height:9px;margin-right:4px;border-left:2px solid var(--ink-3);border-top:2px solid var(--ink-3);transform:rotate(45deg) translateY(2px)}
 .script-end{display:flex;justify-content:center;padding:26px 0 36px}
 .script-end .btn{flex:none;padding:0 20px}
 .end-mark{display:block;height:1px}
@@ -1315,6 +1321,7 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
 
 <!-- ============ SCRIPT ============ -->
 <section class="view" id="view-script" hidden>
+  <button class="seg-stick" id="seg-stick" hidden aria-label="Back to the top of this step"><span class="ss-n"></span><span class="ss-t"></span><span class="ss-up" aria-hidden="true"></span></button>
   <div class="hero page-hero"><div class="hero-mini"></div><div class="wrap">
     <div class="eyebrow">Host script</div>
     <h1>Every word, <em>step by step</em></h1>
@@ -2300,7 +2307,7 @@ function setOpen(i,scroll){
   document.querySelectorAll("article.seg-hint").forEach(a=>a.classList.remove("seg-hint"));
   document.querySelectorAll("article.seg").forEach((a,k)=>{const on=k===i;a.classList.toggle("open",on);a.querySelector(".seg-head").setAttribute("aria-expanded",on)});
   if(scroll&&i>=0){const a=document.getElementById("seg-"+(i+1));if(a)requestAnimationFrame(()=>a.scrollIntoView({block:"start",behavior:"smooth"}));}
-  armNudges();
+  armNudges();segStick();
 }
 /* Script Previous/Next: glide to the step's title, then open it there.
    Going forward the finished step collapses off-screen above while the view is held steady. */
@@ -2324,6 +2331,13 @@ function segGo(k){
   easeScroll(el.getBoundingClientRect().top+scrollY-head,D,()=>{panel.style.cssText="";const before=el.getBoundingClientRect().top;setOpen(k,false);
     window.scrollTo(0,scrollY+(el.getBoundingClientRect().top-before));});
 }
+/* Script page: a slim bar with the open step's number and title, shown while you read below its title */
+function segStick(){const bar=$("#seg-stick");if(!bar)return;const a=openSeg>=0&&!$("#view-script").hidden&&document.getElementById("seg-"+(openSeg+1));
+  if(!a){bar.hidden=true;return;}const toph=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--toph"))||0,
+    hr=a.querySelector(".seg-head").getBoundingClientRect(),ar=a.getBoundingClientRect(),show=hr.bottom<toph+4&&ar.bottom>toph+70;
+  if(show){const s=STEPS[openSeg];bar.querySelector(".ss-n").textContent=openSeg+1;bar.querySelector(".ss-t").textContent=s.title;bar.style.setProperty("--pc",pc(s.phase));}
+  bar.hidden=!show;}
+addEventListener("scroll",segStick,{passive:true});
 function renderScriptTop(){if(!$("#script-top"))return;
   const n=STEPS.filter(s=>doneSteps.has(s.id)).length;
   $("#script-top").innerHTML=`<div><b>${STEPS.length} steps</b></div><button class="btn primary" id="pdf-btn">${IC.doc}Download PDF</button>`;
@@ -3034,6 +3048,7 @@ function show(v,top=true){
   if(v!=="cast"){const dn=$("#cs-done");if(dn)dn.hidden=true;}
   TABS.forEach(([k])=>$("#view-"+k).hidden=k!==v);
   $("#view-cast").hidden=v!=="cast";
+  if(typeof segStick==="function")setTimeout(segStick,0);
   const tab=v==="cast"?"party":v;
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.view===tab));
   if(v==="cast")openCastStudio();
@@ -3071,6 +3086,7 @@ document.addEventListener("click",e=>{
   else if(d.finish!==undefined)openFinish();
   else if(d.finClose!==undefined)closeFinish();
   else if(d.finAgain!==undefined){closeFinish();CAR=0;if(location.hash==="#script"){setOpen(0,true);}else{location.hash="setup";goStep(0);}}
+  else if(t.id==="seg-stick"){const a=document.getElementById("seg-"+(openSeg+1));if(a)easeScroll(a.getBoundingClientRect().top+scrollY-(typeof stickyHead==="function"?stickyHead():0)-12,450);}
   else if(d.segGo!==undefined){const k=+d.segGo;if(STEPS[k])segGo(k);}
   else if(d.car!==undefined)goStep(+d.car);
   else if(d.stepDone){toggleDone(d.stepDone);renderScript();observe();renderCarousel();if(doneSteps.has(d.stepDone)&&CAR<STEPS.length-1)setTimeout(()=>goStep(CAR+1),220);}

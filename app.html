@@ -1600,7 +1600,9 @@ const split=(n,k)=>Array.from({length:k},(_,i)=>Math.floor(n/k)+(i<n%k?1:0));
 const MIN_P=5, MAX_P=24;
 const tribesFor=n=>n<=9?1:n<=14?2:3;
 const finalFor=n=>n<=9?2:3;
-const LENGTHS={short:{name:"Quick",target:95,blurb:"Faster votes, fewer rounds"},standard:{name:"Classic",target:150,blurb:"The full Survivor experience"},long:{name:"Epic",target:210,blurb:"More rounds, more drama"}};
+const LENGTHS={short:{name:"Quick",target:95,blurb:"2 out every round: tribe votes, or a vote plus last place"},standard:{name:"Classic",target:150,blurb:"Tribes vote out 2, then 1 per individual round"},long:{name:"Epic",target:210,blurb:"1 voted out every round"}};
+/* Elimination rules per length: [out, voted out at Tribal, double Tribal, last place in the challenge goes home] */
+const LEN_RULES={short:{tribe:[2,2,false],swap:[2,2,false],solo:[2,1,false,true]},standard:{tribe:[2,2,false],swap:[2,2,false],solo:[1,1,false]},long:{tribe:[1,1,false],swap:[1,1,false],solo:[1,1,false]}};
 const STYLES={strategy:{name:"Strategy",blurb:"Puzzles, word games and more time to scheme",il:"tiles"},balanced:{name:"Balanced",blurb:"A mix of brains and brawn",il:"medal"},physical:{name:"Physical",blurb:"Races, balance and throwing",il:"balance"}};
 const STYLE_TAG={physical:"Physical",strategy:"Strategy",mixed:"Skill"};
 
@@ -1695,27 +1697,27 @@ function selection(){
   const p=planFor(S.players,S.length,{tribe:[...o.tribe],solo:[...o.solo]}),used=new Set(p.rounds.map(r=>r.ch));
   return {tribe:o.tribe.filter(id=>used.has(id)),solo:o.solo.filter(id=>used.has(id))};
 }
-function buildPlan(N,T,F,E,R,sel,fast=false){
+function buildPlan(N,T,F,E,R,sel,mode="standard"){
   let tR=0,sw=false;
   if(T>=2){tR=Math.min(2,R-1);if(tR<1)return null;if(R-tR>=3)sw=true;}
   const sR=R-tR-(sw?1:0);if(sR<1)return null;
   const types=[...Array(tR).fill("tribe"),...(sw?["swap"]:[]),...Array(sR).fill("solo")];
   const sizes=split(N,T),small=Math.min(...sizes);
-  /* [out, voted out at Tribal, double Tribal, last place in the challenge also goes home] */
-  const opts=ty=>ty==="tribe"?(T===3?[[2,2,false],[4,2,true],[2,1,true],[1,1,false]]:[[2,2,false],[1,1,false]])
-    :fast&&ty==="solo"?[[3,2,false,true],[2,1,false,true],[2,2,false],[1,1,false]]:[[2,2,false],[1,1,false]];
-  const maxOut=ty=>ty==="tribe"&&T===3?4:fast&&ty==="solo"?3:2;
+  /* the length's rule first; a single vote-out only when needed to land exactly on the final */
+  const rule=LEN_RULES[mode]||LEN_RULES.standard;
+  const opts=ty=>rule[ty][0]>1?[[...rule[ty]],[1,1,false,false,true]]:[[...rule[ty]]];
+  const maxOut=ty=>rule[ty][0];
   const pick=[];
   // Backtracking: each Tribal votes out 1 or 2 per tribe; the plan must land exactly on the final F.
   const bt=(k,n,taken,rem)=>{
     if(k===types.length)return rem===0&&n===F;
     const ty=types[k],rest=types.slice(k+1),restMax=rest.reduce((a,x)=>a+maxOut(x),0);
-    for(const [o,e,dbl,last] of opts(ty)){
+    for(const [o,e,dbl,last,fb] of opts(ty)){
       const left=rem-o;if(left<rest.length||left>restMax)continue;
       if(ty==="tribe"&&small-taken-e<2)continue;
       if(ty==="swap"&&Math.min(...split(n,2))-e<2)continue;
       if(ty==="solo"&&n-o<F)continue;
-      pick[k]={type:ty,out:o,e,dbl,last:!!last};
+      pick[k]={type:ty,out:o,e,dbl,last:!!last,fb:!!fb};
       if(bt(k+1,n-o,ty==="tribe"?taken+e:taken,left))return true;
     }
     return false;
@@ -1741,26 +1743,16 @@ function buildPlan(N,T,F,E,R,sel,fast=false){
   if(T>=2){lo+=5;hi+=5;}                         // merge
   if(sw){lo+=5;hi+=5;}                           // swap draw
   rounds.forEach(r=>{const m=CH[r.ch].mins;lo+=m[0]+TRIBAL_MINS[0]*(r.dbl?2:1);hi+=m[1]+TRIBAL_MINS[1]*(r.dbl?2:1);});
-  return {N,T,F,E,R,rounds,startSizes:sizes,swap:sw,swapSizes,merge:merge??N,jury:E,mins:[lo,hi],fast};
+  return {N,T,F,E,R,rounds,startSizes:sizes,swap:sw,swapSizes,merge:merge??N,jury:E,mins:[lo,hi],mode,fb:rounds.filter(r=>r.fb).length};
 }
-/* Quick, Classic and Epic should always be different games when possible:
-   Classic is the plan closest to its target, Epic the closest longer one, Quick the closest shorter one.
-   If no shorter plan exists, Quick uses the faster rule: last place in each immunity challenge goes home too. */
+/* Each length plays by its own rules (see LEN_RULES); the number of rounds follows from them.
+   Pick the plan that sticks to the rules most closely (fewest single-vote fallbacks), then the fewest rounds. */
 function planFor(N,length,sel){
   N=Math.min(MAX_P,Math.max(MIN_P,N));
-  const T=tribesFor(N),F=finalFor(N),E=N-F,mid=p=>(p.mins[0]+p.mins[1])/2;
-  const normal=[];for(let R=1;R<=E;R++){const p=buildPlan(N,T,F,E,R,sel);if(p)normal.push(p);}
-  const minR=Math.min(...normal.map(p=>p.R)),fastP=[];
-  for(let R=1;R<minR;R++){const p=buildPlan(N,T,F,E,R,sel,true);if(p)fastP.push(p);}
-  const L=[...fastP,...normal].sort((a,b)=>mid(a)-mid(b));
-  const near=(idx,t)=>idx.reduce((b,i)=>b<0||Math.abs(mid(L[i])-t)<Math.abs(mid(L[b])-t)?i:b,-1);
-  const all=L.map((_,i)=>i),normIdx=all.filter(i=>!L[i].fast);
-  let c=near(normIdx,LENGTHS.standard.target);
-  if(L.length>=3)c=Math.min(L.length-2,Math.max(1,c));   /* leave room for a shorter Quick and a longer Epic */
-  else if(c===L.length-1&&c>0)c--;
-  const e=all.filter(i=>i>c).length?near(all.filter(i=>i>c),LENGTHS.long.target):c;
-  const q=all.filter(i=>i<c).length?near(all.filter(i=>i<c),LENGTHS.short.target):c;
-  return L[length==="short"?q:length==="long"?e:c];
+  const T=tribesFor(N),F=finalFor(N),E=N-F,mode=LEN_RULES[length]?length:"standard";
+  let best=null;
+  for(let R=1;R<=E;R++){const p=buildPlan(N,T,F,E,R,sel,mode);if(p&&(!best||p.fb<best.fb||(p.fb===best.fb&&p.R<best.R)))best=p;}
+  return best;
 }
 function computePlan(){const p=planFor(S.players,S.length,selection());p.length=S.length;p.style=S.style;p.needTribe=p.rounds.filter(r=>r.type!=="solo").length;p.needSolo=p.rounds.filter(r=>r.type==="solo").length;return p;}
 const hrs=m=>{const h=Math.round(m/30)/2;return h%1?h.toFixed(1):String(h)};
@@ -2491,7 +2483,7 @@ function renderWizard(anim=true){
       ${wizColorsHTML()}${nav()}`;
   }else if(k==="length"){
     w.innerHTML=`${dots}<h2 class="wiz-h">How long should it last?</h2><p class="wiz-p">Times are estimates for ${S.players} players, including Tribal Councils.</p>
-      <div class="wiz-cards">${Object.entries(LENGTHS).map(([id,L])=>{const p=wizPlan({length:id});return `<button class="wiz-card${S.length===id?" on":""}" data-wiz-length="${id}"><span class="wc-ic">${IC.clock}</span><b>${L.name}</b><span class="wc-big">${hoursRange(p)}</span><small>${p.R} rounds · ${p.fast?"last place in each immunity challenge goes home":L.blurb}</small></button>`}).join("")}</div>${nav()}`;
+      <div class="wiz-cards">${Object.entries(LENGTHS).map(([id,L])=>{const p=wizPlan({length:id});return `<button class="wiz-card${S.length===id?" on":""}" data-wiz-length="${id}"><span class="wc-ic">${IC.clock}</span><b>${L.name}</b><span class="wc-big">${hoursRange(p)}</span><small>${p.R} rounds · ${L.blurb}</small></button>`}).join("")}</div>${nav()}`;
   }else if(k==="style"){
     w.innerHTML=`${dots}<h2 class="wiz-h">What kind of game?</h2><p class="wiz-p">This picks your starting challenges. You can change them next.</p>
       <div class="wiz-cards">${Object.entries(STYLES).map(([id,st])=>`<button class="wiz-card${S.style===id?" on":""}" data-wiz-style="${id}"><span class="wc-art">${illo(st.il)}</span><b>${st.name}</b><small>${st.blurb}</small></button>`).join("")}</div>${nav()}`;
@@ -2543,7 +2535,7 @@ function renderChInfo(){
 }
 function openChInfo(id){chInfoId=id;chInfoPic=0;renderChInfo();const d=$("#ch-info");if(!d.open)d.showModal();d.scrollTop=0;}
 
-function wizCommitN(){const el=$("#wiz-n");if(!el)return;const n=parseInt(el.value,10);if(!isNaN(n)){S.players=Math.min(MAX_P,Math.max(MIN_P,n));S.challenges=null;saveS();}el.value=S.players;wizPlayersRefresh();}
+function wizCommitN(){const el=$("#wiz-n");if(!el)return;const n=parseInt(el.value,10);if(!isNaN(n)){S.players=Math.min(MAX_P,Math.max(MIN_P,n));saveS();}el.value=S.players;wizPlayersRefresh();}
 
 /* =====================================================================
    Cast Studio: one Survivor-style slide per player, then a looping
@@ -3093,9 +3085,9 @@ document.addEventListener("click",e=>{
     if(isPreset(c))c.name=name;c.hex=hex;wizPal="";saveS();rerender();renderWizard(false);}
   else if(d.wizClose!==undefined)closeWizard("setup");
   else if(d.wizCast!==undefined)closeWizard("cast");
-  else if(d.wizN){const next=S.players+ +d.wizN;if(next<MIN_P||next>MAX_P){const c=$(".wiz-count");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");return;}S.players=next;S.challenges=null;saveS();wizPlayersRefresh();}
+  else if(d.wizN){const next=S.players+ +d.wizN;if(next<MIN_P||next>MAX_P){const c=$(".wiz-count");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");return;}S.players=next;saveS();wizPlayersRefresh();}
   else if(d.wizLength){S.length=d.wizLength;saveS();renderWizard(false);}
-  else if(d.wizStyle){S.style=d.wizStyle;S.challenges=null;saveS();renderWizard(false);}
+  else if(d.wizStyle){if(S.style!==d.wizStyle){S.style=d.wizStyle;S.challenges=null;}saveS();renderWizard(false);}
   else if(d.wizInfo)openChInfo(d.wizInfo);
   else if(d.chiClose!==undefined)$("#ch-info").close();
   else if(d.chiPic!==undefined){chInfoPic=+d.chiPic;renderChInfo();}

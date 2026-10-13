@@ -170,6 +170,9 @@ section{padding:72px 0}
 /* Sticky call to action */
 .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(rgba(22,36,29,0),rgba(22,36,29,.92) 45%);transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.7,.2,1);pointer-events:none}
 .sticky-cta.show{transform:none;pointer-events:auto}
+/* Desktop: the header button does the job (it starts pulsing once the hero button scrolls away); phones: sticky bottom bar */
+.top-cta{display:none}
+@media (min-width:760px){.top-cta{display:inline-flex}.sticky-cta{display:none}}
 .sticky-cta .btn{width:min(100%,420px);min-height:56px;font-size:17px}
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
@@ -181,6 +184,7 @@ section{padding:72px 0}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="./"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 4 7 6 7 12a7 7 0 0 1-14 0c0-3 1.5-5 3-6.5.3 2 1.2 3.3 2.6 3.8C14 8.5 14.6 5.6 16 3z" fill="#ec7a3f"/><path d="M16 13c1.6 2 3 3.3 3 5.6a3 3 0 0 1-6 0c0-1.5.8-2.6 1.6-3.4.2.9.6 1.4 1.1 1.6-.2-1.4 0-2.6.3-3.8z" fill="#ffd27a"/><path d="M7 27l18-6M7 21l18 6" stroke="#d9b07a" stroke-width="2.4" stroke-linecap="round"/></svg>Host a Survivor Party</a>
+    <a class="btn btn-primary top-cta" id="top-cta" href="app.html?new">Plan my party, free</a>
   </div>
 </header>
 
@@ -317,7 +321,8 @@ document.getElementById("foot-scene").innerHTML=FOOT_SCENE;
 /* Sticky "Plan my party" bar once the hero button is out of view */
 const heroCta=document.getElementById("hero-cta"),bar=document.getElementById("sticky-cta");
 const footEl=document.querySelector(".foot");
-function checkBar(){const r=heroCta.getBoundingClientRect(),show=(r.bottom<0||r.top>innerHeight)&&footEl.getBoundingClientRect().top>innerHeight-20;bar.classList.toggle("show",show);bar.setAttribute("aria-hidden",!show);bar.querySelector("a").tabIndex=show?0:-1;}
+const topCta=document.getElementById("top-cta");
+function checkBar(){const r=heroCta.getBoundingClientRect(),past=r.bottom<0||r.top>innerHeight,show=past&&footEl.getBoundingClientRect().top>innerHeight-20;topCta.classList.toggle("btn-pulse",past);bar.classList.toggle("show",show);bar.setAttribute("aria-hidden",!show);bar.querySelector("a").tabIndex=show?0:-1;}
 addEventListener("scroll",checkBar,{passive:true});addEventListener("resize",checkBar);checkBar();
 /* Fade sections in as they scroll into view */
 const io="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -8% 0px"}):null;

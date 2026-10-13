@@ -2133,7 +2133,11 @@ function gotToggle(id){
   if(D){card.style.cssText=`height:${h0}px;overflow:hidden`;void card.offsetHeight;card.style.transition=`height ${D}ms cubic-bezier(.4,0,.2,1)`;card.style.height=h1+"px";setTimeout(()=>{card.style.cssText="";},D+60);}
   if(got.has(id)){card.classList.add("just");setTimeout(()=>card.classList.remove("just"),900);}
   const gh=card.closest(".sup-group")?.querySelector(".group-h"),off=(parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--toph"))||0)+(gh?gh.offsetHeight:0)+10;
-  easeScroll(card.getBoundingClientRect().top+scrollY-off,D);
+  /* if the items right above it in this category are already got, line up the top of that got run instead,
+     so the whole run shows with the new one at the end (but never push the new one off-screen) */
+  let first=card;if(got.has(id)){let prev=card.previousElementSibling;while(prev&&prev.classList.contains("got")){first=prev;prev=prev.previousElementSibling;}}
+  const cardY=card.getBoundingClientRect().top+scrollY,runY=first.getBoundingClientRect().top+scrollY;
+  easeScroll(Math.max(runY,cardY-innerHeight*.5)-off,D);
 }
 function renderSupplies(){setTimeout(supSticky,0);
   const groups=supplyGroups(PL);

@@ -781,8 +781,8 @@ article.seg .skip-banner{margin:16px 18px 0}
 .car-media:not([data-count="1"]){aspect-ratio:auto;gap:6px;padding:0 4.5%;background:var(--surface);scroll-padding:0 4.5%}
 .car-media:not([data-count="1"]) .mi{flex:0 0 100%;aspect-ratio:16/10;border-radius:6px}
 /* Swipe hint: the photos glide left a little and back, once, when the strip first comes into view */
-.car-media.hint .mi{animation:peekHint 1.3s cubic-bezier(.45,0,.25,1) 2}
-@keyframes peekHint{0%,100%{transform:none}45%{transform:translateX(-34px)}}
+.car-media.hint .mi{animation:peekHint 1.6s cubic-bezier(.45,0,.25,1) 1}
+@keyframes peekHint{0%,100%{transform:none}45%{transform:translateX(-16px)}}
 @media (prefers-reduced-motion:reduce){.car-media.hint .mi{animation:none}}
 .car-media:not([data-count="1"])~.mi-arrow{top:50%}
 .car-media::-webkit-scrollbar{display:none}
@@ -2074,7 +2074,7 @@ function renderCarousel(){
 let miHintDone=new Set();
 function miHintArm(){const st=$("#car .car-media");if(!st||st.children.length<2||miHintDone.has(CAR))return;
   const go=()=>{const r=st.getBoundingClientRect();if(!st.isConnected)return removeEventListener("scroll",go);
-    if(r.top<innerHeight*.8&&r.bottom>60&&miIdx(st)===0){removeEventListener("scroll",go);miHintDone.add(CAR);setTimeout(()=>{st.classList.add("hint");setTimeout(()=>st.classList.remove("hint"),2700);},500);}};
+    if(r.top<innerHeight*.8&&r.bottom>60&&miIdx(st)===0){removeEventListener("scroll",go);miHintDone.add(CAR);setTimeout(()=>{st.classList.add("hint");setTimeout(()=>st.classList.remove("hint"),1800);},500);}};
   addEventListener("scroll",go,{passive:true});go();}
 /* Reached the end of a step's script? Give its Next button a little pulse */
 function armNudges(){

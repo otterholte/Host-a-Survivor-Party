@@ -2251,13 +2251,23 @@ function setOpen(i,scroll){
    Going forward the finished step collapses off-screen above while the view is held steady. */
 function glideTo(y,done){const from=scrollY;window.scrollTo({top:y,behavior:"smooth"});let t0=Date.now();
   (function wait(){if(Math.abs(scrollY-y)<3||Date.now()-t0>900){if(Math.abs(scrollY-y)>=3&&Math.abs(scrollY-from)<3)window.scrollTo(0,y);done&&done();return;}setTimeout(wait,40);})();}
+function easeScroll(y,D,done){const y0=scrollY;let fin=false;const end=()=>{if(fin)return;fin=true;window.scrollTo(0,y);done&&done();};
+  if(!D)return end();const t0=performance.now();
+  (function f(now){if(fin)return;const p=Math.min(1,(now-t0)/D),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;window.scrollTo(0,y0+(y-y0)*e);p<1?requestAnimationFrame(f):end();})(t0);
+  setTimeout(end,D+250);}
 function segGo(k){
+  /* Open step k while the page glides its title to the top. A step open below it closes first
+     (nothing above moves); a step open above it tucks away after the glide, with the view held steady. */
   const el=document.getElementById("seg-"+(k+1));if(!el)return;
-  const head=(typeof stickyHead==="function"?stickyHead():0)+12,topOf=e=>e.getBoundingClientRect().top+scrollY-head;
-  if(openSeg>=0&&k>openSeg){
-    glideTo(topOf(el),()=>{const before=el.getBoundingClientRect().top;setOpen(k,false);
-      window.scrollTo(0,scrollY+(el.getBoundingClientRect().top-before));el.classList.add("arrive");setTimeout(()=>el.classList.remove("arrive"),700);});
-  }else{setOpen(k,false);glideTo(topOf(el));el.classList.add("arrive");setTimeout(()=>el.classList.remove("arrive"),700);}
+  const head=(typeof stickyHead==="function"?stickyHead():0)+12,prev=openSeg;
+  if(prev>k){const p=document.getElementById("seg-"+(prev+1));if(p){p.classList.remove("open");p.querySelector(".seg-head").setAttribute("aria-expanded",false);}}
+  document.querySelectorAll("article.seg-hint").forEach(a=>a.classList.remove("seg-hint"));
+  const panel=el.querySelector(".seg-panel"),D=matchMedia("(prefers-reduced-motion: reduce)").matches?0:700;
+  el.classList.add("open");el.querySelector(".seg-head").setAttribute("aria-expanded",true);
+  const full=panel.scrollHeight;panel.style.cssText="height:0;opacity:0;overflow:hidden";void panel.offsetHeight;
+  panel.style.transition=`height ${D}ms cubic-bezier(.4,0,.2,1),opacity ${D}ms ease`;panel.style.height=full+"px";panel.style.opacity="1";
+  easeScroll(el.getBoundingClientRect().top+scrollY-head,D,()=>{panel.style.cssText="";const before=el.getBoundingClientRect().top;setOpen(k,false);
+    window.scrollTo(0,scrollY+(el.getBoundingClientRect().top-before));});
 }
 function renderScriptTop(){if(!$("#script-top"))return;
   const n=STEPS.filter(s=>doneSteps.has(s.id)).length;
@@ -2984,7 +2994,7 @@ function rerender(){PL=computePlan();STEPS=buildSteps(PL);if(PL.T!==lastT||PL.sw
   renderHeader();renderGameCard();renderCarousel();renderSupplies();renderScript();renderParty();btDraw();observe();}
 document.addEventListener("click",e=>{
   const oh=e.target.closest("[data-open]");
-  if(oh){const i=+oh.dataset.open;setOpen(openSeg===i?-1:i,openSeg!==i);return;}
+  if(oh){const i=+oh.dataset.open;if(openSeg===i)setOpen(-1,false);else segGo(i);return;}
   const nd=e.target.closest("[data-need]");
   if(nd){e.preventDefault();const id=nd.dataset.need;location.hash="supplies";setTimeout(()=>{const el=document.getElementById("sup-"+id);if(el){el.scrollIntoView({block:"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}},80);return;}
   const t=e.target.closest("button");if(!t)return;

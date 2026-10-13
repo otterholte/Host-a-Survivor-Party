@@ -2931,12 +2931,13 @@ function csShowUI(){if(SHOW.urls.length)$("#sh-pos").textContent=`${SHOW.i+1} / 
 function csTogglePause(){if(!CAST.settings.auto)return;SHOW.paused=!SHOW.paused;if(SHOW.fading){csShowUI();return;}$("#sh-bar").style.animationPlayState=SHOW.paused?"paused":"running";
   clearTimeout(SHOW.timer);if(!SHOW.paused){const left=CAST.settings.dur*1000*(1-($("#sh-bar").getBoundingClientRect().width/Math.max(1,$("#sh-bar").parentElement.getBoundingClientRect().width)));SHOW.timer=setTimeout(()=>csShowSlide(SHOW.i+1),Math.max(300,left));}csShowUI();}
 function csExitShow(){clearTimeout(SHOW.timer);clearTimeout(SHOW.fadeT);$("#show2").hidden=true;csMusic(false);if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});}
-function csWake(){const el=$("#show2");el.classList.remove("idle");clearTimeout(SHOW.idleT);SHOW.idleT=setTimeout(()=>el.classList.add("idle"),2500);}
+function csWake(){const el=$("#show2");el.classList.remove("idle");clearTimeout(SHOW.idleT);SHOW.idleT=setTimeout(()=>el.classList.add("idle"),6000);}
 
 document.addEventListener("click",e=>{
   if(!CAST)return;
   const b=e.target.closest("button");
-  if(e.target.closest("#show2")&&!e.target.closest(".sh-ui")){csWake();csShowSlide(SHOW.i+1);return;}
+  /* tapping the slide only shows or hides the controls; slides change with the arrow buttons */
+  if(e.target.closest("#show2")&&!e.target.closest(".sh-ui")){const el=$("#show2");if(el.classList.contains("idle"))csWake();else{clearTimeout(SHOW.idleT);el.classList.add("idle");}return;}
   if(!b)return;
   const d=b.dataset,p=CAST.players[csCur];
   if(d.cs!==undefined)csSelect(+d.cs);
@@ -2978,7 +2979,7 @@ document.addEventListener("keydown",e=>{
 });
 let csWasFull=false;
 document.addEventListener("fullscreenchange",()=>{if(document.fullscreenElement){csWasFull=true;}else if(csWasFull){csWasFull=false;if(!$("#show2").hidden)csExitShow();}});
-$("#show2").addEventListener("pointermove",csWake);
+$("#show2").addEventListener("pointermove",e=>{if(e.pointerType==="mouse"&&(Math.abs(e.movementX)+Math.abs(e.movementY))>2)csWake();});
 document.addEventListener("change",e=>{if(e.target.id==="cs-bg-file")csAddBg(e.target.files[0]);});
 $("#cs-done").addEventListener("click",()=>{csFromWiz=false;$("#cs-done").hidden=true;});
 csBindInCrop();

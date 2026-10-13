@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101a15">
+<meta name="robots" content="noindex">
+<title>Tribal Council Voting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1511; --ink:#f4efe4; --ink-2:#cfc8b8; --ink-3:#8e9a91; --line:rgba(255,255,255,.12); --card:rgba(255,255,255,.055);
+  --fire:#f0843a; --fire-2:#ffc46b; --ok:#4cc38a; --warn:#f2b84b; --bad:#ff7d6b;
+  --serif:"Roboto Slab",Georgia,serif; --sans:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;min-height:100vh;min-height:100dvh;color:var(--ink);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+  background:radial-gradient(110% 55% at 50% 108%,rgba(240,132,58,.28) 0%,rgba(240,132,58,0) 62%),linear-gradient(180deg,#17271f 0%,#0d1511 70%)}
+button{font:inherit;color:inherit;cursor:pointer}
+.app{max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;padding:0 16px}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 0 10px}
+.hd small{display:block;font:700 11px/1 var(--sans);letter-spacing:.22em;color:var(--fire-2)}
+.hd b{display:block;font:800 18px/1.25 var(--serif);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:62vw}
+.net{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:5px 10px;white-space:nowrap}
+.net i{width:8px;height:8px;border-radius:50%;background:var(--warn)}
+.net.live i{background:var(--ok);box-shadow:0 0 0 0 rgba(76,195,138,.6);animation:ping 2s infinite}
+.net.off i{background:var(--bad)}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(76,195,138,.55)}80%,100%{box-shadow:0 0 0 7px rgba(76,195,138,0)}}
+main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:12px 0 24px}
+.scr{text-align:center;animation:rise .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kick{font:700 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--fire-2);margin:0 0 10px}
+h1{font:800 clamp(28px,8vw,36px)/1.15 var(--serif);margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--ink-2);margin:0 auto;max-width:34ch;text-wrap:pretty}
+.note{display:inline-flex;align-items:center;gap:8px;margin:16px auto 0;padding:9px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line);color:var(--ink-2);font-size:14.5px}
+.note b{color:var(--ink)}
+.note.gold{border-color:rgba(242,184,75,.45);color:#f6d68b;background:rgba(242,184,75,.1)}
+/* Torch */
+.torch{width:86px;height:150px;margin:0 auto 18px;display:block;overflow:visible}
+.torch .fl{transform-origin:32px 64px;animation:flick 2.4s ease-in-out infinite}
+.torch .fl2{transform-origin:32px 64px;animation:flick 1.7s ease-in-out infinite reverse;opacity:.8}
+.torch .glow{animation:glow 2.4s ease-in-out infinite}
+@keyframes flick{0%,100%{transform:scale(1,1) skewX(0)}25%{transform:scale(.96,1.05) skewX(2deg)}50%{transform:scale(1.03,.95) skewX(-2deg)}75%{transform:scale(.98,1.04) skewX(1deg)}}
+@keyframes glow{0%,100%{opacity:.55}50%{opacity:.85}}
+.torch.out .smoke{animation:smoke 3.2s ease-out infinite}
+@keyframes smoke{0%{opacity:0;transform:translateY(8px)}30%{opacity:.5}100%{opacity:0;transform:translateY(-26px)}}
+@media (prefers-reduced-motion:reduce){.torch *,.net i{animation:none!important}.scr{animation:none}}
+/* Lists */
+.list{display:grid;gap:8px;margin:20px 0 0;text-align:left}
+.opt{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:10px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);font-weight:600;font-size:17px;text-align:left;transition:transform .12s,background .15s,border-color .15s}
+.opt:active{transform:scale(.985)}
+@media (hover:hover){.opt:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.22)}}
+.av{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;font:800 15px/1 var(--serif);color:#fff;background:hsl(var(--h) 45% 38%)}
+.opt .x{margin-left:auto;color:var(--ink-3);font-size:13px;font-weight:500}
+.grid{grid-template-columns:1fr 1fr}
+.grid .opt{min-height:52px;font-size:16px}
+.link{background:none;border:0;color:var(--fire-2);font-weight:600;text-decoration:underline;text-underline-offset:3px;padding:10px;margin-top:10px}
+.field{display:flex;gap:8px;margin-top:18px}
+.field input{flex:1;min-width:0;min-height:52px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--ink);font:600 17px var(--sans);padding:0 14px}
+.field input:focus{outline:2px solid var(--fire);outline-offset:1px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 20px;border-radius:14px;border:1px solid var(--line);background:var(--card);font-weight:700;font-size:16px}
+.btn.fire{background:linear-gradient(180deg,#f39250,#df6a22);border-color:#e47a35;color:#fff;box-shadow:0 8px 24px -10px rgba(240,132,58,.8)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.wide{width:100%}
+.err{color:var(--bad);font-size:14px;margin:12px 0 0}
+/* Parchment */
+.parch{margin:6px auto 18px;width:min(260px,80%);aspect-ratio:4/3;border-radius:6px;background:linear-gradient(160deg,#efe2c2,#d8c39a);color:#3b2a17;display:grid;place-items:center;
+  box-shadow:0 18px 40px -18px rgba(0,0,0,.8),inset 0 0 30px rgba(120,80,30,.35);transform:rotate(-2deg);padding:14px}
+.parch b{font:800 clamp(24px,8vw,34px)/1.1 "Roboto Slab",Georgia,serif;transform:rotate(-3deg);word-break:break-word}
+.check{width:64px;height:64px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;background:rgba(76,195,138,.15);color:var(--ok);border:1px solid rgba(76,195,138,.4)}
+.check svg{width:30px;height:30px}
+.crown{font:800 clamp(30px,9vw,42px)/1.1 var(--serif);color:var(--fire-2);margin:6px 0 12px;word-break:break-word}
+.ft{padding:12px 0 calc(16px + env(safe-area-inset-bottom));text-align:center;font-size:13.5px;color:var(--ink-3)}
+.ft button{background:none;border:0;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;padding:6px}
+/* Confirm sheet */
+.sheet{position:fixed;inset:0;z-index:10;display:flex;align-items:flex-end;justify-content:center;background:rgba(5,9,7,.66);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);animation:fade .2s}
+.sheet[hidden]{display:none}
+@keyframes fade{from{opacity:0}}
+.sheet .box{width:min(520px,100%);background:#18231d;border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;padding:24px 18px calc(18px + env(safe-area-inset-bottom));text-align:center;animation:up .28s cubic-bezier(.2,.7,.2,1)}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sheet h2{font:800 26px/1.2 var(--serif);margin:4px 0 8px;word-break:break-word}
+.sheet p{color:var(--ink-2);margin:0 0 18px}
+.sheet .row{display:grid;gap:10px}
+.spin{width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.15);border-top-color:var(--fire-2);animation:sp 1s linear infinite;margin:0 auto 16px}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hd"><div><small>SURVIVOR</small><b id="ev">Tribal Council</b></div><span class="net" id="net"><i></i><span>Connecting</span></span></header>
+  <main id="main" aria-live="polite"></main>
+  <footer class="ft" id="ft"></footer>
+</div>
+<div class="sheet" id="sheet" hidden><div class="box" role="dialog" aria-modal="true" aria-labelledby="sh-h"></div></div>
+<script>
+"use strict";
+/* Player voting page. The host's planner publishes the game state to a private ntfy.sh topic;
+   this page listens, shows a ballot when Tribal Council opens, and sends back an encrypted vote. */
+const RELAY="https://ntfy.sh/",Q=new URLSearchParams(location.search),ROOM=(Q.get("r")||"").replace(/[^a-z0-9]/gi,"").slice(0,40),TOPIC="svh1-"+ROOM,LK="svh-vote@"+ROOM;
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const buzz=p=>{try{if(navigator.vibrate&&(!navigator.userActivation||navigator.userActivation.hasBeenActive))navigator.vibrate(p);}catch(e){}};
+const rid=()=>Array.from(crypto.getRandomValues(new Uint8Array(10)),b=>(b%36).toString(36)).join("");
+let me;try{me=JSON.parse(localStorage.getItem(LK)||"null")}catch(e){}
+me=Object.assign({name:"",dev:rid(),voted:{}},me||{});
+const save=()=>{try{localStorage.setItem(LK,JSON.stringify(me))}catch(e){}};save();
+let st=null,net="wait",settled=false,typing=false,lastTc="",es=null,beat=Date.now(),hiSent="";
+
+/* ---------- relay ---------- */
+async function send(o){
+  for(let i=0;i<3;i++){try{const r=await fetch(RELAY+TOPIC,{method:"POST",body:JSON.stringify(o)});if(r.ok)return true;}catch(e){}
+    await new Promise(r=>setTimeout(r,700*(i+1)));}
+  return false;
+}
+function connect(){
+  if(es)es.close();
+  es=new EventSource(RELAY+TOPIC+"/sse?since=12h");
+  es.addEventListener("open",()=>{net="live";beat=Date.now();paint();setTimeout(()=>{settled=true;paint();},1500);sayHi(true);});
+  es.addEventListener("keepalive",()=>{beat=Date.now();if(net!=="live"){net="live";paint();}});
+  es.onmessage=e=>{beat=Date.now();let m,b;try{m=JSON.parse(e.data);if(m.event!=="message")return;b=JSON.parse(m.message)}catch(x){return}handle(b);};
+  es.onerror=()=>{net=navigator.onLine===false?"off":"wait";paint();};
+}
+function handle(b){
+  if(b.t==="s"&&b.v===1){if(!st||b.ts>=st.ts)st=b;}
+  else if(b.t==="v"&&b.dev===me.dev&&b.id&&!me.voted[b.id]){me.voted[b.id]=1;save();}
+  else return;
+  paintSoon();
+}
+function sayHi(force){if(!me.name||(!force&&hiSent===me.name))return;hiSent=me.name;send({t:"hi",name:me.name,dev:me.dev});}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){if(!es||es.readyState===2||Date.now()-beat>70000)connect();wake();}});
+addEventListener("online",()=>connect());addEventListener("offline",()=>{net="off";paint();});
+let wl=null;async function wake(){try{if("wakeLock" in navigator&&!wl){wl=await navigator.wakeLock.request("screen");wl.addEventListener("release",()=>wl=null);}}catch(e){}}
+
+/* ---------- vote ---------- */
+async function encrypt(text,jwk){
+  const k=await crypto.subtle.importKey("jwk",jwk,{name:"RSA-OAEP",hash:"SHA-256"},false,["encrypt"]);
+  const c=new Uint8Array(await crypto.subtle.encrypt({name:"RSA-OAEP"},k,new TextEncoder().encode(text)));
+  let s="";c.forEach(x=>s+=String.fromCharCode(x));return btoa(s);
+}
+async function castVote(name){
+  const tc=st&&st.tc;if(!tc||tc.phase!=="open"||!tc.pub)return;
+  sheet(`<div class="spin"></div><h2 id="sh-h">Sending your vote…</h2><p>Keep this page open for a moment.</p>`);
+  let ok=false;try{ok=await send({t:"v",id:tc.id,voter:me.name,dev:me.dev,enc:await encrypt(name,tc.pub)});}catch(e){ok=false;}
+  if(ok){me.voted[tc.id]=name;save();sheet();buzz(30);paint();}
+  else sheet(`<h2 id="sh-h">Your vote didn't send</h2><p>Check your Wi-Fi or signal, then try again.</p><div class="row"><button class="btn fire wide" data-go="vote" data-n="${esc(name)}">Try again</button><button class="btn wide" data-go="close">Back</button></div>`);
+}
+
+/* ---------- UI ---------- */
+const hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%360;return h;};
+const av=n=>`<span class="av" style="--h:${hue(n)}" aria-hidden="true">${esc((n.trim()[0]||"?").toUpperCase())}</span>`;
+const torch=(out)=>`<svg class="torch${out?" out":""}" viewBox="0 0 64 120" aria-hidden="true"><defs>
+  <radialGradient id="tg" cx="50%" cy="72%" r="62%"><stop offset="0" stop-color="#fff4c9"/><stop offset=".45" stop-color="#ffb24a"/><stop offset="1" stop-color="#e2531b"/></radialGradient>
+  <radialGradient id="tglow"><stop offset="0" stop-color="#ff9a3c" stop-opacity=".55"/><stop offset="1" stop-color="#ff9a3c" stop-opacity="0"/></radialGradient></defs>
+  ${out?`<g class="smoke" fill="none" stroke="#9aa39c" stroke-width="2.4" stroke-linecap="round" opacity=".5"><path d="M30 52c-5-7 5-11 0-18s4-11 1-16"/><path d="M38 50c-3-5 3-8 0-13"/></g>`
+     :`<circle class="glow" cx="32" cy="44" r="34" fill="url(#tglow)"/><g class="fl"><path d="M32 4c7 14 19 22 19 39a19 19 0 0 1-38 0c0-11 6-16 9-23 2 6 5 9 8 10-2-10-1-18 2-26z" fill="url(#tg)"/></g>
+     <g class="fl2"><path d="M32 30c3 7 9 11 9 19a9 9 0 0 1-18 0c0-5 3-8 5-11 1 3 2 4 4 5-1-5 0-9 0-13z" fill="#fff1c2"/></g>`}
+  <path d="M19 62h26l-5 9H24z" fill="#7b5634"/><rect x="28" y="70" width="8" height="48" rx="3" fill="#8a6038"/><path d="M24 66h16" stroke="#5c3f24" stroke-width="2"/></svg>`;
+const ICK=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`;
+function sheet(html){const s=$("#sheet");if(!html){s.hidden=true;return;}s.querySelector(".box").innerHTML=html;s.hidden=false;}
+let pt=0;function paintSoon(){clearTimeout(pt);pt=setTimeout(paint,40);}
+function screen(){
+  if(!ROOM)return `<div class="scr">${torch(true)}<h1>This link isn't complete</h1><p class="sub">Ask the host to share the voting link again, or scan their QR code.</p></div>`;
+  if(!st)return settled?`<div class="scr">${torch()}<p class="kick">You're in the right place</p><h1>Waiting for the host</h1><p class="sub">Keep this page open. It updates on its own when the game starts.</p></div>`
+    :`<div class="scr"><div class="spin"></div><h1>Connecting to the game…</h1></div>`;
+  const tc=st.tc,roster=st.roster||[],out=(st.out||[]).includes(me.name);
+  if(st.win)return `<div class="scr">${torch()}<p class="kick">The jury has spoken</p><div class="crown">${esc(st.win)}</div><h1>is the Sole Survivor!</h1><p class="sub">Thanks for playing Survivor: ${esc(st.ev||"")}.</p></div>`;
+  if(!me.name||typing){
+    const names=roster.slice().sort((a,b)=>a.localeCompare(b));
+    if(typing||!names.length)return `<div class="scr"><p class="kick">Welcome, castaway</p><h1>What's your name?</h1><p class="sub">Use the name everyone knows you by, so the host can match your vote.</p>
+      <form class="field" data-form="name"><input id="nm" maxlength="24" autocomplete="given-name" autocapitalize="words" placeholder="Your name" value="${esc(me.name)}" required><button class="btn fire" type="submit">Join</button></form>
+      ${names.length?`<button class="link" data-go="list">Pick from the list instead</button>`:""}</div>`;
+    return `<div class="scr"><p class="kick">Welcome, castaway</p><h1>Who are you?</h1><p class="sub">Tap your name. This phone will remember it.</p>
+      <div class="list grid">${names.map(n=>`<button class="opt" data-go="me" data-n="${esc(n)}">${av(n)}<span>${esc(n)}</span></button>`).join("")}</div>
+      <button class="link" data-go="type">Not on the list? Type your name</button></div>`;
+  }
+  if(tc&&tc.phase==="open"&&(tc.voters||[]).includes(me.name)){
+    const fin=tc.mode==="final",imm=(tc.immune||[]).includes(me.name);
+    if(me.voted[tc.id]){const v=me.voted[tc.id];
+      return `<div class="scr">${typeof v==="string"?`<div class="parch"><b>${esc(v)}</b></div>`:`<div class="check">${ICK}</div>`}<p class="kick">${esc(tc.title)}</p><h1>Your vote is in</h1>
+        <p class="sub">${fin?"Thank you, juror. The host will read the votes once the whole jury has voted.":"Hold tight. The host will read the votes once everyone has voted."}</p></div>`;}
+    const c=(tc.cands||[]).filter(n=>n!==me.name);
+    return `<div class="scr"><p class="kick">${esc(tc.title)}</p><h1>${fin?"Who should win?":"Who are you voting out?"}</h1>
+      <p class="sub">${fin?"Vote for the finalist who played the best game.":"Your vote is secret. Only the host can see it."}</p>
+      ${imm?`<div class="note gold">You have immunity tonight. You're safe, but you still vote.</div>`:""}
+      <div class="list">${c.map(n=>`<button class="opt" data-go="pick" data-n="${esc(n)}">${av(n)}<span>${esc(n)}</span><span class="x">Vote</span></button>`).join("")}</div></div>`;
+  }
+  if(tc&&tc.phase==="open")return `<div class="scr">${torch(out)}<p class="kick">${esc(tc.title)}</p><h1>Tribal Council is in session</h1>
+    <p class="sub">${out?"The jury watches this one. Your screen will update after the vote.":"You're not voting this time. Sit tight, your screen will update after the vote."}</p></div>`;
+  if(tc)return `<div class="scr">${torch(out)}<p class="kick">${esc(tc.title)}</p><h1>The votes are in</h1><p class="sub">The host is about to read them. Eyes up!</p></div>`;
+  const last=st.last&&st.last.out||[];
+  if(out){const just=last.includes(me.name);
+    return `<div class="scr">${torch(true)}<p class="kick">${just?"The tribe has spoken":"Jury member"}</p><h1>You're on the jury</h1>
+      <p class="sub">You're still part of the game. Watch closely: at the Final Tribal Council, you'll vote for the winner right here.</p></div>`;}
+  return `<div class="scr">${torch()}<p class="kick">You're still in the game</p><h1>Waiting for the next Tribal Council</h1>
+    <p class="sub">Keep this page open. When the host starts the vote, your ballot appears here.</p>
+    ${last.length?`<div class="note">Last Tribal Council: <b>${esc(last.join(" and "))}</b> ${last.length>1?"were":"was"} voted out.</div>`:""}</div>`;
+}
+function paint(){
+  const n=$("#net");n.className="net "+(net==="live"?"live":net==="off"?"off":"");n.lastChild.textContent=net==="live"?"Live":net==="off"?"Offline":"Connecting";
+  if(st&&st.ev){$("#ev").textContent=st.ev;document.title="Tribal Council · "+st.ev;}
+  const tc=st&&st.tc;
+  if(tc&&tc.phase==="open"&&tc.id!==lastTc&&(tc.voters||[]).includes(me.name)&&!me.voted[tc.id]){if(lastTc)buzz([60,60,60]);}
+  lastTc=tc?tc.id:"";
+  const ae=document.activeElement,keep=ae&&ae.id==="nm"?ae.value:null;
+  const html=screen();if($("#main").dataset.h!==html){$("#main").innerHTML=html;$("#main").dataset.h=html;}
+  if(keep!==null&&$("#nm")){$("#nm").value=keep;$("#nm").focus();}
+  $("#ft").innerHTML=me.name&&!typing&&st?`You're <b>${esc(me.name)}</b> · <button data-go="notme">Not you?</button>`:"";
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(!b)return;const go=b.dataset.go,n=b.dataset.n;
+  if(go==="me"){me.name=n;typing=false;save();sayHi();paint();}
+  else if(go==="type"){typing=true;paint();setTimeout(()=>$("#nm")&&$("#nm").focus(),50);}
+  else if(go==="list"){typing=false;if(!(st&&st.roster||[]).includes(me.name))me.name="";paint();}
+  else if(go==="notme"){me.name="";typing=false;save();paint();}
+  else if(go==="pick")sheet(`<p class="kick">${esc(st.tc.title)}</p><h2 id="sh-h">${st.tc.mode==="final"?"Vote for":"Vote out"} ${esc(n)}?</h2><p>Once it's cast, your vote can't be changed.</p>
+    <div class="row"><button class="btn fire wide" data-go="vote" data-n="${esc(n)}">Cast my vote</button><button class="btn wide" data-go="close">Go back</button></div>`);
+  else if(go==="vote")castVote(n);
+  else if(go==="close")sheet();
+});
+$("#sheet").addEventListener("click",e=>{if(e.target.id==="sheet")sheet();});
+document.addEventListener("submit",e=>{if(e.target.dataset.form!=="name")return;e.preventDefault();const v=$("#nm").value.replace(/\s+/g," ").trim().slice(0,24);if(!v)return;
+  const hit=(st&&st.roster||[]).find(x=>x.toLowerCase()===v.toLowerCase());me.name=hit||v;typing=false;save();sayHi();paint();});
+paint();if(ROOM){connect();wake();}
+</script>
+</body>
+</html>

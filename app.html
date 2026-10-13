@@ -61,6 +61,108 @@ h2.sec{font:800 26px/1.15 var(--serif);margin:28px 0 6px;letter-spacing:-.01em}
 p.sec-sub{margin:0 0 16px;color:var(--ink-2)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
 
+/* ---------- Phone voting ---------- */
+.blk.pv{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.pv-top{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.pv-ic{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:none}
+.pv-ic svg{width:21px;height:21px}
+.pv-tt{min-width:0;flex:1}
+.pv-tt b{display:block;font:700 16px/1.25 var(--sans)}
+.pv-tt small{display:block;color:var(--ink-3);font-size:13px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pv-net{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ink-3);border:1px solid var(--line);border-radius:999px;padding:4px 9px;flex:none}
+.pv-net i{width:7px;height:7px;border-radius:50%;background:#d9a23a}
+.pv-net.on i{background:var(--ok)}
+.blk.pv p{margin:0 0 10px;color:var(--ink-2);font-size:14.5px;line-height:1.5}
+.blk.pv .pv-sub{font-size:13.5px;color:var(--ink-3);margin:0 0 8px}
+.blk.pv .pv-sub b{color:var(--ink-2)}
+.pv-c{margin-top:8px!important;text-align:center}
+.pv-empty{font-size:14px;color:var(--ink-3)!important;background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.pv-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 6px;font:700 12px/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.pv-hb{display:flex;gap:4px}
+.pv-chips{display:flex;flex-wrap:wrap;gap:6px}
+.pv-chip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);font-size:14px;font-weight:600;line-height:1}
+button.pv-chip{cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.pv-chip[aria-pressed="false"]{color:var(--ink-3);background:transparent;border-style:dashed}
+.pv-chip[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 12%,var(--surface));border-color:color-mix(in srgb,var(--accent) 55%,var(--line));color:var(--ink)}
+.pv-chip.imm[aria-pressed="false"]{border-style:solid;background:var(--surface-2);color:var(--ink-2)}
+.pv-chip.imm[aria-pressed="true"]{background:#f3c64a;border-color:#d9a923;color:#3a2a00}
+.pv-chip svg{width:14px;height:14px}
+.pv-chip.voted{background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 45%,var(--line));color:var(--ok)}
+.pv-chip.waiting{color:var(--ink-3)}
+.pv-d{width:7px;height:7px;border-radius:50%;background:var(--ink-3);opacity:.35;flex:none}
+.pv-d.on{background:var(--ok);opacity:1}
+.pv-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.blk.pv .btn{flex:1 1 auto;min-height:46px;padding:0 16px;font-size:15px;white-space:normal;text-align:center;line-height:1.2}
+.blk.pv .btn svg,.pv-sheet .btn svg{width:18px;height:18px}
+.blk.pv .btn:disabled,.pv-sheet .btn:disabled{opacity:.45;cursor:default}
+.pv-glow{animation:pvGlow 1.8s ease-in-out infinite}
+@keyframes pvGlow{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 45%,transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 0%,transparent)}}
+.pv-tools{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.pv-a{display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:6px 0;color:var(--accent);font-weight:600;font-size:14px;cursor:pointer}
+.pv-a svg{width:17px;height:17px}
+.pv-hb .pv-a{font-size:12.5px;padding:2px 6px;letter-spacing:0;text-transform:none}
+.pv-off{color:var(--ink-3)}
+.pv-err{color:#c2412d!important;font-size:13.5px!important;margin-top:10px!important}
+.pv-fine{font-size:12.5px!important;color:var(--ink-3)!important;margin:10px 0 0!important}
+.pv-share{display:flex;gap:14px;align-items:flex-start}
+.pv-share-t{min-width:0;flex:1}
+.pv-qr{width:116px;height:116px;flex:none;background:#fff;border-radius:12px;padding:8px;border:1px solid var(--line)}
+.pv-qr svg{width:100%;height:100%}
+.pv-qr.wait{background:linear-gradient(90deg,var(--surface-2),var(--line),var(--surface-2));background-size:200% 100%;animation:pvShim 1.2s linear infinite}
+@keyframes pvShim{to{background-position:-200% 0}}
+.pv-qr.big{width:min(240px,70vw);height:min(240px,70vw);margin:4px auto 14px;padding:12px}
+.pv-url{font:600 13px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--ink-2)}
+@media (max-width:520px){.pv-share{flex-direction:column;align-items:center;text-align:center}.pv-share .pv-row{justify-content:center}}
+.pv-live{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--ok);font-size:15px}
+.pv-live.off{color:var(--ink-2)}
+.pv-live svg{width:16px;height:16px}
+.pv-pulse{width:9px;height:9px;border-radius:50%;background:var(--ok);animation:pvPulse 1.6s infinite}
+@keyframes pvPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 55%,transparent)}80%,100%{box-shadow:0 0 0 8px color-mix(in srgb,var(--ok) 0%,transparent)}}
+.pv-count{display:flex;align-items:baseline;gap:8px;margin:8px 0 8px}
+.pv-count b{font:800 42px/1 var(--serif);letter-spacing:-.02em}
+.pv-count span{color:var(--ink-2);font-size:14.5px}
+.pv-meter{height:6px;border-radius:9px;background:var(--surface-2);overflow:hidden;margin-bottom:12px}
+.pv-meter i{display:block;height:100%;background:var(--ok);border-radius:9px;transition:width .4s ease}
+.pv-card{position:relative;margin:4px 0 12px;padding:22px 16px 18px;border-radius:14px;text-align:center;color:#f4efe4;
+  background:radial-gradient(100% 90% at 50% 120%,rgba(240,132,58,.35),transparent 60%),linear-gradient(160deg,var(--jungle-2),var(--jungle))}
+.pv-card small{display:block;font:700 11.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#ffc46b}
+.pv-name{display:block;font:800 clamp(30px,8vw,42px)/1.1 var(--serif);margin:10px 0 2px;word-break:break-word;animation:pvIn .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes pvIn{from{opacity:0;transform:translateY(8px) scale(.97)}}
+.pv-void{display:inline-block;margin-top:6px;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#ffd27a;border:1px solid rgba(255,210,122,.5);border-radius:999px;padding:3px 10px}
+.pv-of{display:block;margin-top:8px;font-size:12.5px;color:rgba(244,239,228,.6)}
+.pv-tally{display:grid;gap:7px}
+.pv-tally div{display:grid;grid-template-columns:minmax(70px,auto) 1fr 24px;align-items:center;gap:10px;font-size:14.5px;font-weight:600}
+.pv-tally span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pv-tally i{display:block;height:10px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.pv-tally u{display:block;height:100%;background:var(--accent);border-radius:9px;transition:width .4s ease}
+.pv-tally b{text-align:right;font-variant-numeric:tabular-nums}
+.pv-res{margin-top:14px;padding:14px;border-radius:12px;background:var(--accent-soft);text-align:center}
+.pv-res small{display:block;font:700 11.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.pv-res b{display:block;font:800 24px/1.2 var(--serif);margin-top:6px;word-break:break-word}
+.pv-res.tie{background:var(--surface-2)}
+.pv-done{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;background:var(--ok-soft)}
+.pv-done>svg{width:22px;height:22px;color:var(--ok);flex:none}
+.pv-done b{display:block;font-weight:700}
+.pv-done small{display:block;color:var(--ink-2);font-size:13px}
+.pv-modal{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,15,12,.55);animation:pvFade .2s}
+@keyframes pvFade{from{opacity:0}}
+.pv-sheet{position:relative;width:min(520px,100%);max-height:88vh;max-height:88dvh;overflow:auto;background:var(--surface);color:var(--ink);border-radius:20px 20px 0 0;padding:22px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(0,0,0,.25);animation:pvUp .28s cubic-bezier(.2,.7,.2,1)}
+@keyframes pvUp{from{transform:translateY(40px);opacity:0}}
+@media (min-width:700px){.pv-modal{align-items:center}.pv-sheet{border-radius:20px}}
+.pv-sheet h3{font:800 22px/1.2 var(--serif);margin:0 36px 6px 0}
+.pv-sheet .pv-sub{font-size:14px;color:var(--ink-3);margin:0 0 14px}
+.pv-sheet .btn{flex:1 1 auto}
+.pv-x{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface-2);font-size:22px;line-height:1;cursor:pointer;color:var(--ink-2)}
+.pv-add{display:flex;gap:8px;margin-bottom:12px}
+.pv-add input{flex:1;min-width:0;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);padding:0 12px;font-size:16px}
+.pv-add .btn{flex:none;padding:0 18px}
+.pv-pl{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.pv-pn{flex:1;min-width:0;display:flex;align-items:center;gap:9px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pv-st{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--ok)}
+.pv-st.out{color:var(--ink-3)}
+.pv-rm{width:32px;height:32px;border-radius:50%;border:0;background:none;color:var(--ink-3);font-size:20px;cursor:pointer}
+body.pv-lock{overflow:hidden}
+
 /* ---------- Top bar ---------- */
 .top{background:linear-gradient(160deg,var(--jungle-2),var(--jungle) 70%);color:#f4efe4}
 .top-inner{display:flex;align-items:center;gap:12px;min-height:56px;padding-top:env(safe-area-inset-top)}
@@ -1817,6 +1919,7 @@ function stepOpening(p){
   const one=p.T===1,cols=S.colors.slice(0,p.T);
   const blocks=[
     {t:"note",text:one?"Before guests arrive: hide the idols, light the torches, get the fire keeper started, and put the cast slideshow on the TV (Ambiance tab).":"Before guests arrive: hide the idols, put the rocks colored-side-down in a bag, and lay the buffs out by color. Light the torches, get the fire keeper started, and put the cast slideshow on the TV (Ambiance tab)."},
+    {t:"pvjoin"},
     {t:"say",text:one?"Welcome to Survivor: {event}. If you've never watched Survivor, don't worry — this is meant to be easy to follow. Tonight you're all one tribe. Every challenge is for individual immunity, and after each one, we vote someone out.\n\nIf you're voted out, you're not out of the party. You join the jury: you'll sit in on every Tribal Council after that, keep an eye on how people are playing, and at the end of the night you decide the winner.\n\nThere's a {prize} for the winner. Tonight is competitive, but it is supposed to be fun. Talk, scheme, make alliances, betray them — just don't take any of it personally."
       :"Welcome to Survivor: {event}. If you've never watched Survivor, don't worry — this is meant to be easy to follow. You'll start on tribes, compete in simple challenges, and sometimes vote people out.\n\nIf you're voted out, you're not out of the party. You join the jury later in the game, keep hanging out, watch the challenges, grab a drink, and when I call you for Tribal Council during the later rounds, you come and watch. Keep a general eye on how people are playing, because at the end of the game, you as the jury decide the winner.\n\nThere's a {prize} for the winner. Tonight is competitive, but it is supposed to be fun. Talk, scheme, make alliances, betray them — just don't take any of it personally."},
     {t:"say",h:"Hidden immunity idols",text:"There are hidden immunity idols around the property. Ours are {idol}. If you find one, you can keep it secret, or not — that's up to you. An idol can be played for yourself or someone else at Tribal Council, and any votes cast against that person don't count. Once you use an idol, it's no longer in the game.\n\nThis game will last {hours}, with plenty of downtime and mingling."}];
@@ -1875,6 +1978,7 @@ function stepTribal(p,r,i,soloIdx,tribeIdx){
       {t:"q",h:"Jeff-style questions: read 2",items:[SOLO_Q[(soloIdx*2)%SOLO_Q.length],SOLO_Q[(soloIdx*2+1)%SOLO_Q.length]]});
   }
   blocks.push({t:"cue",text:"Send them to vote at {voteSpot}, one at a time."},
+    {t:"pvote",mode:"tribal",key:title,e:r.e,solo:r.type==="solo",last:!!r.last},
     {t:"say",h:"Before reading votes",text:"If anyone has a hidden immunity idol and wants to play it, now's the time."},
     {t:"votes"},
     {t:"say",h:"After the vote",text:"The {elimPeople} voted out now join the jury. You're still part of the night — hang out, watch, and come back when I call you. You'll help decide the winner at the end. We're keeping the game rolling, right on to the next challenge."});
@@ -1894,6 +1998,7 @@ function stepFinal(p){
     {t:"q",h:"Survivor-style questions for the finalists",items:["Which juror's vote did you work hardest to earn, and how?","What was the biggest blindside you were part of tonight?","Who would you have hated to sit next to at the end, and why didn't you take them out?","When were you closest to going home, and how did you survive it?","Did you ever hold, play, or hunt for an idol? Tell us about it.","If you could replay one Tribal Council, which one, and what would you change?","Everyone on this jury was voted out by someone. Whose votes are you proudest of?","Describe your game tonight in three words."]},
     {t:"q",h:"If the jury is quiet",items:["What was your best move of the night?","Who did you trust the most, and why?","What vote was hardest for you?","Did you make a move the jury may not have seen?","Why should the jury vote for you instead of {others}?"]},
     {t:"say",h:"Final vote",text:"Jury, you're now voting for a winner. One at a time, head over to {voteSpot} and write down the name of the person you want to win Survivor: {event}. Then come back here for the reveal."},
+    {t:"pvote",mode:"final",key:"Final Tribal Council"},
     {t:"cue",text:"Read the votes one at a time and keep a running count. The finalist with the most votes wins the {prize}."},
     {t:"reveal",small:"Final line",text:"Congratulations ______ — you are the Sole Survivor!"},
     {t:"say",text:"Thank you to everyone for playing tonight. I hope you had fun! Go grab a drink, a snack, relax, and enjoy the rest of your evening."}],ctx:{}};
@@ -2300,6 +2405,8 @@ function renderBlock(b,ctx={}){
       return `<div class="blk results">${Array.from({length:T},(_,i)=>i<T-lose?`<div><b>${ord[i]}</b><span>Safe</span></div>`:`<div class="lose"><b>${i===T-1?"Last":ord[i]}</b><span>Tribal Council</span></div>`).join("")}</div>`;}
     case "rocks":{const swap=b.set==="swap",cols=swap?S.swap:S.colors.slice(0,PL.T),sizes=swap?PL.swapSizes:PL.startSizes;
       return `<div class="blk tribe-viz">${cols.map((c,i)=>`<div class="tv">${rockSVG(c.hex)}<b>${sizes[i]}</b><span>${esc(c.name)} rocks + buffs</span></div>`).join("")}</div>`;}
+    case "pvjoin":return `<div class="blk pv pv-host" data-pv-kind="join"></div>`;
+    case "pvote":return `<div class="blk pv pv-host" data-pv-kind="vote" data-pv-key="${esc(b.key)}" data-pv-mode="${b.mode}" data-pv-e="${b.e||1}"${b.solo?' data-pv-solo="1"':""}${b.last?' data-pv-last="1"':""}></div>`;
     case "votes":{const E=ctx.e||1,n="______",line=E===1?n:`${n}, and ${n}`;
       return `<div class="blk say"><div class="lab">${IC.mic}Read the votes</div>${PS(`That's ___ votes for ______. That's enough.\n\n${line}, come on over.\n\nThe tribe has spoken.\n\nHand over your ${PL.T>1?"buff":"torch"}. You've joined the jury — you're still in this, just from the other side now.`)}</div>`;}
   }
@@ -2343,6 +2450,217 @@ function segStick(){const bar=$("#seg-stick");if(!bar)return;const a=openSeg>=0&
   if(show){const s=STEPS[openSeg];bar.querySelector(".ss-n").textContent=openSeg+1;bar.querySelector(".ss-t").textContent=s.title;bar.style.setProperty("--pc",pc(s.phase));}
   bar.hidden=!show;}
 addEventListener("scroll",segStick,{passive:true});
+/* ---------- Phone voting (optional) ----------
+   Players open vote.html on their own phones and keep it open. This device publishes the game state to a private
+   ntfy.sh topic; players' votes come back the same way, encrypted on their phone with this device's public key. */
+const PV_RELAY="https://ntfy.sh/",PV_QR_SRC="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+const PV_IC={
+  phone:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/><path d="M9.3 9.8l2 2 3.6-4"/></svg>`,
+  qr:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h2.5v2.5M20.5 14v.01M18 18h2.5v2.5M14 20.5h.01"/></svg>`,
+  users:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>`,
+  check:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`};
+const PV_ORD=["First","Second","Third","Fourth","Fifth","Sixth","Seventh","Eighth","Ninth","Tenth","Eleventh","Twelfth"];
+let PV=null,pvES=null,pvLive=false,pvErr="",pvSeen={},pvDraft={},pvBusy=false;
+const pvKeyName=()=>"svh-pv@"+GAME.id;
+function pvGet(){if(PV)return PV;try{PV=JSON.parse(localStorage.getItem(pvKeyName())||"null")}catch(e){}
+  PV=Object.assign({room:"",made:0,roster:[],out:[],removed:[],cur:null,last:null,win:null,done:{},keys:null},PV||{});return PV;}
+function pvSave(){try{localStorage.setItem(pvKeyName(),JSON.stringify(PV))}catch(e){}}
+const pvRid=n=>Array.from(crypto.getRandomValues(new Uint8Array(n)),b=>"abcdefghjkmnpqrstuvwxyz23456789"[b%31]).join("");
+const pvClean=s=>String(s||"").replace(/\s+/g," ").trim().slice(0,24);
+const pvTopic=()=>"svh1-"+PV.room,pvLink=()=>new URL("vote.html?r="+PV.room,location.href).href;
+const pvIn=()=>PV.roster.filter(n=>!PV.out.includes(n));
+async function pvCastNames(){try{const c=await csKV.get("cast@"+GAME.id);return [...new Set((c&&c.players||[]).map(p=>pvClean(p.name)).filter(Boolean))];}catch(e){return [];}}
+async function pvSetup(){pvGet();if(PV.room)return;PV.room=pvRid(18);PV.made=Date.now();if(!PV.roster.length)PV.roster=await pvCastNames();
+  pvSave();pvListen();pvPublish(true);}
+/* relay */
+let pvPubT=0;
+function pvSnap(){const c=PV.cur;return {t:"s",v:1,ts:Date.now(),ev:S.event,roster:PV.roster,out:PV.out,win:PV.win,last:PV.last,
+  tc:c?{id:c.id,mode:c.mode,title:c.title,voters:c.voters,cands:c.cands,immune:c.immune,phase:c.phase==="open"?"open":"closed",pub:c.phase==="open"?PV.keys.pub:null}:null};}
+function pvPublish(now){clearTimeout(pvPubT);if(!PV||!PV.room)return Promise.resolve(false);
+  if(!now){pvPubT=setTimeout(()=>pvPublish(true),900);return Promise.resolve(true);}
+  return fetch(PV_RELAY+pvTopic(),{method:"POST",body:JSON.stringify(pvSnap())}).then(r=>{if(!r.ok)throw new Error(r.status);if(pvErr){pvErr="";pvRender();}return true;})
+    .catch(()=>{pvErr="Couldn't reach the voting service. Check this device's connection.";pvRender();return false;});}
+function pvListen(){if(pvES||!PV.room)return;
+  pvES=new EventSource(PV_RELAY+pvTopic()+"/sse?since="+Math.floor(Math.max(PV.made,Date.now()-12*3600e3)/1000));
+  pvES.addEventListener("open",()=>{pvLive=true;pvRenderSoon();});
+  pvES.onerror=()=>{pvLive=false;pvRenderSoon();};
+  pvES.onmessage=e=>{let m,b;try{m=JSON.parse(e.data);if(m.event!=="message")return;b=JSON.parse(m.message);}catch(x){return;}pvMsg(b,m.time*1000);};}
+function pvMsg(b,t){
+  if(b.t==="hi"){const n=pvClean(b.name);if(!n)return;pvSeen[n]=Math.max(pvSeen[n]||0,t);
+    if(!PV.roster.includes(n)&&!PV.removed.includes(n)){PV.roster.push(n);pvSave();pvPublish();}pvRenderSoon();}
+  else if(b.t==="v"){const c=PV.cur;
+    if(c&&b.id===c.id&&c.phase==="open"&&c.voters.includes(b.voter)&&!c.votes[b.voter]&&typeof b.enc==="string"){c.votes[b.voter]=b.enc;pvSeen[b.voter]=Math.max(pvSeen[b.voter]||0,t);pvSave();pvRenderSoon();}}}
+/* secret ballots: players encrypt with this device's public key */
+async function pvKeys(){if(PV.keys)return PV.keys;
+  const k=await crypto.subtle.generateKey({name:"RSA-OAEP",modulusLength:2048,publicExponent:new Uint8Array([1,0,1]),hash:"SHA-256"},true,["encrypt","decrypt"]);
+  const pub=await crypto.subtle.exportKey("jwk",k.publicKey);PV.keys={pub:{kty:pub.kty,n:pub.n,e:pub.e,alg:pub.alg,ext:true},priv:await crypto.subtle.exportKey("jwk",k.privateKey)};pvSave();return PV.keys;}
+async function pvOpen(enc){const k=await crypto.subtle.importKey("jwk",PV.keys.priv,{name:"RSA-OAEP",hash:"SHA-256"},false,["decrypt"]);
+  return new TextDecoder().decode(await crypto.subtle.decrypt({name:"RSA-OAEP"},k,Uint8Array.from(atob(enc),c=>c.charCodeAt(0))));}
+/* a vote's life: open -> closed (idols) -> reveal -> confirm */
+function pvD(h){const fin=h.dataset.pvMode==="final",pool=fin?PV.out.filter(n=>PV.roster.includes(n)):pvIn(),k=h.dataset.pvKey;
+  const d=pvDraft[k]||(pvDraft[k]={off:new Set(),imm:"",show:false});return {d,pool,fin};}
+function pvPlan(h){const {d,pool,fin}=pvD(h),voters=pool.filter(n=>!d.off.has(n)),imm=!fin&&h.dataset.pvSolo&&voters.includes(d.imm)?d.imm:"",
+  cands=fin?pvIn():voters.filter(n=>n!==imm);return {d,pool,fin,voters,imm,cands,ok:voters.length>=(fin?1:2)&&cands.length>=2};}
+async function pvStart(h,b){const P=pvPlan(h);if(!P.ok)return;b.disabled=true;await pvKeys();
+  const e=P.fin?1:Math.min(Math.max(1,+h.dataset.pvE||1),P.cands.length-1);
+  PV.cur={id:pvRid(8),key:h.dataset.pvKey,mode:P.fin?"final":"tribal",title:h.dataset.pvKey,base:h.dataset.pvKey,e,pre:[],voters:P.voters,cands:P.cands,
+    immune:P.imm?[P.imm]:[],votes:{},phase:"open",idol:[],order:[],shown:0};
+  P.d.show=false;pvSave();pvRender();await pvPublish(true);}
+async function pvRead(){const c=PV.cur;if(!c)return;pvBusy=true;pvRender();const list=[];
+  for(const enc of Object.values(c.votes)){try{const n=await pvOpen(enc);if(c.cands.includes(n))list.push(n);}catch(e){}}
+  for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]];}
+  /* like the show: save a vote for the leader for last */
+  const r=pvTally(list.filter(n=>!c.idol.includes(n)));if(r.length&&(r.length===1||r[0][1]>r[1][1])){const i=list.lastIndexOf(r[0][0]);list.push(list.splice(i,1)[0]);}
+  c.order=list;c.shown=list.length?1:0;c.phase="reveal";pvBusy=false;pvSave();pvRender();}
+function pvTally(list){const m={};list.forEach(n=>m[n]=(m[n]||0)+1);return Object.entries(m).sort((a,b)=>b[1]-a[1]);}
+function pvResult(c){const need=c.e,s=pvTally(c.order.filter(n=>!c.idol.includes(n)));
+  if(s.length<need)return {tie:[],slots:need,sure:[],none:true};
+  const cut=s[need-1][1],above=s.filter(x=>x[1]>cut).map(x=>x[0]),at=s.filter(x=>x[1]===cut).map(x=>x[0]);
+  return above.length+at.length===need?{out:[...above,...at]}:{tie:at,slots:need-above.length,sure:above};}
+function pvRevote(){const c=PV.cur,r=pvResult(c),voters=c.mode==="final"?c.voters:c.voters.filter(n=>!r.tie.includes(n));
+  PV.cur={id:pvRid(8),key:c.key,mode:c.mode,title:c.base+" · Revote",base:c.base,e:r.slots,pre:[...c.pre,...r.sure],voters,cands:r.tie,immune:[],votes:{},phase:"open",idol:[],order:[],shown:0};
+  pvSave();pvRender();pvPublish(true);}
+function pvFinish(names){const c=PV.cur,all=[...c.pre,...names];
+  if(c.mode==="final")PV.win=all[0];else{all.forEach(n=>{if(!PV.out.includes(n))PV.out.push(n);});PV.last={title:c.base,out:all};}
+  (PV.done[c.key]=PV.done[c.key]||[]).push(all);PV.cur=null;delete pvDraft[c.key];pvSave();pvRender();pvPublish(true);}
+/* QR code */
+let pvQRp=null;
+function pvQR(big){if(typeof qrcode!=="function"){if(!pvQRp)pvQRp=new Promise((res,rej)=>{const sc=document.createElement("script");sc.src=PV_QR_SRC;sc.onload=res;sc.onerror=rej;document.head.append(sc);}).then(pvRender,()=>{pvQRp=null;});
+    return `<div class="pv-qr${big?" big":""} wait" aria-hidden="true"></div>`;}
+  const q=qrcode(0,"M");q.addData(pvLink());q.make();return `<div class="pv-qr${big?" big":""}" role="img" aria-label="QR code for the players' voting link">${q.createSvgTag({cellSize:4,margin:0,scalable:true})}</div>`;}
+/* panels */
+const pvDot=n=>`<i class="pv-d${pvSeen[n]?" on":""}" title="${pvSeen[n]?"Joined on their phone":"Hasn't opened the link yet"}"></i>`;
+const pvChip=(n,act,on,cls="")=>`<button class="pv-chip ${cls}" data-pv="${act}" data-n="${esc(n)}" aria-pressed="${!!on}">${act==="voter"?pvDot(n):""}${esc(n)}</button>`;
+function pvHTML(h){
+  const kind=h.dataset.pvKind,fin=h.dataset.pvMode==="final";
+  const head=(t,sub,extra="")=>`<div class="pv-top"><span class="pv-ic">${PV_IC.phone}</span><div class="pv-tt"><b>${t}</b><small>${sub}</small></div>${extra}</div>`;
+  const err=pvErr?`<p class="pv-err">${esc(pvErr)} <button class="pv-a" data-pv="retry">Try again</button></p>`:"";
+  if(!PV.room)return head("Phone voting","Optional · faster Tribal Councils")+
+    `<p>${kind==="join"?"Skip the paper ballots. Everyone opens a link on their own phone now and leaves it open. When it's time to vote, you start Tribal Council from your script, they vote in secret, and you read the results.":"Skip the paper ballots: everyone votes in secret on their own phone and you read the results right here."}</p>
+    <div class="pv-row"><button class="btn primary" data-pv="setup">${PV_IC.phone}Set up phone voting</button></div>`;
+  const joined=PV.roster.filter(n=>pvSeen[n]).length,net=`<span class="pv-net${pvLive?" on":""}"><i></i>${pvLive?"Live":"Connecting"}</span>`,
+    tools=`<div class="pv-tools"><button class="pv-a" data-pv="link">${PV_IC.qr}Players' link</button><button class="pv-a" data-pv="players">${PV_IC.users}Players (${PV.roster.length})</button></div>`;
+  if(kind==="join")return head("Phone voting is on",`${joined} of ${PV.roster.length} players joined`,net)+
+    `<div class="pv-share">${pvQR()}<div class="pv-share-t"><p>Have everyone scan this code, or send them the link, and leave the page open. Between votes it just says they're waiting.</p>
+      <div class="pv-url">${esc(pvLink().replace(/^https?:\/\//,""))}</div>
+      <div class="pv-row"><button class="btn" data-pv="copy">Copy link</button>${navigator.share?`<button class="btn" data-pv="share">Share</button>`:""}</div></div></div>
+    ${PV.roster.length?`<div class="pv-h"><span>Players</span></div><div class="pv-chips">${PV.roster.map(n=>`<span class="pv-chip">${pvDot(n)}${esc(n)}</span>`).join("")}</div>`
+      :`<p class="pv-empty">No names yet. Add them under Players, or they'll appear as people join.</p>`}
+    ${tools}${err}<p class="pv-fine">Votes are encrypted on each phone, so only this device can read them. They travel through ntfy.sh, a free public relay.</p>`;
+  const c=PV.cur;
+  if(c){const other=c.key!==h.dataset.pvKey?`<p class="pv-sub">This vote was started from <b>${esc(c.base)}</b>.</p>`:"";
+    return head(c.mode==="final"?"Jury vote":"Phone voting",esc(c.title),net)+other+pvLiveHTML(c)+err;}
+  if(fin&&PV.win)return head("Jury vote","Final Tribal Council",net)+`<div class="pv-done">${PV_IC.check}<div><b>${esc(PV.win)} is the Sole Survivor</b><small>Every player's phone shows the winner.</small></div></div>`;
+  const P=pvPlan(h),done=PV.done[h.dataset.pvKey];
+  if(done&&!P.d.show){const lastOut=done[done.length-1];
+    return head("Phone voting",esc(h.dataset.pvKey),net)+`<div class="pv-done">${PV_IC.check}<div><b>${esc(lastOut.join(" and "))} voted out</b><small>${done.length>1?`${done.length} votes held at this Tribal Council.`:"Phones are back to waiting for the next Tribal Council."}</small></div></div>
+      <div class="pv-tools"><button class="pv-a" data-pv="again">Start another vote here</button></div>`;}
+  const hint=fin?"":h.dataset.pvSolo?(h.dataset.pvLast?"If last place in the challenge already went home, mark them on the jury under Players first.":"Everyone still in the game is here. Tap anyone who isn't."):"Tap to leave out the tribes that won immunity.";
+  return head(fin?"Jury vote by phone":"Vote by phone",fin?"The jury picks the winner on their phones":"Start Tribal Council on everyone's phone",net)+
+    (P.pool.length?`<div class="pv-h"><span>${fin?"Jury members voting":"Who's at Tribal Council?"}</span><span class="pv-hb"><button class="pv-a" data-pv="all">All</button><button class="pv-a" data-pv="none">None</button></span></div>
+      ${hint?`<p class="pv-sub">${hint}</p>`:""}<div class="pv-chips">${P.pool.map(n=>pvChip(n,"voter",!P.d.off.has(n))).join("")}</div>`
+      :`<p class="pv-empty">${fin?"No one is on the jury yet. Mark voted-out players under Players.":"Add your players first so they can find their name. Open Players below."}</p>`)+
+    (!fin&&h.dataset.pvSolo&&P.voters.length?`<div class="pv-h"><span>Immunity winner</span></div><p class="pv-sub">Safe tonight: still votes, but can't be voted for.</p><div class="pv-chips">${P.voters.map(n=>pvChip(n,"imm",n===P.imm,"imm")).join("")}</div>`:"")+
+    (fin?`<p class="pv-sub">Finalists on the ballot: <b>${P.cands.map(esc).join(", ")||"none"}</b></p>`:"")+
+    `<div class="pv-row"><button class="btn primary" data-pv="start" ${P.ok?"":"disabled"}>${PV_IC.phone}${fin?"Start the jury vote":"Start Tribal Council vote"}</button></div>
+    <p class="pv-sub pv-c">${P.voters.length} voting · ${P.cands.length} on the ballot${P.ok?"":` · need at least ${fin?"1 juror and 2 finalists":"2 voters and 2 names on the ballot"}`}</p>${tools}${err}`;
+}
+function pvLiveHTML(c){
+  if(c.phase==="open"){const n=c.voters.filter(v=>c.votes[v]).length,all=n>=c.voters.length,miss=c.voters.length-n;
+    return `<div class="pv-live"><span class="pv-pulse"></span>Voting is open</div>
+      <div class="pv-count"><b>${n}</b><span>of ${c.voters.length} votes in${all?" · everyone has voted":""}</span></div>
+      <div class="pv-meter"><i style="width:${Math.round(n/Math.max(1,c.voters.length)*100)}%"></i></div>
+      <div class="pv-chips">${c.voters.map(v=>`<span class="pv-chip ${c.votes[v]?"voted":"waiting"}">${c.votes[v]?PV_IC.check:pvDot(v)}${esc(v)}</span>`).join("")}</div>
+      ${c.pre.length?`<p class="pv-sub">Already out from the first vote: <b>${esc(c.pre.join(", "))}</b></p>`:""}
+      <div class="pv-row"><button class="btn primary${all?" pv-glow":""}" data-pv="close" ${n?"":"disabled"}>${c.sure?`Lock with ${miss} missing?`:all?"Lock votes & read them":"Lock votes now"}</button>
+      <button class="btn" data-pv="cancel">${c.sureX?"Tap again to cancel":"Cancel vote"}</button></div>`;}
+  if(c.phase==="closed")return `<div class="pv-live off">${PV_IC.check}Votes are locked</div>
+    <div class="pv-h"><span>Did anyone play a hidden immunity idol?</span></div><p class="pv-sub">Tap who it protects. Votes for them won't count.</p>
+    <div class="pv-chips">${c.cands.map(n=>pvChip(n,"idol",c.idol.includes(n),"imm")).join("")}</div>
+    <div class="pv-row"><button class="btn primary" data-pv="read" ${pvBusy?"disabled":""}>${pvBusy?"Opening the votes…":"Read the votes"}</button></div>`;
+  /* reveal */
+  const shown=c.order.slice(0,c.shown),cur=shown[shown.length-1],nul=cur&&c.idol.includes(cur),t=pvTally(shown.filter(n=>!c.idol.includes(n))),max=t.length?t[0][1]:1,doneR=c.shown>=c.order.length;
+  let h=c.order.length?`<div class="pv-card" aria-live="polite"><small>${PV_ORD[c.shown-1]||"Vote "+c.shown} vote${doneR&&c.order.length>1?" · last one":""}</small><b class="pv-name" key="${c.shown}">${esc(cur)}</b>${nul?`<span class="pv-void">Does not count</span>`:""}<span class="pv-of">${c.shown} of ${c.order.length}</span></div>
+    ${t.length?`<div class="pv-tally">${t.map(([n,k])=>`<div><span>${esc(n)}</span><i><u style="width:${k/max*100}%"></u></i><b>${k}</b></div>`).join("")}</div>`:""}`
+    :`<p class="pv-empty">No valid votes came in.</p>`;
+  if(!doneR)return h+`<div class="pv-row"><button class="btn primary" data-pv="next">Read the next vote</button></div>`;
+  const fin=c.mode==="final",r=pvResult(c);
+  if(c.manual){const pool=c.cands.filter(n=>!c.idol.includes(n)),need=c.e;
+    return h+`<div class="pv-h"><span>${fin?"Pick the winner":`Pick who's out (${need})`}</span></div><div class="pv-chips">${pool.map(n=>pvChip(n,"mpick",c.pick.includes(n))).join("")}</div>
+      <div class="pv-row"><button class="btn primary" data-pv="confirm" ${c.pick.length===need?"":"disabled"}>${fin?"Crown the winner":"Confirm"}</button><button class="btn" data-pv="unmanual">Back</button></div>`;}
+  if(r.out){const all=[...c.pre,...r.out];
+    return h+`<div class="pv-res"><small>${fin?"The winner":all.length>1?"Voted out":"Voted out"}</small><b>${esc(all.join(" and "))}</b></div>
+      <div class="pv-row"><button class="btn primary" data-pv="confirm">${fin?`Crown ${esc(all[0])} Sole Survivor`:`Confirm and update phones`}</button></div>
+      <div class="pv-tools"><button class="pv-a" data-pv="manual">Change the result</button></div>`;}
+  const canRe=!r.none&&(fin||c.voters.some(n=>!r.tie.includes(n)));
+  return h+`<div class="pv-res tie"><small>${r.none?"No result":"It's a tie"}</small><b>${r.none?"Decide by hand":esc(r.tie.join(" · "))}</b></div>
+    ${canRe?`<p class="pv-sub">Like the show: ${fin?"the jury votes again":"everyone except the tied players revotes"}, choosing only between ${r.tie.length===2?"these two":"them"}. Still tied? Draw rocks and enter the result by hand.</p>`:""}
+    <div class="pv-row">${canRe?`<button class="btn primary" data-pv="revote">Start the revote</button>`:""}<button class="btn" data-pv="manual">Decide by hand</button></div>`;
+}
+/* sheets: the players' link and the player list */
+function pvModal(kind){pvCloseModal();const m=document.createElement("div");m.id="pv-modal";m.className="pv-modal";m.dataset.kind=kind;
+  m.innerHTML=`<div class="pv-sheet" role="dialog" aria-modal="true" aria-label="${kind==="link"?"Players' voting link":"Players"}"><button class="pv-x" data-pv="mclose" aria-label="Close">×</button><div class="pv-sheet-b"></div></div>`;
+  document.body.append(m);document.body.classList.add("pv-lock");pvModalFill();}
+function pvModalFill(){const m=$("#pv-modal");if(!m)return;const b=m.querySelector(".pv-sheet-b");
+  if(m.dataset.kind==="link"){const html=`<h3>Players' voting link</h3><p class="pv-sub">Everyone scans this and leaves the page open. When you start a vote, their ballot appears.</p>${pvQR(true)}
+      <div class="pv-url">${esc(pvLink().replace(/^https?:\/\//,""))}</div><div class="pv-row"><button class="btn primary" data-pv="copy">Copy link</button>${navigator.share?`<button class="btn" data-pv="share">Share</button>`:""}</div>`;
+    if(b.dataset.h!==html){b.innerHTML=html;b.dataset.h=html;}return;}
+  if(!b.querySelector("#pv-list"))b.innerHTML=`<h3>Players</h3><p class="pv-sub">Players tap their name when they open the link. Anyone who joins with a new name is added here automatically.</p>
+    <form class="pv-add" data-pv-form="add"><input id="pv-new" maxlength="24" placeholder="Add a player's name" autocomplete="off" autocapitalize="words"><button class="btn primary" type="submit">Add</button></form>
+    <div id="pv-list"></div><div class="pv-tools"><button class="pv-a" data-pv="castnames">${PV_IC.users}Add names from the Cast</button><button class="pv-a pv-off" data-pv="reset">Turn off phone voting</button></div>`;
+  const L=b.querySelector("#pv-list"),html=PV.roster.length?PV.roster.map(n=>{const o=PV.out.includes(n);
+      return `<div class="pv-pl"><span class="pv-pn">${pvDot(n)}${esc(n)}</span><button class="pv-st${o?" out":""}" data-pv="jury" data-n="${esc(n)}">${o?"Out · jury":"In the game"}</button><button class="pv-rm" data-pv="rm" data-n="${esc(n)}" aria-label="Remove ${esc(n)}">×</button></div>`;}).join("")
+    :`<p class="pv-empty">No players yet.</p>`;
+  if(L.dataset.h!==html){L.innerHTML=html;L.dataset.h=html;}}
+function pvCloseModal(){const m=$("#pv-modal");if(m)m.remove();document.body.classList.remove("pv-lock");}
+function pvCopy(b){const t=b.textContent,ok=()=>{b.textContent="Copied";setTimeout(()=>b.textContent=t,1600);};
+  if(navigator.clipboard)navigator.clipboard.writeText(pvLink()).then(ok,()=>prompt("Copy this link:",pvLink()));else prompt("Copy this link:",pvLink());}
+const pvCache=new WeakMap();
+function pvRender(){pvGet();document.querySelectorAll(".pv-host").forEach(h=>{const html=pvHTML(h);if(pvCache.get(h)!==html){h.innerHTML=html;pvCache.set(h,html);}h.dataset.pvOn=1;});pvModalFill();}
+let pvRT=0;function pvRenderSoon(){clearTimeout(pvRT);pvRT=setTimeout(pvRender,30);}
+async function pvAct(a,n,h,b){pvGet();const c=PV.cur;
+  switch(a){
+    case "setup":b.disabled=true;await pvSetup();break;
+    case "retry":await pvPublish(true);break;
+    case "link":case "players":pvModal(a);return;
+    case "mclose":pvCloseModal();return;
+    case "copy":pvCopy(b);return;
+    case "share":navigator.share({title:`Survivor: ${S.event}`,text:"Open this and keep it open for Tribal Council voting:",url:pvLink()}).catch(()=>{});return;
+    case "voter":{const {d}=pvD(h);d.off.has(n)?d.off.delete(n):d.off.add(n);break;}
+    case "all":pvD(h).d.off.clear();break;
+    case "none":{const {d,pool}=pvD(h);pool.forEach(x=>d.off.add(x));break;}
+    case "imm":{const {d}=pvD(h);d.imm=d.imm===n?"":n;break;}
+    case "again":pvD(h).d.show=true;break;
+    case "start":await pvStart(h,b);return;
+    case "close":{if(!c)break;const miss=c.voters.filter(v=>!c.votes[v]).length;
+      if(miss&&!c.sure){c.sure=1;setTimeout(()=>{if(PV.cur===c&&c.sure){c.sure=0;pvRender();}},4000);break;}
+      c.sure=0;c.phase="closed";c.idol=[];pvSave();pvPublish(true);if(c.mode==="final"){await pvRead();return;}break;}
+    case "cancel":if(!c)break;if(!c.sureX){c.sureX=1;setTimeout(()=>{if(PV.cur===c&&c.sureX){c.sureX=0;pvRender();}},4000);break;}
+      PV.cur=null;pvSave();pvPublish(true);break;
+    case "idol":if(c){const i=c.idol.indexOf(n);i>=0?c.idol.splice(i,1):c.idol.push(n);pvSave();}break;
+    case "read":await pvRead();return;
+    case "next":if(c){c.shown=Math.min(c.order.length,c.shown+1);pvSave();}break;
+    case "manual":if(c){c.manual=true;c.pick=[];}break;
+    case "unmanual":if(c)c.manual=false;break;
+    case "mpick":if(c){const i=c.pick.indexOf(n);i>=0?c.pick.splice(i,1):c.pick.length<c.e?c.pick.push(n):(c.pick.shift(),c.pick.push(n));}break;
+    case "confirm":if(c)pvFinish(c.manual?c.pick:pvResult(c).out);return;
+    case "revote":if(c)pvRevote();return;
+    case "rm":PV.roster=PV.roster.filter(x=>x!==n);PV.out=PV.out.filter(x=>x!==n);if(!PV.removed.includes(n))PV.removed.push(n);pvSave();pvPublish();break;
+    case "jury":PV.out=PV.out.includes(n)?PV.out.filter(x=>x!==n):[...PV.out,n];pvSave();pvPublish();break;
+    case "castnames":{const add=(await pvCastNames()).filter(x=>!PV.roster.includes(x));PV.roster.push(...add);PV.removed=PV.removed.filter(x=>!add.includes(x));
+      pvSave();pvPublish();b.textContent=add.length?`Added ${add.length} from the Cast`:"No new names in the Cast";break;}
+    case "reset":if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again: old links stop working";return;}
+      if(pvES){pvES.close();pvES=null;}PV={room:"",made:0,roster:PV.roster,out:[],removed:[],cur:null,last:null,win:null,done:{},keys:null};pvSave();pvLive=false;pvDraft={};pvSeen={};pvCloseModal();break;
+  }
+  pvRender();}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-pv]");
+  if(!b){if(e.target.id==="pv-modal")pvCloseModal();return;}
+  e.preventDefault();e.stopPropagation();if(b.disabled)return;pvAct(b.dataset.pv,b.dataset.n,b.closest(".pv-host"),b);},true);
+document.addEventListener("submit",e=>{if(e.target.dataset.pvForm!=="add")return;e.preventDefault();const i=$("#pv-new"),n=pvClean(i.value);if(!n)return;
+  if(!PV.roster.some(x=>x.toLowerCase()===n.toLowerCase()))PV.roster.push(n);PV.removed=PV.removed.filter(x=>x!==n);i.value="";i.focus();pvSave();pvPublish();pvRender();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#pv-modal"))pvCloseModal();});
+setTimeout(()=>{pvGet();if(PV.room){pvListen();pvPublish(true);}pvRender();
+  new MutationObserver(()=>{if(document.querySelector(".pv-host:not([data-pv-on])"))pvRenderSoon();}).observe(document.body,{childList:true,subtree:true});},0);
 function renderScriptTop(){if(!$("#script-top"))return;
   const n=STEPS.filter(s=>doneSteps.has(s.id)).length;
   $("#script-top").innerHTML=`<div><b>${STEPS.length} steps</b></div><button class="btn primary" id="pdf-btn">${IC.doc}Download PDF</button>`;

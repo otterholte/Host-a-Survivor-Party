@@ -1125,6 +1125,7 @@ body.wl .chi-foot{background:var(--surface);border-top-color:var(--line)}
 .need-dl svg{width:20px;height:20px}
 .need-dl:hover{filter:brightness(.88)}
 .cs-bg-btn{display:flex;align-items:center;gap:14px;width:100%;margin-top:14px;padding:10px 14px 10px 10px;border:1px solid var(--line);border-radius:16px;background:var(--surface);cursor:pointer;text-align:left;color:var(--ink);box-shadow:var(--shadow);transition:border-color .15s}
+@media (max-width:759px){#cs-export{display:none}}
 .cs-bg-btn:hover{border-color:var(--accent)}
 .cs-bg-btn img{width:120px;aspect-ratio:16/9;object-fit:cover;border-radius:10px;flex:none;background:#0b1411}
 .cs-bg-btn span{display:grid;gap:2px;min-width:0}
@@ -2785,7 +2786,12 @@ function csBindStage(){
   let nameTap=null;
   cv.addEventListener("pointerdown",e=>{if(CAST&&!CROPM&&inName(csPt(e))){nameTap={x:e.clientX,y:e.clientY};}},true);
   cv.addEventListener("pointerup",e=>{if(nameTap&&Math.hypot(e.clientX-nameTap.x,e.clientY-nameTap.y)<8){nameTap=null;csCur===-1?csEditTitle(csTitleAt(csPt(e))):csEditName();}nameTap=null;});
-  cv.addEventListener("pointerdown",e=>{const p=CAST&&CAST.players[csCur];if(!p||!p.photo||CROPM||nameTap)return;try{cv.setPointerCapture(e.pointerId);}catch(_){}csPtrs.set(e.pointerId,csPt(e));
+  /* only the player's photo itself can be dragged, not the background around it */
+  const inPhoto=pt=>{const p=CAST&&CAST.players[csCur];if(!p||!p.photo)return false;const ph=p.photo,[fx,fy,fw,fh]=csFrame(CAST_SCENE(p)),h=ph.w/(ph.ar||1);
+    return pt.x>=fx&&pt.x<=fx+fw&&pt.y>=fy&&pt.y<=fy+fh&&Math.abs(pt.x-ph.x)<=ph.w/2&&Math.abs(pt.y-ph.y)<=h/2;};
+  cv.addEventListener("pointermove",e=>{if(csPtrs.size||CROPM)return;cv.style.cursor=inPhoto(csPt(e))?"grab":(inNameHover(csPt(e))?"text":"default");});
+  const inNameHover=pt=>CAST&&inName(pt);
+  cv.addEventListener("pointerdown",e=>{const p=CAST&&CAST.players[csCur];if(!p||!p.photo||CROPM||nameTap)return;if(!csPtrs.size&&!inPhoto(csPt(e)))return;try{cv.setPointerCapture(e.pointerId);}catch(_){}csPtrs.set(e.pointerId,csPt(e));
     if(csPtrs.size===1)csGesture={type:"drag"};else if(csPtrs.size===2){const [a,b]=[...csPtrs.values()];csGesture={type:"pinch",d:Math.hypot(a.x-b.x,a.y-b.y),m:{x:(a.x+b.x)/2,y:(a.y+b.y)/2}};}});
   cv.addEventListener("pointermove",e=>{if(!csPtrs.has(e.pointerId))return;const prev=csPtrs.get(e.pointerId),pt=csPt(e);csPtrs.set(e.pointerId,pt);const ph=CAST.players[csCur].photo;
     if(csGesture&&csGesture.type==="drag"&&csPtrs.size===1){ph.x+=pt.x-prev.x;ph.y+=pt.y-prev.y;csClamp(CAST.players[csCur]);}
@@ -2852,7 +2858,7 @@ async function csBuildPpt(){
   const fc=ct.createElementNS(ct.documentElement.namespaceURI,'Default');fc.setAttribute('Extension','fntdata');fc.setAttribute('ContentType','application/x-fontdata');ct.documentElement.append(fc);
   zip.file('ppt/presentation.xml',csSer(pres));zip.file('ppt/_rels/presentation.xml.rels',csSer(rels));zip.file('[Content_Types].xml',csSer(ct));return zip.generateAsync({type:'blob',compression:'DEFLATE',mimeType:'application/vnd.openxmlformats-officedocument.presentationml.presentation'});
 }
-async function csExportPpt(){const b=$('#cs-export');b.disabled=true;b.textContent='Buildingâ€¦';try{const blob=await csBuildPpt(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(S.event||'Survivor Game').replace(/[<>:"/\\|?*]/g,'-')+'.pptx';a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);}catch(e){alert(e.message);}finally{b.disabled=false;b.textContent='Download PowerPoint';}}
+async function csExportPpt(){const b=$('#cs-export');b.disabled=true;b.textContent='Building…';try{const blob=await csBuildPpt(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(S.event||'Survivor Game').replace(/[<>:"/\\|?*]/g,'-')+'.pptx';a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);}catch(e){alert(e.message);}finally{b.disabled=false;b.textContent='Download PowerPoint';}}
 
 /* ---------- Slideshow ---------- */
 const SHOW={urls:[],i:0,timer:null,paused:false,idleT:null,layer:0,audio:null};
